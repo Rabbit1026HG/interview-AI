@@ -1,4 +1,4 @@
-'use client'
+"use client";
 // import Card from "../ui/Card";
 import Cta from "@/app/ui/Cta";
 import CtaStyle2 from "@/app/ui/Cta/CtaStyle2";
@@ -10,8 +10,7 @@ import PortfolioSlider2 from "@/app/ui/Slider/PortfolioSlider2";
 import PostSlider from "@/app/ui/Slider/PostSlider";
 import TestimonialSliderStyle3 from "@/app/ui/Slider/TestimonialSliderStyle3";
 import Spacing from "@/app/ui/Spacing";
-import Card from "../ui/Card";
-
+import Card from "../../ui/Card";
 
 export default function CreativeSolutionHome() {
   return (

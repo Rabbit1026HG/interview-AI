@@ -1,18 +1,19 @@
-'use client';
-import { useEffect, useState } from 'react';
-import Div from '../Div';
-import Link from 'next/link';
-import DropDown from './DropDown';
-import ContactInfoWidget from '../Widget/ContactInfoWidget';
-import Newsletter from '../Widget/Newsletter';
-import SocialWidget from '../Widget/SocialWidget';
+"use client";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import Div from "../Div";
+import Link from "next/link";
+import DropDown from "./DropDown";
+import ContactInfoWidget from "../Widget/ContactInfoWidget";
+import Newsletter from "../Widget/Newsletter";
+import SocialWidget from "../Widget/SocialWidget";
 
 export default function Header({ variant }) {
   const [isSticky, setIsSticky] = useState(false);
   const [sideHeaderToggle, setSideHeaderToggle] = useState(false);
   const [mobileToggle, setMobileToggle] = useState(false);
   useEffect(() => {
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (window.scrollY > 0) {
         setIsSticky(true);
       } else {
@@ -25,8 +26,8 @@ export default function Header({ variant }) {
     <>
       <header
         className={`cs-site_header cs-style1 text-uppercase ${
-          variant ? variant : ''
-        } cs-sticky_header ${isSticky ? 'cs-sticky_header_active' : ''}`}
+          variant ? variant : ""
+        } cs-sticky_header ${isSticky ? "cs-sticky_header_active" : ""}`}
       >
         <Div className="cs-main_header">
           <Div className="container">
@@ -40,7 +41,7 @@ export default function Header({ variant }) {
                 <Div className="cs-nav cs-primary_font cs-medium">
                   <ul
                     className="cs-nav_list"
-                    style={{ display: `${mobileToggle ? 'block' : 'none'}` }}
+                    style={{ display: `${mobileToggle ? "block" : "none"}` }}
                   >
                     <li className="menu-item-has-children">
                       <Link href="/" onClick={() => setMobileToggle(false)}>
@@ -148,11 +149,8 @@ export default function Header({ variant }) {
                       </DropDown>
                     </li>
                     <li>
-                      <Link
-                        href="/about"
-                        onClick={() => setMobileToggle(false)}
-                      >
-                        About
+                      <Link href="/job" onClick={() => setMobileToggle(false)}>
+                        Job
                       </Link>
                     </li>
                     <li className="menu-item-has-children">
@@ -185,10 +183,10 @@ export default function Header({ variant }) {
                     </li>
                     <li className="menu-item-has-children">
                       <Link
-                        href="/portfolio"
+                        href="/question"
                         onClick={() => setMobileToggle(false)}
                       >
-                        Portfolio
+                        Qustion
                       </Link>
                       <DropDown>
                         <ul>
@@ -212,10 +210,13 @@ export default function Header({ variant }) {
                       </DropDown>
                     </li>
                     <li className="menu-item-has-children">
-                      <Link href="/blog" onClick={() => setMobileToggle(false)}>
-                        Blog
+                      <Link
+                        href="/price"
+                        onClick={() => setMobileToggle(false)}
+                      >
+                        Price
                       </Link>
-                      <DropDown>
+                      {/* <DropDown>
                         <ul>
                           <li>
                             <Link
@@ -234,7 +235,7 @@ export default function Header({ variant }) {
                             </Link>
                           </li>
                         </ul>
-                      </DropDown>
+                      </DropDown> */}
                     </li>
                     <li className="menu-item-has-children">
                       <Link href="/" onClick={() => setMobileToggle(false)}>
@@ -285,12 +286,22 @@ export default function Header({ variant }) {
                         </ul>
                       </DropDown>
                     </li>
+                    <li>
+                      <SignedOut>
+                        <Link
+                          href="/sign-in"
+                          onClick={() => setMobileToggle(false)}
+                        >
+                          SignIn
+                        </Link>
+                      </SignedOut>
+                    </li>
                   </ul>
                   <span
                     className={
                       mobileToggle
-                        ? 'cs-munu_toggle cs-toggle_active'
-                        : 'cs-munu_toggle'
+                        ? "cs-munu_toggle cs-toggle_active"
+                        : "cs-munu_toggle"
                     }
                     onClick={() => setMobileToggle(!mobileToggle)}
                   >
@@ -298,21 +309,14 @@ export default function Header({ variant }) {
                   </span>
                 </Div>
               </Div>
-              <Div className="cs-main_header_right">
-                <Div className="cs-toolbox">
-                  <span
-                    className="cs-icon_btn"
-                    onClick={() => setSideHeaderToggle(!sideHeaderToggle)}
-                  >
-                    <span className="cs-icon_btn_in">
-                      <span />
-                      <span />
-                      <span />
-                      <span />
-                    </span>
-                  </span>
-                </Div>
-              </Div>
+              <div
+                className="cs-main_header_right"
+                style={{ marginRight: "50px" }}
+              >
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
             </Div>
           </Div>
         </Div>
@@ -320,7 +324,7 @@ export default function Header({ variant }) {
 
       <Div
         className={
-          sideHeaderToggle ? 'cs-side_header active' : 'cs-side_header'
+          sideHeaderToggle ? "cs-side_header active" : "cs-side_header"
         }
       >
         <button
