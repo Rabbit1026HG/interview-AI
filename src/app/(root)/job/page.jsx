@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
+
 import SectionHeading from "@/app/ui/SectionHeading";
 import ServiceListStyle2 from "@/app/ui/ServiceList/ServiceListStyle2";
-
 import Spacing from "@/app/ui/Spacing";
 
 export default function FreelancerAgencyHome() {
