@@ -1,4 +1,5 @@
 "use client";
+
 import CustomCursor from "@/app/ui/CustomCursor";
 import "swiper/css";
 import "swiper/css/pagination";

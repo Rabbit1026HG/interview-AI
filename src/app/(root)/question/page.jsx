@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
+
 import Div from "@/app/ui/Div";
 import SectionHeading from "@/app/ui/SectionHeading";
 import ServiceList from "@/app/ui/ServiceList";
 import Spacing from "@/app/ui/Spacing";
 
 export default function PersonalPortfolioHome() {
-  const [active, setActive] = useState("all");
-  const [itemShow, setItemShow] = useState(6);
   return (
     <>
       {/* Start Services Section */}

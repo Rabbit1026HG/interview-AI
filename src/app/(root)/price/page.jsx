@@ -1,4 +1,5 @@
 "use client";
+
 import Div from "@/app/ui/Div";
 import PricingTableList from "@/app/ui/PricingTable/PricingTableList";
 import SectionHeading from "@/app/ui/SectionHeading";
