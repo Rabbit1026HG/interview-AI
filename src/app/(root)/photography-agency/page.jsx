@@ -1,57 +1,57 @@
-'use client';
-import Div from '@/app/ui/Div';
-import FunFact2 from '@/app/ui/FunFact/FunFact2';
-import MasonryGallery from '@/app/ui/Gallery/MasonryGallery';
-import Hero2 from '@/app/ui/Hero/Hero2';
-import PricingTableList from '@/app/ui/PricingTable/PricingTableList';
-import SectionHeading from '@/app/ui/SectionHeading';
-import PostSlider from '@/app/ui/Slider/PostSlider';
-import TestimonialSlider from '@/app/ui/Slider/TestimonialSlider';
-import Spacing from '@/app/ui/Spacing';
-import { Icon } from '@iconify/react';
-import Image from 'next/image';
+"use client";
+import Div from "@/app/ui/Div";
+import FunFact2 from "@/app/ui/FunFact/FunFact2";
+import MasonryGallery from "@/app/ui/Gallery/MasonryGallery";
+import Hero2 from "@/app/ui/Hero/Hero2";
+import PricingTableList from "@/app/ui/PricingTable/PricingTableList";
+import SectionHeading from "@/app/ui/SectionHeading";
+import PostSlider from "@/app/ui/Slider/PostSlider";
+import TestimonialSlider from "@/app/ui/Slider/TestimonialSlider";
+import Spacing from "@/app/ui/Spacing";
+import { Icon } from "@iconify/react";
+import Image from "next/image";
 
-import aboutImg from '../../../public/images/about_img_5.jpeg';
-import Card from '../ui/Card';
+import aboutImg from "../../../../public/images/about_img_5.jpeg";
+import Card from "../../ui/Card";
 
 const heroData = [
   {
-    title: 'Wedding',
-    imageUrl: '/images/wedding.jpeg',
-    href: '/service/service-details',
+    title: "Wedding",
+    imageUrl: "/images/wedding.jpeg",
+    href: "/service/service-details",
   },
   {
-    title: 'Fashion',
-    imageUrl: '/images/fashion.jpeg',
-    href: '/service/service-details',
+    title: "Fashion",
+    imageUrl: "/images/fashion.jpeg",
+    href: "/service/service-details",
   },
   {
-    title: 'Commercial',
-    imageUrl: '/images/commercial.jpeg',
-    href: '/service/service-details',
+    title: "Commercial",
+    imageUrl: "/images/commercial.jpeg",
+    href: "/service/service-details",
   },
   {
-    title: 'Landscape',
-    imageUrl: '/images/landscape.jpeg',
-    href: '/service/service-details',
+    title: "Landscape",
+    imageUrl: "/images/landscape.jpeg",
+    href: "/service/service-details",
   },
 ];
 const funfaceData = [
   {
-    title: 'Products',
-    factNumber: '550',
+    title: "Products",
+    factNumber: "550",
   },
   {
-    title: 'Global happy clients',
-    factNumber: '40K',
+    title: "Global happy clients",
+    factNumber: "40K",
   },
   {
-    title: 'Project completed',
-    factNumber: '50k',
+    title: "Project completed",
+    factNumber: "50k",
   },
   {
-    title: 'Team members',
-    factNumber: '250',
+    title: "Team members",
+    factNumber: "250",
   },
 ];
 

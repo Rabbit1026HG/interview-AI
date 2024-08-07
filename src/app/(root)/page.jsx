@@ -1,75 +1,75 @@
-'use client';
-import Cta from '@/app/ui/Cta';
-import Div from '@/app/ui/Div';
-import FunFact from '@/app/ui/FunFact';
-import Hero from '@/app/ui/Hero';
-import LogoList from '@/app/ui/LogoList';
-import MovingText from '@/app/ui/MovingText';
-import SectionHeading from '@/app/ui/SectionHeading';
-import PortfolioSlider from '@/app/ui/Slider/PortfolioSlider';
-import PostSlider from '@/app/ui/Slider/PostSlider';
-import TeamSlider from '@/app/ui/Slider/TeamSlider';
-import TestimonialSlider from '@/app/ui/Slider/TestimonialSlider';
-import TimelineSlider from '@/app/ui/Slider/TimelineSlider';
-import Spacing from '@/app/ui/Spacing';
-import VideoModal from '@/app/ui/VideoModal';
-import Card from './ui/Card';
+"use client";
+import Cta from "@/app/ui/Cta";
+import Div from "@/app/ui/Div";
+import FunFact from "@/app/ui/FunFact";
+import Hero from "@/app/ui/Hero";
+import LogoList from "@/app/ui/LogoList";
+import MovingText from "@/app/ui/MovingText";
+import SectionHeading from "@/app/ui/SectionHeading";
+import PortfolioSlider from "@/app/ui/Slider/PortfolioSlider";
+import PostSlider from "@/app/ui/Slider/PostSlider";
+import TeamSlider from "@/app/ui/Slider/TeamSlider";
+import TestimonialSlider from "@/app/ui/Slider/TestimonialSlider";
+import TimelineSlider from "@/app/ui/Slider/TimelineSlider";
+import Spacing from "@/app/ui/Spacing";
+import VideoModal from "@/app/ui/VideoModal";
+import Card from "../ui/Card";
 
 // Hero Social Links
 const heroSocialLinks = [
   {
-    name: 'Behance',
-    links: '/',
+    name: "Behance",
+    links: "/",
   },
   {
-    name: 'Twitter',
-    links: '/',
+    name: "Twitter",
+    links: "/",
   },
 ];
 // FunFact Data
 const funfaceData = [
   {
-    title: 'Global Happy Clients',
-    factNumber: '40K',
+    title: "Global Happy Clients",
+    factNumber: "40K",
   },
   {
-    title: 'Project Completed',
-    factNumber: '50K',
+    title: "Project Completed",
+    factNumber: "50K",
   },
   {
-    title: 'Team Members',
-    factNumber: '245',
+    title: "Team Members",
+    factNumber: "245",
   },
   {
-    title: 'Digital products',
-    factNumber: '550',
+    title: "Digital products",
+    factNumber: "550",
   },
 ];
 // Portfolio Data
 const portfolioData = [
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_1.jpeg',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_1.jpeg",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_2.jpeg',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_2.jpeg",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_0.jpg',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_0.jpg",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_3.jpeg',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_3.jpeg",
   },
 ];
 

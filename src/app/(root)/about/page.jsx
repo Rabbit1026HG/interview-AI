@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Cta from "@/app/ui/Cta";
 import Div from "@/app/ui/Div";
@@ -7,30 +7,27 @@ import PageHeading from "@/app/ui/PageHeading";
 import SectionHeading from "@/app/ui/SectionHeading";
 import TeamSlider from "@/app/ui/Slider/TeamSlider";
 import Spacing from "@/app/ui/Spacing";
-import aboutImg from '../../../public/images/about_img_1.jpeg'
-import aboutImg2 from '../../../public/images/about_img_2.jpeg'
-import aboutImg3 from '../../../public/images/about_img_3.jpeg'
-import aboutImg4 from '../../../public/images/about_img_4.jpeg'
-
-
-
+import aboutImg from "../../../../public/images/about_img_1.jpeg";
+import aboutImg2 from "../../../../public/images/about_img_2.jpeg";
+import aboutImg3 from "../../../../public/images/about_img_3.jpeg";
+import aboutImg4 from "../../../../public/images/about_img_4.jpeg";
 
 const funfaceData = [
   {
-    title: 'Global Happy Clients',
-    factNumber: '40K',
+    title: "Global Happy Clients",
+    factNumber: "40K",
   },
   {
-    title: 'Project Completed',
-    factNumber: '50K',
+    title: "Project Completed",
+    factNumber: "50K",
   },
   {
-    title: 'Team Members',
-    factNumber: '245',
+    title: "Team Members",
+    factNumber: "245",
   },
   {
-    title: 'Digital products',
-    factNumber: '550',
+    title: "Digital products",
+    factNumber: "550",
   },
 ];
 
@@ -68,27 +65,15 @@ export default function AboutPage() {
             </SectionHeading>
           </Div>
           <Div className="col-lg-5 offset-xl-2">
-            <Image
-              src={aboutImg}
-              alt="About"
-              className="w-100 cs-radius_15"
-            />
+            <Image src={aboutImg} alt="About" className="w-100 cs-radius_15" />
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-lg-7">
-            <Image
-              src={aboutImg2}
-              alt="About"
-              className="w-100 cs-radius_15"
-            />
+            <Image src={aboutImg2} alt="About" className="w-100 cs-radius_15" />
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-lg-5">
-            <Image
-              src={aboutImg3}
-              alt="About"
-              className="w-100 cs-radius_15"
-            />
+            <Image src={aboutImg3} alt="About" className="w-100 cs-radius_15" />
             <Spacing lg="25" md="25" />
           </Div>
         </Div>

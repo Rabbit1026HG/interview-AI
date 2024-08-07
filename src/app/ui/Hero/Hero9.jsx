@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import parse from 'html-react-parser';
-import Button from '../Button';
-import Div from '../Div';
-import imgUrl from "../../../../public/images/hero_img_1.png"
-import Image from 'next/image';
+import React, { useState } from "react";
+import parse from "html-react-parser";
+import Button from "../Button";
+import Div from "../Div";
+import imgUrl from "../../../../public/images/hero_img_1.png";
+import Image from "next/image";
 
 export default function Hero9({
   title,
@@ -14,15 +14,15 @@ export default function Hero9({
   spiningCircleUrl,
   videoSrc,
 }) {
-  const [iframeSrc, setIframeSrc] = useState('about:blank');
+  const [iframeSrc, setIframeSrc] = useState("about:blank");
   const [toggle, setToggle] = useState(false);
   const handelClick = () => {
-    const video = videoSrc.split('?v=')[1].trim();
+    const video = videoSrc.split("?v=")[1].trim();
     setIframeSrc(`https://www.youtube.com/embed/${video}`);
     setToggle(!toggle);
   };
   const handelClose = () => {
-    setIframeSrc('about:blank');
+    setIframeSrc("about:blank");
     setToggle(!toggle);
   };
   return (
@@ -44,7 +44,7 @@ export default function Hero9({
             <div className="col-xl-5 col-lg-6">
               <div className="cs-height_0 cs-height_lg_50" />
               <div className="cs-hero_img">
-                <Image src={imgUrl} alt="Thumb" placeholder='blur' />
+                <Image src={imgUrl} alt="Thumb" placeholder="blur" />
                 <span
                   className="cs-hero_video_btn cs-center"
                   onClick={handelClick}
@@ -65,7 +65,7 @@ export default function Hero9({
           </div>
         </div>
       </div>
-      <Div className={toggle ? 'cs-video_popup active' : 'cs-video_popup'}>
+      <Div className={toggle ? "cs-video_popup active" : "cs-video_popup"}>
         <Div className="cs-video_popup_overlay" />
         <Div className="cs-video_popup_content">
           <Div className="cs-video_popup_layer" />
