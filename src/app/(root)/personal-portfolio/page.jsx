@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useEffect, useState } from "react";
 import Cta from "@/app/ui/Cta";
 import Div from "@/app/ui/Div";
@@ -11,155 +11,154 @@ import TestimonialSliderStyle4 from "@/app/ui/Slider/TestimonialSliderStyle4";
 import Spacing from "@/app/ui/Spacing";
 import { Icon } from "@iconify/react";
 
-
 // import TestimonialSliderStyle4 from '../Slider/TestimonialSliderStyle4';
 const funfaceData = [
   {
-    title: 'HTML5',
-    factNumber: '90%',
+    title: "HTML5",
+    factNumber: "90%",
   },
   {
-    title: 'CSS3',
-    factNumber: '95%',
+    title: "CSS3",
+    factNumber: "95%",
   },
   {
-    title: 'JavaScript',
-    factNumber: '92%',
+    title: "JavaScript",
+    factNumber: "92%",
   },
   {
-    title: 'UI/UX Design',
-    factNumber: '85%',
+    title: "UI/UX Design",
+    factNumber: "85%",
   },
   {
-    title: 'React.js',
-    factNumber: '85%',
+    title: "React.js",
+    factNumber: "85%",
   },
   {
-    title: 'Mysql Database',
-    factNumber: '70%',
+    title: "Mysql Database",
+    factNumber: "70%",
   },
 ];
 const portfolioData = [
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_39.jpeg',
-    category: 'ui_ux_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_39.jpeg",
+    category: "ui_ux_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_40.jpeg',
-    category: 'logo_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_40.jpeg",
+    category: "logo_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_41.jpeg',
-    category: 'web_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_41.jpeg",
+    category: "web_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_42.jpeg',
-    category: 'mobile_apps',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_42.jpeg",
+    category: "mobile_apps",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_43.jpeg',
-    category: 'ui_ux_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_43.jpeg",
+    category: "ui_ux_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_44.jpeg',
-    category: 'web_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_44.jpeg",
+    category: "web_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_10.jpeg',
-    category: 'logo_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_10.jpeg",
+    category: "logo_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_4.jpeg',
-    category: 'ui_ux_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_4.jpeg",
+    category: "ui_ux_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_5.jpeg',
-    category: 'logo_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_5.jpeg",
+    category: "logo_design",
   },
   {
-    title: 'Colorful Art Work',
-    subtitle: 'See Details',
-    href: '/portfolio/portfolio-details',
-    src: '/images/portfolio_6.jpeg',
-    category: 'web_design',
+    title: "Colorful Art Work",
+    subtitle: "See Details",
+    href: "/portfolio/portfolio-details",
+    src: "/images/portfolio_6.jpeg",
+    category: "web_design",
   },
 ];
 const categoryMenu = [
   {
-    title: 'Web Design',
-    category: 'web_design',
+    title: "Web Design",
+    category: "web_design",
   },
   {
-    title: 'UI/UX Design',
-    category: 'ui_ux_design',
+    title: "UI/UX Design",
+    category: "ui_ux_design",
   },
   {
-    title: 'Mobile Apps',
-    category: 'mobile_apps',
+    title: "Mobile Apps",
+    category: "mobile_apps",
   },
   {
-    title: 'Logo Design',
-    category: 'logo_design',
+    title: "Logo Design",
+    category: "logo_design",
   },
 ];
 const educationData = [
   {
-    title: 'Bachelor In Web Technology',
-    subTitle: 'University Of Florida | 2008-20012',
+    title: "Bachelor In Web Technology",
+    subTitle: "University Of Florida | 2008-20012",
   },
   {
-    title: 'Masters In Graphic Design',
-    subTitle: 'University Of Coventry | 2013-2015',
+    title: "Masters In Graphic Design",
+    subTitle: "University Of Coventry | 2013-2015",
   },
   {
-    title: 'Diploma In Motion Graphic',
-    subTitle: 'University Of Florida | 2018-20020',
+    title: "Diploma In Motion Graphic",
+    subTitle: "University Of Florida | 2018-20020",
   },
 ];
 const experienceData = [
   {
-    title: 'Senior Graphic Designer',
-    subTitle: 'Web Tech | 2022-2024',
+    title: "Senior Graphic Designer",
+    subTitle: "Web Tech | 2022-2024",
   },
   {
-    title: 'Project Manager',
-    subTitle: 'Awesome Themez | 2020-2022',
+    title: "Project Manager",
+    subTitle: "Awesome Themez | 2020-2022",
   },
   {
-    title: 'Word Press Developer',
-    subTitle: 'Mount Soft IT | 2018-2020',
+    title: "Word Press Developer",
+    subTitle: "Mount Soft IT | 2018-2020",
   },
 ];
 
 export default function PersonalPortfolioHome() {
-  const [active, setActive] = useState('all');
+  const [active, setActive] = useState("all");
   const [itemShow, setItemShow] = useState(6);
   return (
     <>
@@ -190,7 +189,7 @@ export default function PersonalPortfolioHome() {
       {/* End Service Section */}
       <section
         className="cs-bg"
-        style={{ backgroundImage: 'url(/images/funfact_bg.jpeg)' }}
+        style={{ backgroundImage: "url(/images/funfact_bg.jpeg)" }}
       >
         <div className="container">
           <FunFact
@@ -208,12 +207,12 @@ export default function PersonalPortfolioHome() {
           <SectionHeading title="Some recent work" subtitle="Our Portfolio" />
           <Div className="cs-filter_menu cs-style1">
             <ul className="cs-mp0 cs-center">
-              <li className={active === 'all' ? 'active' : ''}>
-                <span onClick={() => setActive('all')}>All</span>
+              <li className={active === "all" ? "active" : ""}>
+                <span onClick={() => setActive("all")}>All</span>
               </li>
               {categoryMenu.map((item, index) => (
                 <li
-                  className={active === item.category ? 'active' : ''}
+                  className={active === item.category ? "active" : ""}
                   key={index}
                 >
                   <span onClick={() => setActive(item.category)}>
@@ -229,11 +228,11 @@ export default function PersonalPortfolioHome() {
           {portfolioData.slice(0, itemShow).map((item, index) => (
             <Div
               className={`${
-                active === 'all'
-                  ? ''
+                active === "all"
+                  ? ""
                   : !(active === item.category)
-                  ? 'd-none'
-                  : ''
+                  ? "d-none"
+                  : ""
               }`}
               key={index}
             >
@@ -250,7 +249,7 @@ export default function PersonalPortfolioHome() {
 
         <Div className="text-center">
           {portfolioData.length <= itemShow ? (
-            ''
+            ""
           ) : (
             <>
               <Spacing lg="65" md="40" />
