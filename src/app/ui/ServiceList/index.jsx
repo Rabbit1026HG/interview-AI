@@ -8,28 +8,28 @@ const serviceData = [
     subtitle:
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
     imgUrl: "/images/service_7.jpeg",
-    href: "/service/service-details",
+    href: "/answer/service-details",
   },
   {
     title: "UI/UX Design",
     subtitle:
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
     imgUrl: "/images/service_8.jpeg",
-    href: "/service/service-details",
+    href: "/answer/service-details",
   },
   {
     title: "Branding",
     subtitle:
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
     imgUrl: "/images/service_9.jpeg",
-    href: "/service/service-details",
+    href: "/answer/service-details",
   },
   {
     title: "Social Ad Campaign",
     subtitle:
       "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
     imgUrl: "/images/service_10.jpeg",
-    href: "/service/service-details",
+    href: "/answer/service-details",
   },
 ];
 

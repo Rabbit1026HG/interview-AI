@@ -5,7 +5,7 @@ const serviceData = [
   {
     title: "Create custom job",
 
-    href: "/service/service-details",
+    href: "/create-job",
   },
   {
     title: "WP Development",

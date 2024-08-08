@@ -153,14 +153,14 @@ export default function Header({ variant }) {
                         Job
                       </Link>
                     </li>
-                    <li className="menu-item-has-children">
+                    <li>
                       <Link
-                        href="/service"
+                        href="/create-job"
                         onClick={() => setMobileToggle(false)}
                       >
-                        Services
+                        CreateJob
                       </Link>
-                      <DropDown>
+                      {/* <DropDown>
                         <ul>
                           <li>
                             <Link
@@ -179,16 +179,16 @@ export default function Header({ variant }) {
                             </Link>
                           </li>
                         </ul>
-                      </DropDown>
+                      </DropDown> */}
                     </li>
-                    <li className="menu-item-has-children">
+                    <li>
                       <Link
                         href="/question"
                         onClick={() => setMobileToggle(false)}
                       >
                         Qustion
                       </Link>
-                      <DropDown>
+                      {/* <DropDown>
                         <ul>
                           <li>
                             <Link
@@ -207,9 +207,9 @@ export default function Header({ variant }) {
                             </Link>
                           </li>
                         </ul>
-                      </DropDown>
+                      </DropDown> */}
                     </li>
-                    <li className="menu-item-has-children">
+                    <li>
                       <Link
                         href="/price"
                         onClick={() => setMobileToggle(false)}
