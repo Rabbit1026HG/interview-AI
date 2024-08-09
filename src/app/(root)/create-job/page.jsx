@@ -4,6 +4,7 @@ import ProgressBar from "@/app/ui/ProgressBar";
 import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useApi } from "@/hooks/api";
 
 const report = [
   {
@@ -17,7 +18,7 @@ const report = [
       "Extra details about the company can help us to generate more relevant questions. Not requied, but certainly helpful. question",
   },
   {
-    title: "Tell us about the job you're interviewing for",
+    title: "Upload any relevant documents",
     subtitle:
       "These documents can help us generate more relevant questions for your interview and we can also provide help you craft interview question answers based off of your work experience. The more information you upload, the better our tool works! Acceptable file formats are CV and pdf.",
   },
@@ -27,14 +28,27 @@ const report = [
   },
 ];
 export default function CreateJob() {
+  const api = useApi();
   const [step, setStep] = useState(0);
   const [fileName, setFileName] = useState("No file chosen");
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyDescription, setCompanyDescription] = useState("");
   const router = useRouter();
   const onBack = () => {
     step && setStep(step - 1);
   };
   const onNext = () => {
-    step < 3 ? setStep(step + 1) : router.push("/question");
+    step < 2
+      ? setStep(step + 1)
+      : api.test({
+          title: jobTitle,
+          description: jobDescription,
+          company: companyName,
+          companyDescription: companyDescription,
+          fileName: fileName,
+        });
   };
   return (
     <>
@@ -47,11 +61,16 @@ export default function CreateJob() {
             <h2 className="cs-font_30">{report[step].title}</h2>
             <p>{report[step].subtitle}</p>
           </div>
-          {(step == 0 || step == 3) && (
+          {step == 0 && (
             <section>
               <div className="col-sm-12">
                 <label className="cs-primary_color">Title</label>
-                <input type="text" className="cs-form_field" />
+                <input
+                  type="text"
+                  className="cs-form_field"
+                  defaultValue={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                />
                 <Spacing lg="20" md="20" />
               </div>
               <div className="col-sm-12">
@@ -60,16 +79,23 @@ export default function CreateJob() {
                   cols="30"
                   rows="7"
                   className="cs-form_field"
+                  defaultValue={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
                 ></textarea>
                 <Spacing lg="25" md="25" />
               </div>
             </section>
           )}
-          {(step == 1 || step == 3) && (
+          {step == 1 && (
             <section>
               <div className="col-sm-12">
                 <label className="cs-primary_color">Company name</label>
-                <input type="text" className="cs-form_field" />
+                <input
+                  type="text"
+                  className="cs-form_field"
+                  defaultValue={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                />
                 <Spacing lg="20" md="20" />
               </div>
               <div className="col-sm-12">
@@ -78,15 +104,17 @@ export default function CreateJob() {
                   cols="30"
                   rows="7"
                   className="cs-form_field"
+                  defaultValue={companyDescription}
+                  onChange={(e) => setCompanyDescription(e.target.value)}
                 ></textarea>
                 <Spacing lg="25" md="25" />
               </div>
             </section>
           )}
-          {(step == 2 || step == 3) && (
+          {step == 2 && (
             <section>
               <div className="col-sm-12">
-                <label className="cs-btn cs-style1" for="choose">
+                <label className="cs-btn cs-style1" htmlFor="choose">
                   Choose File
                 </label>
                 <input

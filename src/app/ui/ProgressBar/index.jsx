@@ -5,14 +5,10 @@ const progress = [
   },
   {
     title: "Step2",
-    width: "34%",
+    width: "50%",
   },
   {
     title: "Step3",
-    width: "66%",
-  },
-  {
-    title: "Step4",
     width: "100%",
   },
 ];

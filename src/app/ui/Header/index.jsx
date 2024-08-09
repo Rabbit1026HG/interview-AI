@@ -43,6 +43,7 @@ export default function Header({ variant }) {
                     className="cs-nav_list"
                     style={{ display: `${mobileToggle ? "block" : "none"}` }}
                   >
+                    {/* <SignedOut> */}
                     <li className="menu-item-has-children">
                       <Link href="/" onClick={() => setMobileToggle(false)}>
                         Home
@@ -148,95 +149,27 @@ export default function Header({ variant }) {
                         </ul>
                       </DropDown>
                     </li>
-                    <li>
-                      <Link href="/job" onClick={() => setMobileToggle(false)}>
-                        Job
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/create-job"
-                        onClick={() => setMobileToggle(false)}
-                      >
-                        CreateJob
-                      </Link>
-                      {/* <DropDown>
-                        <ul>
-                          <li>
-                            <Link
-                              href="/service"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Services
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/service/service-details"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Service Details
-                            </Link>
-                          </li>
-                        </ul>
-                      </DropDown> */}
-                    </li>
-                    <li>
-                      <Link
-                        href="/question"
-                        onClick={() => setMobileToggle(false)}
-                      >
-                        Qustion
-                      </Link>
-                      {/* <DropDown>
-                        <ul>
-                          <li>
-                            <Link
-                              href="/portfolio"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Portfolio
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/portfolio/portfolio-details"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Portfolio Details
-                            </Link>
-                          </li>
-                        </ul>
-                      </DropDown> */}
-                    </li>
-                    <li>
-                      <Link
-                        href="/price"
-                        onClick={() => setMobileToggle(false)}
-                      >
-                        Price
-                      </Link>
-                      {/* <DropDown>
-                        <ul>
-                          <li>
-                            <Link
-                              href="/blog"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Blog
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/blog/blog-details"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Blog Details
-                            </Link>
-                          </li>
-                        </ul>
-                      </DropDown> */}
-                    </li>
+                    {/* </SignedOut> */}
+                    <SignedIn>
+                      <li>
+                        <Link
+                          href="/job"
+                          onClick={() => setMobileToggle(false)}
+                        >
+                          Job
+                        </Link>
+                      </li>
+
+                      <li>
+                        <Link
+                          href="/price"
+                          onClick={() => setMobileToggle(false)}
+                        >
+                          Price
+                        </Link>
+                      </li>
+                    </SignedIn>
+
                     <li className="menu-item-has-children">
                       <Link href="/" onClick={() => setMobileToggle(false)}>
                         Pages
@@ -286,16 +219,16 @@ export default function Header({ variant }) {
                         </ul>
                       </DropDown>
                     </li>
-                    <li>
-                      <SignedOut>
+                    <SignedOut>
+                      <li>
                         <Link
                           href="/sign-in"
                           onClick={() => setMobileToggle(false)}
                         >
                           SignIn
                         </Link>
-                      </SignedOut>
-                    </li>
+                      </li>
+                    </SignedOut>
                   </ul>
                   <span
                     className={
