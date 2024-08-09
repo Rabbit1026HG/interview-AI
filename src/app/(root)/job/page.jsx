@@ -3,8 +3,24 @@
 import SectionHeading from "@/app/ui/SectionHeading";
 import ServiceListStyle2 from "@/app/ui/ServiceList/ServiceListStyle2";
 import Spacing from "@/app/ui/Spacing";
+import { useApi } from "@/hooks/api";
+import { useEffect, useState } from "react";
 
 export default function FreelancerAgencyHome() {
+  const api = useApi();
+  const [data, setData] = useState([]);
+  const getData = async () => {
+    const data1 = await api.getJob();
+    data1.unshift({
+      title: "Create custom job",
+      description: "",
+      id: "/create-job",
+    });
+    setData(data1);
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <>
       <section className="cs-shape_wrap_4 cs-parallax">
@@ -18,7 +34,7 @@ export default function FreelancerAgencyHome() {
               <Spacing lg="45" md="45" />
             </div>
             <div className="col-lg-7 offset-xl-1">
-              <ServiceListStyle2 />
+              <ServiceListStyle2 data={data} />
             </div>
           </div>
         </div>

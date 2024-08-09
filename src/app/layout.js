@@ -6,6 +6,7 @@ import "swiper/css/pagination";
 import "./scss/index.scss";
 import { Poppins, Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SupabaseProvider } from "@/hooks/SupabaseContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
           <title>Arino Creative Agency Next JS Template</title>
         </head>
         <body className={`${openSans.variable} ${poppins.variable}`}>
-          <CustomCursor />
-          {children}
+          <SupabaseProvider>
+            <CustomCursor />
+            {children}
+          </SupabaseProvider>
         </body>
       </html>
     </ClerkProvider>
