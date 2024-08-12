@@ -1,39 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Div from "../Div";
-const serviceData = [
-  {
-    title: "Create custom job",
 
-    href: "/create-job",
-  },
-  {
-    title: "WP Development",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    href: "/job/job-details",
-  },
-  {
-    title: "UI/UX Design",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    href: "/job/job-details",
-  },
-  {
-    title: "Branding",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    href: "/job/job-details",
-  },
-  {
-    title: "Social Ad Campaign",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    href: "/job/job-details",
-  },
-];
-
-export default function ServiceListStyle2({ data }) {
+export default function JobList({ data }) {
   const [active, setActive] = useState(0);
   const handelActive = (index) => {
     setActive(index);

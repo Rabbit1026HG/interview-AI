@@ -7,11 +7,11 @@ import LogoList from "@/app/ui/LogoList";
 import MovingText from "@/app/ui/MovingText";
 import Portfolio from "@/app/ui/Portfolio";
 import SectionHeading from "@/app/ui/SectionHeading";
-import ServiceListStyle2 from "@/app/ui/ServiceList/ServiceListStyle2";
 import TestimonialSlider from "@/app/ui/Slider/TestimonialSlider";
 import Spacing from "@/app/ui/Spacing";
 import VideoModal from "@/app/ui/VideoModal";
 import { Icon } from "@iconify/react";
+import JobList from "@/app/ui/ServiceList/ServiceJobList";
 
 
 const heroSocialLinks = [
@@ -148,7 +148,7 @@ export default function FreelancerAgencyHome() {
               <Spacing lg="45" md="45" />
             </div>
             <div className="col-lg-7 offset-xl-1">
-              <ServiceListStyle2 />
+              <JobList/>
             </div>
           </div>
         </div>
