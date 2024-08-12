@@ -19,7 +19,7 @@ const report = [
       "Extra details about the company can help us to generate more relevant questions. Not requied, but certainly helpful. question",
   },
   {
-    title: "Upload any relevant documents",
+    title: "Upload your CV/Resume.",
     subtitle:
       "These documents can help us generate more relevant questions for your interview and we can also provide help you craft interview question answers based off of your work experience. The more information you upload, the better our tool works! Acceptable file formats are CV and pdf.",
   },
