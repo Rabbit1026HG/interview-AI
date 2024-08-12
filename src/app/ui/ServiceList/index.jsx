@@ -33,25 +33,25 @@ const serviceData = [
   },
 ];
 
-export default function ServiceList({ variant }) {
+export default function ServiceList({ variant,data }) {
   const [active, setActive] = useState(0);
   const handelActive = (index) => {
     setActive(index);
   };
   return (
-    <Div className={`cs-iconbox_3_list ${variant ? variant : ""}`}>
-      {serviceData.map((item, index) => (
+    <Div className={`cs-iconbox_3_list cs-style1`}>
+      {data?.map((item, index) => (
         <Div
           className={`cs-hover_tab ${active === index ? "active" : ""}`}
           key={index}
           onMouseEnter={() => handelActive(index)}
         >
           <Link
-            href={index < 2 ? item.href : "/price"}
+            href={index < 2 ? `/answer/${item.id}` : "/price"}
             className="cs-iconbox cs-style3"
           >
             <>
-              <Div className="cs-image_layer cs-style1 cs-size_md">
+              {/* <Div className="cs-image_layer cs-style1 cs-size_md">
                 <Div className="cs-image_layer_in">
                   <img
                     src={item.imgUrl}
@@ -59,7 +59,7 @@ export default function ServiceList({ variant }) {
                     className="w-100 cs-radius_15"
                   />
                 </Div>
-              </Div>
+              </Div> */}
               <span className="cs-iconbox_icon cs-center">
                 {index < 2 ? (
                   <svg
@@ -96,7 +96,7 @@ export default function ServiceList({ variant }) {
                 )}
               </span>
               <Div className="cs-iconbox_in">
-                <Div className="cs-iconbox_subtitle">{item.subtitle}</Div>
+                <Div className="cs-iconbox_subtitle">{item.question}</Div>
               </Div>
             </>
           </Link>

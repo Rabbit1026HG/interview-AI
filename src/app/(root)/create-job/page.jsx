@@ -3,8 +3,9 @@
 import ProgressBar from "@/app/ui/ProgressBar";
 import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
+import { AssistantStream } from "openai/lib/AssistantStream";
 
 const report = [
   {
@@ -35,20 +36,66 @@ export default function CreateJob() {
   const [jobDescription, setJobDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [companyDescription, setCompanyDescription] = useState("");
+  
+  const [threadId, setThreadId] = useState("");
+
   const router = useRouter();
   const onBack = () => {
     step && setStep(step - 1);
   };
-  const onNext = () => {
-    step < 2
-      ? setStep(step + 1)
-      : api.test({
-          title: jobTitle,
-          description: jobDescription,
-          company: companyName,
-          companyDescription: companyDescription,
-          fileName: fileName,
-        });
+  const onNext =()=>{
+    if(step<2)setStep(step + 1);
+    else {
+      sendMessage(`Give me 20 question for ${jobTitle} job interview and I want to need only question without other content such as introduction, report, conclusion and so on.`);
+    }
+  }
+ 
+
+  useEffect(() => {
+    const createThread = async () => {
+      const res = await fetch(`/api/assistants/threads`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      setThreadId(data.threadId);
+    };
+    createThread();
+  }, []);
+
+  const sendMessage = async (text) => {
+    const data = await fetch(
+      `/api/assistants/threads/${threadId}/messages`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          content: text,
+        }),
+      }
+    );
+    const data1=await data.json();
+    console.log("response:",data1.msg);
+    api.test({
+              title: jobTitle,
+              description: jobDescription,
+              company: companyName,
+              companyDescription: companyDescription,
+              fileName: fileName,
+              question:data1.msg,
+            })
+  };
+ 
+
+  const handleFileUpload = async (event) => {
+    const data = new FormData();
+    console.log("Init data:",data)
+    if (event.target.files.length < 0) return;
+    data.append("file", event.target.files[0]);
+    console.log("Append data:",data);
+    setFileName(event.target?.files[0].name)
+    await fetch("/api/assistants/files", {
+      method: "POST",
+      body: data,
+    });
   };
   return (
     <>
@@ -122,11 +169,7 @@ export default function CreateJob() {
                   hidden
                   id="choose"
                   accept=".pdf, .doc, .docx, .md, .txt"
-                  onChange={(e) => {
-                    e.target.value
-                      ? setFileName(e.target?.files[0].name)
-                      : setFileName("No file chosen");
-                  }}
+                  onChange={handleFileUpload}
                 />
                 <p>{fileName}</p>
               </div>
