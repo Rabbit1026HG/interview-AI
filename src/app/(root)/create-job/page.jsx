@@ -5,6 +5,7 @@ import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
+import Loader from "@/app/ui/Loader";
 
 const report = [
   {
@@ -35,6 +36,7 @@ export default function CreateJob() {
   const [jobDescription, setJobDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [companyDescription, setCompanyDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [threadId, setThreadId] = useState("");
 
@@ -42,10 +44,11 @@ export default function CreateJob() {
   const onBack = () => {
     step && setStep(step - 1);
   };
-  const onNext =()=>{
-    if(step<2)setStep(step + 1);
+  const onNext = () => {
+    if (step < 2) setStep(step + 1);
     else {
-      sendMessage(`Give me 20 question for ${jobTitle} job interview and I want to need only question without other content such as introduction, report, conclusion and so on.`);
+      sendMessage(`I want to 20 question for ${jobTitle} job interview. But your answer have to include only question without other content such as your introduction, conclusion. Answer format:
+Number. sentence`);
     }
   }
 
@@ -62,7 +65,8 @@ export default function CreateJob() {
   }, []);
 
   const sendMessage = async (text) => {
-    const data = await fetch(
+    setIsLoading(true)
+    let data = await fetch(
       `/api/assistants/threads/${threadId}/messages`,
       {
         method: "POST",
@@ -71,25 +75,27 @@ export default function CreateJob() {
         }),
       }
     );
-    const data1=await data.json();
-    console.log("response:",data1.msg);
-    api.test({
-              title: jobTitle,
-              description: jobDescription,
-              company: companyName,
-              companyDescription: companyDescription,
-              fileName: fileName,
-              question:data1.msg,
-            })
+    let data1 = await data.json();
+    data = data1.msg.split("\n");
+    console.log("response:", data1.msg);
+    await api.test({
+      title: jobTitle,
+      description: jobDescription,
+      company: companyName,
+      companyDescription: companyDescription,
+      fileName: fileName,
+      question: data,
+    })
+    setIsLoading(false)
   };
 
 
   const handleFileUpload = async (event) => {
     const data = new FormData();
-    console.log("Init data:",data)
+    console.log("Init data:", data)
     if (event.target.files.length < 0) return;
     data.append("file", event.target.files[0]);
-    console.log("Append data:",data);
+    console.log("Append data:", data);
     setFileName(event.target?.files[0].name)
     await fetch("/api/assistants/files", {
       method: "POST",
@@ -174,14 +180,15 @@ export default function CreateJob() {
               </div>
             </section>
           )}
-          <div className="d-flex justify-content-between cs-font_22">
+          {isLoading ? <Loader /> : <div className="d-flex justify-content-between cs-font_22">
             <div className="cs-btn cs-style1" onClick={onBack}>
               Back
             </div>
             <div className="cs-btn cs-style1" onClick={onNext}>
               Next
             </div>
-          </div>
+          </div>}
+
         </div>
       </div>
     </>

@@ -9,6 +9,8 @@ import Link from "next/link";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import Markdown from "react-markdown";
+import Loader from "@/app/ui/Loader";
 
 export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
@@ -17,8 +19,13 @@ export default function Answer({ params: { id } }) {
   const [answer, setAnswer] = useState("This is test1.");
   const [weakness, setWeakness] = useState("This is test.");
   const [strength, setStrength] = useState("This is test.");
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
+
   const supabase = useSupabase();
   const { userId } = useAuth();
+
+  const [threadId, setThreadId] = useState("");
 
   const getAnswer = async () => {
     if (!supabase) return;
@@ -39,7 +46,33 @@ export default function Answer({ params: { id } }) {
     getAnswer();
   }, [supabase]);
 
+  useEffect(() => {
+    const createThread = async () => {
+      const res = await fetch(`/api/assistants/threads`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      setThreadId(data.threadId);
+    };
+    createThread();
+  }, []);
+
+  const sendMessage = async (text) => {
+    let data = await fetch(
+      `/api/assistants/threads/${threadId}/messages`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          content: text,
+        }),
+      }
+    );
+    const returnvalue = await data.json();
+    return returnvalue.msg;
+  }
+
   const onSave = async () => {
+    setIsLoadingSave(true)
     const ischeck = await isExist();
 
     if (!ischeck) return;
@@ -58,6 +91,7 @@ export default function Answer({ params: { id } }) {
       return;
     }
     getAnswer();
+    setIsLoadingSave(false);
     console.log("Save success! :", data);
   };
   const isExist = async () => {
@@ -79,13 +113,28 @@ export default function Answer({ params: { id } }) {
     return true;
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!input.trim()) {
       console.log("input invalid");
       return;
     }
+    setIsLoadingSubmit(true);
+    const text = `I would like to rate my answer to the question, but the answer should be brief. Answer format:
+Weaknesses: Less than 4 sentences. 
+Strengths: Less than 4 sentences.
+My question and answer are as follows:
+Question: ${question}
+Answer: ${input.trim()}`;
+    console.log("text:", text);
+    let data = await sendMessage(text);
+    console.log("data:", data);
+    let data_array = data.split("Strengths:");
+
     setAnswer(input.trim());
+    setStrength(data_array[1].trim());
+    setWeakness(data_array[0].replace("Weaknesses:", "").trim());
     setInput("");
+    setIsLoadingSubmit(false);
   };
   return (
     <>
@@ -109,7 +158,7 @@ export default function Answer({ params: { id } }) {
           <span className="cs-font_30">Question</span>
         </Link>
         <Spacing lg="20" md="10" />
-        <p className="cs-m0">{question}</p>
+        <div className="cs-m0">{question}</div>
         <br />
         <Div className="d-flex justify-content-sm-between">
           <Link href="" className="cs-text_btn">
@@ -122,9 +171,9 @@ export default function Answer({ params: { id } }) {
         <hr />
         <br />
         {answers?.map((item, index) => (
-          <p className="cs-m0" key={index}>
+          <div className="cs-m0" key={index}>
             {item.answer}
-          </p>
+          </div>
         ))}
 
         <Div className="col-sm-12">
@@ -138,35 +187,36 @@ export default function Answer({ params: { id } }) {
           />
           <Spacing lg="25" md="25" />
         </Div>
-        <Div className="d-flex justify-content-sm-end">
+
+        {isLoadingSubmit ? <Loader /> : <Div className="d-flex justify-content-sm-end">
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
-        </Div>
+        </Div>}
+
         <Spacing lg="65" md="45" />
         <Div className="row">
           <Div className="col-sm-6">
-            <h2 className="cs-font_30 ">Strengh</h2>
-            <p className="cs-m0">{strength}</p>
+            <h2 className="cs-font_30 ">Strength</h2>
+            <div className="cs-m0"><Markdown>{strength}</Markdown></div>
 
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Weakness</h2>
-            {/* <Spacing lg="40" md="30" /> */}
-            <p className="cs-m0">{weakness}</p>
+            <div className="cs-m0"><Markdown>{weakness}</Markdown></div>
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-12">
             <h2 className="cs-font_30 ">Interview</h2>
-            {/* <Spacing lg="40" md="30" /> */}
-            <p className="cs-m0">{answer}</p>
+            <div className="cs-m0" style={{ whiteSpace: 'pre-wrap' }}>{answer}</div>
+
           </Div>
-          <Div className="d-flex justify-content-sm-end">
+          {isLoadingSave?<Loader/>:<Div className="d-flex justify-content-sm-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
               <span>Save</span>
             </button>
-          </Div>
+          </Div>}
         </Div>
         <Spacing lg="125" md="55" />
       </Div>
