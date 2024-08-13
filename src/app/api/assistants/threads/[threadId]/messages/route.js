@@ -24,13 +24,13 @@ export async function POST(request, { params: { threadId } }) {
     const messages = await openai.beta.threads.messages.list(
       run.thread_id
     );
-    let data = messages.data[0].content[0].text.value;
+    const data = messages.data[0].content[0].text.value;
     console.log(data);
-    const data_array = data.split("\n");
-    console.log(data_array);
+    // const data_array = data.split("\n");
+    // console.log(data_array);
    
 
-    return Response.json({ msg: data_array});
+    return Response.json({ msg: data});
   } else {
     console.log(run.status);
     return Response.json({ msg: "fail" });

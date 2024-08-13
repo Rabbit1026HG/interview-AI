@@ -63,7 +63,7 @@ export default function CreateJob() {
   }, []);
 
   const sendMessage = async (text) => {
-    const data = await fetch(
+    let data = await fetch(
       `/api/assistants/threads/${threadId}/messages`,
       {
         method: "POST",
@@ -72,7 +72,8 @@ export default function CreateJob() {
         }),
       }
     );
-    const data1=await data.json();
+    let data1=await data.json();
+    data = data1.msg.split("\n");
     console.log("response:",data1.msg);
     api.test({
               title: jobTitle,

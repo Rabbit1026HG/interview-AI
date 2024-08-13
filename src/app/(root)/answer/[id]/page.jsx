@@ -9,6 +9,7 @@ import Link from "next/link";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import Markdown from "react-markdown";
 
 export default function answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
@@ -19,6 +20,8 @@ export default function answer({ params: { id } }) {
   const [strength, setStrength] = useState("This is test.");
   const supabase = useSupabase();
   const { userId } = useAuth();
+
+  const [threadId, setThreadId] = useState("");
 
   const getAnswer = async () => {
     if (!supabase) return;
@@ -38,6 +41,31 @@ export default function answer({ params: { id } }) {
   useEffect(() => {
     getAnswer();
   }, [supabase]);
+
+  useEffect(() => {
+    const createThread = async () => {
+      const res = await fetch(`/api/assistants/threads`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      setThreadId(data.threadId);
+    };
+    createThread();
+  }, []);
+
+  const sendMessage = async (text) => {
+    let data = await fetch(
+      `/api/assistants/threads/${threadId}/messages`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          content: text,
+        }),
+      }
+    );
+const returnvalue = await data.json();
+    return returnvalue.msg;
+  }
 
   const onSave = async () => {
     const ischeck = await isExist();
@@ -79,12 +107,25 @@ export default function answer({ params: { id } }) {
     return true;
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!input.trim()) {
       console.log("input invalid");
       return;
     }
+    const text = `I would like to rate my answer to the question, but the answer should be brief. Answer format:
+Weaknesses: Less than 4 sentences. 
+Strengths: Less than 4 sentences.
+My question and answer are as follows:
+Question: ${question}
+Answer: ${input.trim()}`;
+    console.log("text:", text);
+    let data = await sendMessage(text);
+    console.log("data:", data);
+    let data_array = data.split("Strengths:");
+
     setAnswer(input.trim());
+    setStrength(data_array[1].trim());
+    setWeakness(data_array[0].replace("Weaknesses:","").trim());
     setInput("");
   };
   return (
@@ -109,7 +150,7 @@ export default function answer({ params: { id } }) {
           <span className="cs-font_30">Question</span>
         </Link>
         <Spacing lg="20" md="10" />
-        <p className="cs-m0">{question}</p>
+        <div className="cs-m0">{question}</div>
         <br />
         <Div className="d-flex justify-content-sm-between">
           <Link href="" className="cs-text_btn">
@@ -122,9 +163,9 @@ export default function answer({ params: { id } }) {
         <hr />
         <br />
         {answers?.map((item, index) => (
-          <p className="cs-m0" key={index}>
+          <div className="cs-m0" key={index}>
             {item.answer}
-          </p>
+          </div>
         ))}
 
         <Div className="col-sm-12">
@@ -147,20 +188,21 @@ export default function answer({ params: { id } }) {
         <Div className="row">
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Strengh</h2>
-            <p className="cs-m0">{strength}</p>
+            <div className="cs-m0"><Markdown>{strength}</Markdown></div>
 
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Weakness</h2>
             {/* <Spacing lg="40" md="30" /> */}
-            <p className="cs-m0">{weakness}</p>
+            <div className="cs-m0"><Markdown>{weakness}</Markdown></div>
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-12">
             <h2 className="cs-font_30 ">Interview</h2>
             {/* <Spacing lg="40" md="30" /> */}
-            <p className="cs-m0">{answer}</p>
+            <div className="cs-m0" style={{whiteSpace: 'pre-wrap'}}>{answer}</div>
+            
           </Div>
           <Div className="d-flex justify-content-sm-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
