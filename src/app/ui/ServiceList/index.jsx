@@ -2,38 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Div from "../Div";
 
-const serviceData = [
-  {
-    title: "WP Development",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    imgUrl: "/images/service_7.jpeg",
-    href: "/answer/service-details",
-  },
-  {
-    title: "UI/UX Design",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    imgUrl: "/images/service_8.jpeg",
-    href: "/answer/service-details",
-  },
-  {
-    title: "Branding",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    imgUrl: "/images/service_9.jpeg",
-    href: "/answer/service-details",
-  },
-  {
-    title: "Social Ad Campaign",
-    subtitle:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium lorema doloremque laudantium, totam rem.",
-    imgUrl: "/images/service_10.jpeg",
-    href: "/answer/service-details",
-  },
-];
-
-export default function ServiceList({ variant,data }) {
+export default function ServiceList({ variant, data }) {
   const [active, setActive] = useState(0);
   const handelActive = (index) => {
     setActive(index);
@@ -51,15 +20,6 @@ export default function ServiceList({ variant,data }) {
             className="cs-iconbox cs-style3"
           >
             <>
-              {/* <Div className="cs-image_layer cs-style1 cs-size_md">
-                <Div className="cs-image_layer_in">
-                  <img
-                    src={item.imgUrl}
-                    alt="Thumb"
-                    className="w-100 cs-radius_15"
-                  />
-                </Div>
-              </Div> */}
               <span className="cs-iconbox_icon cs-center">
                 {index < 2 ? (
                   <svg
@@ -70,12 +30,7 @@ export default function ServiceList({ variant,data }) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M206.527,4.542c-40.742,0-73.889,33.146-73.889,73.889v32.111H16.125C7.22,110.542,0,117.761,0,126.667V259.75
-	c0,8.906,7.22,16.125,16.125,16.125h165.25c8.906,0,16.125-7.219,16.125-16.125V126.667c0-8.906-7.219-16.125-16.125-16.125h-8.736
-	V78.431c0-18.686,15.202-33.889,33.889-33.889c18.687,0,33.89,15.202,33.89,33.889c0,11.046,8.954,20,20,20s20-8.954,20-20
-	C280.417,37.689,247.27,4.542,206.527,4.542z M114.416,194.777v26.432c0,8.652-7.014,15.666-15.666,15.666
-	s-15.666-7.014-15.666-15.666v-26.432c-5.885-4.639-9.668-11.826-9.668-19.901c0-13.992,11.342-25.334,25.334-25.334
-	s25.334,11.342,25.334,25.334C124.084,182.951,120.301,190.138,114.416,194.777z"
+                      d="M206.527,4.542c-40.742,0-73.889,33.146-73.889,73.889v32.111H16.125C7.22,110.542,0,117.761,0,126.667V259.75,c0,8.906,7.22,16.125,16.125,16.125h165.25c8.906,0,16.125-7.219,16.125-16.125V126.667c0-8.906-7.219-16.125-16.125-16.125h-8.736,	V78.431c0-18.686,15.202-33.889,33.889-33.889c18.687,0,33.89,15.202,33.89,33.889c0,11.046,8.954,20,20,20s20-8.954,20-20,	C280.417,37.689,247.27,4.542,206.527,4.542z M114.416,194.777v26.432c0,8.652-7.014,15.666-15.666,15.666,	s-15.666-7.014-15.666-15.666v-26.432c-5.885-4.639-9.668-11.826-9.668-19.901c0-13.992,11.342-25.334,25.334-25.334,	s25.334,11.342,25.334,25.334C124.084,182.951,120.301,190.138,114.416,194.777z"
                       fill="currentColor"
                     />
                   </svg>

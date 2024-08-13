@@ -3,24 +3,32 @@
 import SectionHeading from "@/app/ui/SectionHeading";
 import JobList from "@/app/ui/ServiceList/ServiceJobList";
 import Spacing from "@/app/ui/Spacing";
-import { useApi } from "@/hooks/api";
+import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 
 export default function FreelancerAgencyHome() {
-  const api = useApi();
+  const supabase = useSupabase();
   const [data, setData] = useState([]);
   const getData = async () => {
-    const data1 = await api.getJob();
-    data1?.unshift({
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from("jobtable")
+      .select(`id,title,description`)
+      .order("update_at", { ascending: false });
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+    data?.unshift({
       title: "Create custom job",
       description: "",
       id: "/create-job",
     });
-    setData(data1);
+    setData(data);
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [supabase]);
   return (
     <>
       <section className="cs-shape_wrap_4 cs-parallax">
