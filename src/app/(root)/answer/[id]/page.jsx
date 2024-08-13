@@ -19,6 +19,9 @@ export default function Answer({ params: { id } }) {
   const [answer, setAnswer] = useState("This is test1.");
   const [weakness, setWeakness] = useState("This is test.");
   const [strength, setStrength] = useState("This is test.");
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
+
   const supabase = useSupabase();
   const { userId } = useAuth();
 
@@ -64,11 +67,12 @@ export default function Answer({ params: { id } }) {
         }),
       }
     );
-const returnvalue = await data.json();
+    const returnvalue = await data.json();
     return returnvalue.msg;
   }
 
   const onSave = async () => {
+    setIsLoadingSave(true)
     const ischeck = await isExist();
 
     if (!ischeck) return;
@@ -87,6 +91,7 @@ const returnvalue = await data.json();
       return;
     }
     getAnswer();
+    setIsLoadingSave(false);
     console.log("Save success! :", data);
   };
   const isExist = async () => {
@@ -113,6 +118,7 @@ const returnvalue = await data.json();
       console.log("input invalid");
       return;
     }
+    setIsLoadingSubmit(true);
     const text = `I would like to rate my answer to the question, but the answer should be brief. Answer format:
 Weaknesses: Less than 4 sentences. 
 Strengths: Less than 4 sentences.
@@ -126,8 +132,9 @@ Answer: ${input.trim()}`;
 
     setAnswer(input.trim());
     setStrength(data_array[1].trim());
-    setWeakness(data_array[0].replace("Weaknesses:","").trim());
+    setWeakness(data_array[0].replace("Weaknesses:", "").trim());
     setInput("");
+    setIsLoadingSubmit(false);
   };
   return (
     <>
@@ -180,37 +187,36 @@ Answer: ${input.trim()}`;
           />
           <Spacing lg="25" md="25" />
         </Div>
-        <Div className="d-flex justify-content-sm-end">
+
+        {isLoadingSubmit ? <Loader /> : <Div className="d-flex justify-content-sm-end">
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
-        </Div>
+        </Div>}
+
         <Spacing lg="65" md="45" />
         <Div className="row">
           <Div className="col-sm-6">
-            <h2 className="cs-font_30 ">Strengh</h2>
+            <h2 className="cs-font_30 ">Strength</h2>
             <div className="cs-m0"><Markdown>{strength}</Markdown></div>
 
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Weakness</h2>
-            {/* <Spacing lg="40" md="30" /> */}
             <div className="cs-m0"><Markdown>{weakness}</Markdown></div>
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-12">
             <h2 className="cs-font_30 ">Interview</h2>
-            {/* <Spacing lg="40" md="30" /> */}
-            <div className="cs-m0" style={{whiteSpace: 'pre-wrap'}}>{answer}</div>
-            
+            <div className="cs-m0" style={{ whiteSpace: 'pre-wrap' }}>{answer}</div>
+
           </Div>
-          <Div className="d-flex justify-content-sm-end">
+          {isLoadingSave?<Loader/>:<Div className="d-flex justify-content-sm-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
               <span>Save</span>
             </button>
-          </Div>
-          <Loader/>
+          </Div>}
         </Div>
         <Spacing lg="125" md="55" />
       </Div>
