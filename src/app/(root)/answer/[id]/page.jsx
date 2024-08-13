@@ -10,6 +10,7 @@ import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
+import Loader from "@/app/ui/Loader";
 
 export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
@@ -209,6 +210,7 @@ Answer: ${input.trim()}`;
               <span>Save</span>
             </button>
           </Div>
+          <Loader/>
         </Div>
         <Spacing lg="125" md="55" />
       </Div>

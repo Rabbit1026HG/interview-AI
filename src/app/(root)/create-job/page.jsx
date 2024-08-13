@@ -46,7 +46,8 @@ export default function CreateJob() {
   const onNext =()=>{
     if(step<2)setStep(step + 1);
     else {
-      sendMessage(`Give me 20 question for ${jobTitle} job interview and I want to need only question without other content such as introduction, report, conclusion and so on.`);
+      sendMessage(`I want to 20 question for ${jobTitle} job interview. But your answer have to include only question without other content such as your introduction, conclusion. Answer format:
+Number. sentence`);
     }
   }
  
@@ -81,7 +82,7 @@ export default function CreateJob() {
               company: companyName,
               companyDescription: companyDescription,
               fileName: fileName,
-              question:data1.msg,
+              question:data,
             })
   };
  
