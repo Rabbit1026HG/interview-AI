@@ -5,7 +5,6 @@ import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
-import { AssistantStream } from "openai/lib/AssistantStream";
 
 const report = [
   {
@@ -36,7 +35,7 @@ export default function CreateJob() {
   const [jobDescription, setJobDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [companyDescription, setCompanyDescription] = useState("");
-  
+
   const [threadId, setThreadId] = useState("");
 
   const router = useRouter();
@@ -50,7 +49,7 @@ export default function CreateJob() {
 Number. sentence`);
     }
   }
- 
+
 
   useEffect(() => {
     const createThread = async () => {
@@ -85,7 +84,7 @@ Number. sentence`);
               question:data,
             })
   };
- 
+
 
   const handleFileUpload = async (event) => {
     const data = new FormData();
