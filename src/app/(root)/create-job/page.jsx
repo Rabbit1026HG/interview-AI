@@ -5,7 +5,6 @@ import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
-import { AssistantStream } from "openai/lib/AssistantStream";
 
 const report = [
   {
@@ -36,7 +35,7 @@ export default function CreateJob() {
   const [jobDescription, setJobDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [companyDescription, setCompanyDescription] = useState("");
-  
+
   const [threadId, setThreadId] = useState("");
 
   const router = useRouter();
@@ -49,7 +48,7 @@ export default function CreateJob() {
       sendMessage(`Give me 20 question for ${jobTitle} job interview and I want to need only question without other content such as introduction, report, conclusion and so on.`);
     }
   }
- 
+
 
   useEffect(() => {
     const createThread = async () => {
@@ -83,7 +82,7 @@ export default function CreateJob() {
               question:data1.msg,
             })
   };
- 
+
 
   const handleFileUpload = async (event) => {
     const data = new FormData();
