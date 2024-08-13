@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
 
-export default function answer({ params: { id } }) {
+export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState([]);
   const [input, setInput] = useState("");

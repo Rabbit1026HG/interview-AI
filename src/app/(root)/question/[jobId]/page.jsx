@@ -7,7 +7,7 @@ import Spacing from "@/app/ui/Spacing";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 
-export default function question({ params: { jobId } }) {
+export default function Question({ params: { jobId } }) {
   const [data, setData] = useState([]);
   const [questiontitle, setTitle] = useState();
   const supabase = useSupabase();
