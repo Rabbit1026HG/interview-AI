@@ -7,6 +7,7 @@ import "./scss/index.scss";
 import { Poppins, Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SupabaseProvider } from "@/hooks/SupabaseContext";
+import NextTopLoader from "nextjs-toploader";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
         </head>
         <body className={`${openSans.variable} ${poppins.variable}`}>
           <SupabaseProvider>
+            <NextTopLoader/>
             <CustomCursor />
             {children}
           </SupabaseProvider>

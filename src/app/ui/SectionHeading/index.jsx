@@ -8,7 +8,7 @@ export default function SectionHeading({title, subtitle, btnLink, btnText, varia
   return (
     <Div className={variant ? `cs-section_heading ${variant}` : `cs-section_heading cs-style1`}>
       <h3 className="cs-section_subtitle">{parse(subtitle)}</h3>
-      <h2 className="cs-section_title">{title}</h2>
+      <h2 className="cs-section_title">{parse(title)}</h2>
       {children}
       {btnText && (
         <>

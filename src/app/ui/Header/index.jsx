@@ -50,94 +50,7 @@ export default function Header({ variant }) {
                       </Link>
                       <DropDown>
                         <ul>
-                          <li>
-                            <Link
-                              href="/"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Main Home
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/photography-agency"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Photography Agency
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/creative-portfolio"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Creative Portfolio
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/digital-agency"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Digital Agency
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/marketing-agency"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Marketing Agency
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/freelancer-agency"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Freelancer Agency
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/architecture-agency"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Architecture Agency
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/creative-solution"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Creative Solution
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/personal-portfolio"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Personal Portfolio
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/showcase-portfolio"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Showcase Portfolio
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/case-study-showcase"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Case Study Showcase
-                            </Link>
-                          </li>
+                     
                           <li>
                             <Link
                               href="/video-showcase"
@@ -200,14 +113,7 @@ export default function Header({ variant }) {
                               Team Details
                             </Link>
                           </li>
-                          <li>
-                            <Link
-                              href="/case-study/case-study-details"
-                              onClick={() => setMobileToggle(false)}
-                            >
-                              Case Study Details
-                            </Link>
-                          </li>
+ 
                           <li>
                             <Link
                               href="/faq"

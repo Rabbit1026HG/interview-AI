@@ -1,5 +1,5 @@
-import { assistantId } from "@/app/assistant-config";
-import { openai } from "@/app/openai";
+import { assistantId } from "@/config/assistant-config";
+import { openai } from "@/config/openai";
 
 
 export const runtime = "nodejs";
@@ -11,7 +11,6 @@ export async function POST(request, { params: { threadId } }) {
     role: "user",
     content: content,
   });
-
 
   let run = await openai.beta.threads.runs.createAndPoll(
     threadId,
@@ -25,10 +24,7 @@ export async function POST(request, { params: { threadId } }) {
       run.thread_id
     );
     const data = messages.data[0].content[0].text.value;
-    console.log(data);
-    // const data_array = data.split("\n");
-    // console.log(data_array);
-   
+    console.log(data);   
 
     return Response.json({ msg: data});
   } else {

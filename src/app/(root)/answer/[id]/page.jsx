@@ -19,8 +19,7 @@ export default function Answer({ params: { id } }) {
   const [answer, setAnswer] = useState("This is test1.");
   const [weakness, setWeakness] = useState("This is test.");
   const [strength, setStrength] = useState("This is test.");
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
-  const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const supabase = useSupabase();
   const { userId } = useAuth();
@@ -72,7 +71,7 @@ export default function Answer({ params: { id } }) {
   }
 
   const onSave = async () => {
-    setIsLoadingSave(true)
+    setIsLoading(true)
     const ischeck = await isExist();
 
     if (!ischeck) return;
@@ -91,7 +90,7 @@ export default function Answer({ params: { id } }) {
       return;
     }
     getAnswer();
-    setIsLoadingSave(false);
+    setIsLoading(false);
     console.log("Save success! :", data);
   };
   const isExist = async () => {
@@ -118,13 +117,14 @@ export default function Answer({ params: { id } }) {
       console.log("input invalid");
       return;
     }
-    setIsLoadingSubmit(true);
-    const text = `I would like to rate my answer to the question, but the answer should be brief. Answer format:
+    setIsLoading(true);
+    const text = `I would like to rate my answer to the question. Answer format:
 Weaknesses: Less than 4 sentences. 
 Strengths: Less than 4 sentences.
 My question and answer are as follows:
 Question: ${question}
-Answer: ${input.trim()}`;
+Answer: ${input.trim()} 
+Do not write any explanations or other words, just reply with the answer format.`;
     console.log("text:", text);
     let data = await sendMessage(text);
     console.log("data:", data);
@@ -134,9 +134,13 @@ Answer: ${input.trim()}`;
     setStrength(data_array[1].trim());
     setWeakness(data_array[0].replace("Weaknesses:", "").trim());
     setInput("");
-    setIsLoadingSubmit(false);
+    setIsLoading(false);
   };
   return (
+    isLoading ? <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "100vh" }}
+    ><Loader /></div>:
     <>
       <Spacing lg="145" md="80" />
       <Div className="container">
@@ -188,11 +192,11 @@ Answer: ${input.trim()}`;
           <Spacing lg="25" md="25" />
         </Div>
 
-        {isLoadingSubmit ? <Loader /> : <Div className="d-flex justify-content-sm-end">
+         <Div className="d-flex justify-content-sm-end">
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
-        </Div>}
+        </Div>
 
         <Spacing lg="65" md="45" />
         <Div className="row">
@@ -212,11 +216,11 @@ Answer: ${input.trim()}`;
             <div className="cs-m0" style={{ whiteSpace: 'pre-wrap' }}>{answer}</div>
 
           </Div>
-          {isLoadingSave?<Loader/>:<Div className="d-flex justify-content-sm-end">
+         <Div className="d-flex justify-content-sm-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
               <span>Save</span>
             </button>
-          </Div>}
+          </Div>
         </Div>
         <Spacing lg="125" md="55" />
       </Div>

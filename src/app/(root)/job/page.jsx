@@ -1,5 +1,7 @@
 "use client";
 
+import Loader from "@/app/ui/Loader";
+import Loading from "@/app/ui/loading";
 import SectionHeading from "@/app/ui/SectionHeading";
 import JobList from "@/app/ui/ServiceList/ServiceJobList";
 import Spacing from "@/app/ui/Spacing";
@@ -43,6 +45,7 @@ export default function FreelancerAgencyHome() {
             </div>
             <div className="col-lg-7 offset-xl-1">
               <JobList data={data} />
+              
             </div>
           </div>
         </div>
