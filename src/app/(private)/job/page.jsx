@@ -31,7 +31,7 @@ export default function FreelancerAgencyHome() {
   useEffect(() => {
     getData();
   }, [supabase]);
-  return (
+  return data.length ? (
     <>
       <section className="cs-shape_wrap_4 cs-parallax">
         <div className="cs-shape_4 cs-to_up" />
@@ -45,7 +45,6 @@ export default function FreelancerAgencyHome() {
             </div>
             <div className="col-lg-7 offset-xl-1">
               <JobList data={data} />
-              
             </div>
           </div>
         </div>
@@ -53,5 +52,12 @@ export default function FreelancerAgencyHome() {
 
       <Spacing lg="145" md="80" />
     </>
+  ) : (
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "100vh" }}
+    >
+      <Loader />
+    </div>
   );
 }

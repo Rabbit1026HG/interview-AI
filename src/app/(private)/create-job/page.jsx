@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
 import Loader from "@/app/ui/Loader";
+import toast from "react-hot-toast";
 
 const report = [
   {
@@ -45,16 +46,20 @@ export default function CreateJob() {
     step && setStep(step - 1);
   };
   const onNext = () => {
+    if (!step && !jobTitle.trim()) return toast.error("Missing Title");
+    if (!step && !jobDescription.trim())
+      return toast.error("Missing Description");
     if (step < 2) setStep(step + 1);
     else {
+      if (fileName == "No file chosen")
+        return toast.error("You have to choose file");
       sendMessage(`I want 20 questions for ${jobTitle} job interview.
 Answer format:
 Number. Sentence.
 Do not write any explanations or other words, just reply with the answer format.
 `);
     }
-  }
-
+  };
 
   useEffect(() => {
     const createThread = async () => {
@@ -68,16 +73,13 @@ Do not write any explanations or other words, just reply with the answer format.
   }, []);
 
   const sendMessage = async (text) => {
-    setIsLoading(true)
-    let data = await fetch(
-      `/api/assistants/threads/${threadId}/messages`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
+    setIsLoading(true);
+    let data = await fetch(`/api/assistants/threads/${threadId}/messages`, {
+      method: "POST",
+      body: JSON.stringify({
+        content: text,
+      }),
+    });
     let data1 = await data.json();
     data = data1.msg.split("\n");
     console.log("response:", data1.msg);
@@ -88,28 +90,31 @@ Do not write any explanations or other words, just reply with the answer format.
       companyDescription: companyDescription,
       fileName: fileName,
       question: data,
-    })
-    setIsLoading(false)
+    });
+    setIsLoading(false);
   };
-
 
   const handleFileUpload = async (event) => {
     const data = new FormData();
-    console.log("Init data:", data)
+    console.log("Init data:", data);
     if (event.target.files.length < 0) return;
     data.append("file", event.target.files[0]);
     console.log("Append data:", data);
-    setFileName(event.target?.files[0].name)
+    setFileName(event.target?.files[0].name);
     await fetch("/api/assistants/files", {
       method: "POST",
       body: data,
     });
   };
-  return (
-    isLoading ? <div
+  return isLoading ? (
+    <div
       className="d-flex justify-content-center align-items-center"
       style={{ height: "100vh" }}
-    ><Loader /></div> : <>
+    >
+      <Loader />
+    </div>
+  ) : (
+    <>
       <Spacing lg="145" md="80" />
       <div className="container">
         <div className="row">
@@ -147,7 +152,9 @@ Do not write any explanations or other words, just reply with the answer format.
           {step == 1 && (
             <section>
               <div className="col-sm-12">
-                <label className="cs-primary_color">Company name</label>
+                <label className="cs-primary_color">
+                  Company name (Optional)
+                </label>
                 <input
                   type="text"
                   className="cs-form_field"
@@ -157,7 +164,9 @@ Do not write any explanations or other words, just reply with the answer format.
                 <Spacing lg="20" md="20" />
               </div>
               <div className="col-sm-12">
-                <label className="cs-primary_color">Company Description</label>
+                <label className="cs-primary_color">
+                  Company Description (Optional)
+                </label>
                 <textarea
                   cols="30"
                   rows="7"
@@ -194,7 +203,6 @@ Do not write any explanations or other words, just reply with the answer format.
               Next
             </div>
           </div>
-
         </div>
       </div>
     </>

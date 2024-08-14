@@ -16,9 +16,9 @@ export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState([]);
   const [input, setInput] = useState("");
-  const [answer, setAnswer] = useState("This is test1.");
-  const [weakness, setWeakness] = useState("This is test.");
-  const [strength, setStrength] = useState("This is test.");
+  const [answer, setAnswer] = useState("");
+  const [weakness, setWeakness] = useState("");
+  const [strength, setStrength] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const supabase = useSupabase();
@@ -57,21 +57,18 @@ export default function Answer({ params: { id } }) {
   }, []);
 
   const sendMessage = async (text) => {
-    let data = await fetch(
-      `/api/assistants/threads/${threadId}/messages`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
+    let data = await fetch(`/api/assistants/threads/${threadId}/messages`, {
+      method: "POST",
+      body: JSON.stringify({
+        content: text,
+      }),
+    });
     const returnvalue = await data.json();
     return returnvalue.msg;
-  }
+  };
 
   const onSave = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const ischeck = await isExist();
 
     if (!ischeck) return;
@@ -136,11 +133,14 @@ Do not write any explanations or other words, just reply with the answer format.
     setInput("");
     setIsLoading(false);
   };
-  return (
-    isLoading ? <div
+  return isLoading ? (
+    <div
       className="d-flex justify-content-center align-items-center"
       style={{ height: "100vh" }}
-    ><Loader /></div>:
+    >
+      <Loader />
+    </div>
+  ) : (
     <>
       <Spacing lg="145" md="80" />
       <Div className="container">
@@ -192,7 +192,7 @@ Do not write any explanations or other words, just reply with the answer format.
           <Spacing lg="25" md="25" />
         </Div>
 
-         <Div className="d-flex justify-content-sm-end">
+        <Div className="d-flex justify-content-sm-end">
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
@@ -200,23 +200,29 @@ Do not write any explanations or other words, just reply with the answer format.
 
         <Spacing lg="65" md="45" />
         <Div className="row">
+          <Div className="col-sm-12">
+            <h2 className="cs-font_30 ">Interview</h2>
+            <div className="cs-m0" style={{ whiteSpace: "pre-wrap" }}>
+              {answer}
+            </div>
+          </Div>
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Strength</h2>
-            <div className="cs-m0"><Markdown>{strength}</Markdown></div>
+            <div className="cs-m0">
+              <Markdown>{strength}</Markdown>
+            </div>
 
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Weakness</h2>
-            <div className="cs-m0"><Markdown>{weakness}</Markdown></div>
+            <div className="cs-m0">
+              <Markdown>{weakness}</Markdown>
+            </div>
             <Spacing lg="25" md="25" />
           </Div>
-          <Div className="col-sm-12">
-            <h2 className="cs-font_30 ">Interview</h2>
-            <div className="cs-m0" style={{ whiteSpace: 'pre-wrap' }}>{answer}</div>
 
-          </Div>
-         <Div className="d-flex justify-content-sm-end">
+          <Div className="d-flex justify-content-sm-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
               <span>Save</span>
             </button>
