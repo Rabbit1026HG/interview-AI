@@ -1,4 +1,4 @@
-import { openai } from "@/app/openai";
+import { openai } from "@/config/openai";
 
 // download file by file ID
 export async function GET(_request, { params: { fileId } }) {

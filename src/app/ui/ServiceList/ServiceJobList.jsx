@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Div from "../Div";
+import Loading from "../loading";
+import Loader from "../Loader";
 
 export default function JobList({ data }) {
   const [active, setActive] = useState(0);
@@ -9,8 +11,8 @@ export default function JobList({ data }) {
   };
   return (
     <Div className="cs-iconbox_3_list cs-style1">
-      {data &&
-        data?.map((item, index) => (
+      {data.length ?
+        data.map((item, index) => (
           <Div
             className={`cs-hover_tab ${active === index ? "active" : ""}`}
             key={index}
@@ -59,7 +61,7 @@ export default function JobList({ data }) {
               </>
             </Link>
           </Div>
-        ))}
+        )):<Loader/>}
     </Div>
   );
 }

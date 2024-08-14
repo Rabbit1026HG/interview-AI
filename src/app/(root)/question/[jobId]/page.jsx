@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function Question({ params: { jobId } }) {
   const [data, setData] = useState([]);
-  const [questiontitle, setTitle] = useState();
+  const [questiontitle, setTitle] = useState("");
   const supabase = useSupabase();
 
   const getQuestionData = async () => {

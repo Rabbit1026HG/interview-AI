@@ -47,8 +47,11 @@ export default function CreateJob() {
   const onNext = () => {
     if (step < 2) setStep(step + 1);
     else {
-      sendMessage(`I want to 20 question for ${jobTitle} job interview. But your answer have to include only question without other content such as your introduction, conclusion. Answer format:
-Number. sentence`);
+      sendMessage(`I want 20 questions for ${jobTitle} job interview.
+Answer format:
+Number. Sentence.
+Do not write any explanations or other words, just reply with the answer format.
+`);
     }
   }
 
@@ -103,7 +106,10 @@ Number. sentence`);
     });
   };
   return (
-    <>
+    isLoading ? <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ height: "100vh" }}
+    ><Loader /></div> : <>
       <Spacing lg="145" md="80" />
       <div className="container">
         <div className="row">
@@ -180,14 +186,14 @@ Number. sentence`);
               </div>
             </section>
           )}
-          {isLoading ? <Loader /> : <div className="d-flex justify-content-between cs-font_22">
+          <div className="d-flex justify-content-between cs-font_22">
             <div className="cs-btn cs-style1" onClick={onBack}>
               Back
             </div>
             <div className="cs-btn cs-style1" onClick={onNext}>
               Next
             </div>
-          </div>}
+          </div>
 
         </div>
       </div>
