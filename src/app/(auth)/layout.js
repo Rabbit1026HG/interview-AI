@@ -1,6 +1,6 @@
 "use client";
 
-export default function RootLayout({ children }) {
+export default function AuthLayout({ children }) {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
