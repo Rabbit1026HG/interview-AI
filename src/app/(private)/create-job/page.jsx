@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
 import Loader from "@/app/ui/Loader";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const report = [
   {
@@ -46,13 +46,26 @@ export default function CreateJob() {
     step && setStep(step - 1);
   };
   const onNext = () => {
-    if (!step && !jobTitle.trim()) return toast.error("Missing Title");
+    if (!step && !jobTitle.trim())
+      return toast.error("Missing title", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     if (!step && !jobDescription.trim())
-      return toast.error("Missing Description");
+      return toast.error("Missing Description.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     if (step < 2) setStep(step + 1);
     else {
       if (fileName == "No file chosen")
-        return toast.error("You have to choose file");
+        return toast.error("You have to choose file.", {
+          className: "black-background",
+          bodyClassName: "grow-font-size",
+          progressClassName: "fancy-progress-bar",
+        });
       sendMessage(`I want 20 questions for ${jobTitle} job interview.
 Answer format:
 Number. Sentence.

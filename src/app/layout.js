@@ -8,7 +8,9 @@ import { Poppins, Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SupabaseProvider } from "@/hooks/SupabaseContext";
 import NextTopLoader from "nextjs-toploader";
-import { ToastBar, Toaster } from "react-hot-toast";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,27 +37,7 @@ export default function RootLayout({ children }) {
           <SupabaseProvider>
             <NextTopLoader />
             <CustomCursor />
-            <Toaster
-              position="top-center"
-              reverseOrder={false}
-              toastOptions={{
-                duration: 2000,
-                style: { background: "#333", color: "#fff" },
-              }}
-            >
-              {(t) => (
-                <ToastBar
-                  toast={t}
-                  style={{
-                    ...t.style,
-                    animation: t.visible
-                      ? "custom-enter 2s ease"
-                      : "custom-exit 2s ease",
-                  }}
-                />
-              )}
-            </Toaster>
-
+            <ToastContainer />
             {children}
           </SupabaseProvider>
         </body>
