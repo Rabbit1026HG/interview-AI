@@ -8,8 +8,6 @@ import Spacing from "@/app/ui/Spacing";
 import Image from "next/image";
 import imgUrl from "../../../../../public/images/case_study_img_1.jpeg";
 
-
-
 const categoryMenu = [
   {
     title: "Ready",
@@ -20,7 +18,7 @@ const categoryMenu = [
     category: "completedn",
   },
 ];
-export default function CaseStudyDetailsPage({params:{jobid}}) {
+export default function CaseStudyDetailsPage({ params: { jobid } }) {
   const [active, setActive] = useState("all");
   const [fileName, setFileName] = useState("No file chosen");
   const [files, setFiles] = useState([]);
@@ -29,7 +27,6 @@ export default function CaseStudyDetailsPage({params:{jobid}}) {
     const interval = setTimeout(() => {
       fetchFiles();
     }, 1000);
-
   }, []);
 
   const fetchFiles = async () => {
@@ -38,7 +35,7 @@ export default function CaseStudyDetailsPage({params:{jobid}}) {
     });
     const data = await resp.json();
     console.log(data);
-    
+
     setFiles(data);
   };
   return (
@@ -78,15 +75,17 @@ export default function CaseStudyDetailsPage({params:{jobid}}) {
             <p>{fileName}</p>
           </div>
         </section>
+        <Spacing lg="50" md="35" />
         <Link href={`/question/${jobid}`} className="cs-text_btn">
           <span className="cs-font_30">Question Interviews</span>
         </Link>
       </Div>
-      {/* Start Portfolio Section */}
-      {/* <Spacing lg="115" md="55" /> */}
+      <Spacing lg="50" md="35" />
       <Div className="container">
         <Div className="cs-portfolio_1_heading">
-          <SectionHeading title="Mock Interviews" subtitle="" />
+          <Link href="" className="cs-text_btn">
+            <span className="cs-font_30">Mock Interviews</span>
+          </Link>
           <Div className="cs-filter_menu cs-style1">
             <ul className="cs-mp0 cs-center">
               <li className={active === "all" ? "active" : ""}>
@@ -106,7 +105,6 @@ export default function CaseStudyDetailsPage({params:{jobid}}) {
           </Div>
         </Div>
         <Spacing lg="90" md="45" />
-    
       </Div>
       <Spacing lg="145" md="80" />
     </>

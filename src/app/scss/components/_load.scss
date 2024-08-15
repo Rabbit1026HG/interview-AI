@@ -16,6 +16,23 @@
   animation-delay: 1s;
 }
 
+.cs-fixloading{
+  position:fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0px;
+  z-index: 9999;
+  background: black;
+  opacity: 65%;
+}
+
+.cs-container-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 @keyframes loading_492 {
   50% {
     scale: 1;
