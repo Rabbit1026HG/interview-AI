@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
 import Loader from "@/app/ui/Loader";
 import { toast } from "react-toastify";
+import Loading from "@/app/ui/loading";
 
 const report = [
   {
@@ -47,13 +48,13 @@ export default function CreateJob() {
   };
   const onNext = () => {
     if (!step && !jobTitle.trim())
-      return toast.error("Missing title", {
+      return toast.warning("Missing title", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
       });
     if (!step && !jobDescription.trim())
-      return toast.error("Missing Description.", {
+      return toast.warning("Missing Description.", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
@@ -61,7 +62,7 @@ export default function CreateJob() {
     if (step < 2) setStep(step + 1);
     else {
       if (fileName == "No file chosen")
-        return toast.error("You have to choose file.", {
+        return toast.warning("You have to choose file.", {
           className: "black-background",
           bodyClassName: "grow-font-size",
           progressClassName: "fancy-progress-bar",
@@ -119,15 +120,9 @@ Do not write any explanations or other words, just reply with the answer format.
       body: data,
     });
   };
-  return isLoading ? (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <Loader />
-    </div>
-  ) : (
+  return (
     <>
+      {isLoading && <Loading />}
       <Spacing lg="145" md="80" />
       <div className="container">
         <div className="row">
