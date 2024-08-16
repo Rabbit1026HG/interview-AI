@@ -3,19 +3,23 @@ import Link from "next/link";
 import Div from "../Div";
 import Loading from "../loading";
 import Loader from "../Loader";
+import { useAtom } from "jotai";
+import { titlejotai } from "@/store";
 
 export default function JobList({ data }) {
   const [active, setActive] = useState(0);
+  const [, setTitle] = useAtom(titlejotai);
   const handelActive = (index) => {
     setActive(index);
   };
   return (
     <Div className="cs-iconbox_3_list cs-style1">
       {data.map((item, index) => (
-        <Div
+        <div
           className={`cs-hover_tab ${active === index ? "active" : ""}`}
           key={index}
           onMouseEnter={() => handelActive(index)}
+          onClick={() => setTitle(item.title)}
         >
           <Link
             href={index ? `/job/${item.id}` : item.id}
@@ -59,7 +63,7 @@ export default function JobList({ data }) {
               </Div>
             </>
           </Link>
-        </Div>
+        </div>
       ))}
     </Div>
   );

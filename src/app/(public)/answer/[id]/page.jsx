@@ -1,19 +1,18 @@
 "use client";
 
 import Div from "@/app/ui/Div";
-import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
-import Image from "next/image";
-import imgUrl from "../../../../../public/images/case_study_img_1.jpeg";
 import Link from "next/link";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
-import Loader from "@/app/ui/Loader";
+import { toast } from "react-toastify";
+import Loading from "@/app/ui/loading";
 
 export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
+  const [jobId, setJobId] = useState("");
   const [answers, setAnswers] = useState([]);
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState("");
@@ -30,15 +29,20 @@ export default function Answer({ params: { id } }) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`question,answertable(id,answer,weakness,strength)`)
+      .select(`question, jobId,answertable(id,answer,weakness,strength)`)
+
       .eq("id", id);
 
     if (error) {
       console.log(error.message);
       return;
     }
+    setJobId(data[0].jobId);
     setQuestion(data[0].question);
     setAnswers(data[0].answertable);
+    setAnswer(data[0].answertable[0]?.answer);
+    setWeakness(data[0].answertable[0]?.weakness);
+    setStrength(data[0].answertable[0]?.strength);
   };
 
   useEffect(() => {
@@ -68,10 +72,21 @@ export default function Answer({ params: { id } }) {
   };
 
   const onSave = async () => {
+    if (!answer || !weakness || !strength)
+      return toast.warning("The value to be saved is incorrect.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     setIsLoading(true);
     const ischeck = await isExist();
 
-    if (!ischeck) return;
+    if (!ischeck)
+      return toast.warning("The value to be saved already exists.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     const { data, error } = await supabase
       .from("answertable")
       .upsert({
@@ -88,7 +103,11 @@ export default function Answer({ params: { id } }) {
     }
     getAnswer();
     setIsLoading(false);
-    console.log("Save success! :", data);
+    toast.success("Saved successfully!", {
+      className: "black-background",
+      bodyClassName: "grow-font-size",
+      progressClassName: "fancy-progress-bar",
+    });
   };
   const isExist = async () => {
     if (!supabase) return false;
@@ -111,8 +130,11 @@ export default function Answer({ params: { id } }) {
 
   const onSubmit = async () => {
     if (!input.trim()) {
-      console.log("input invalid");
-      return;
+      return toast.warning("Answer is required.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     }
     setIsLoading(true);
     const text = `I would like to rate my answer to the question. Answer format:
@@ -133,38 +155,19 @@ Do not write any explanations or other words, just reply with the answer format.
     setInput("");
     setIsLoading(false);
   };
-  return isLoading ? (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <Loader />
-    </div>
-  ) : (
+  return (
     <>
+      {(isLoading || !question) && <Loading />}
       <Spacing lg="145" md="80" />
       <Div className="container">
-        <SectionHeading
-          title="Web development"
-          subtitle="INTERVIEW"
-          variant="cs-style1 text-center"
-        />
-        <hr />
-        <Spacing lg="90" md="45" />
-        <Image
-          src={imgUrl}
-          alt="Thumb"
-          className="w-100 cs-radius_15"
-          placeholder="blur"
-        />
-        <Spacing lg="100" md="50" />
-        <Link href="/question" className="cs-text_btn">
-          <span className="cs-font_30">Question</span>
+        <Spacing lg="50" md="35" />
+        <Link href={`/question/${jobId}`} className="cs-text_btn">
+          <span className="cs-font_38">Question</span>
         </Link>
         <Spacing lg="20" md="10" />
         <div className="cs-m0">{question}</div>
         <br />
-        <Div className="d-flex justify-content-sm-between">
+        <Div className="d-flex justify-content-between">
           <Link href="" className="cs-text_btn">
             <span>Prev</span>
           </Link>
@@ -175,9 +178,12 @@ Do not write any explanations or other words, just reply with the answer format.
         <hr />
         <br />
         {answers?.map((item, index) => (
-          <div className="cs-m0" key={index}>
-            {item.answer}
-          </div>
+          <>
+            <div className="cs-m0" key={index}>
+              {item.answer}
+            </div>
+            <br />
+          </>
         ))}
 
         <Div className="col-sm-12">
@@ -192,13 +198,13 @@ Do not write any explanations or other words, just reply with the answer format.
           <Spacing lg="25" md="25" />
         </Div>
 
-        <Div className="d-flex justify-content-sm-end">
+        <Div className="d-flex justify-content-end">
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
         </Div>
 
-        <Spacing lg="65" md="45" />
+        <Spacing lg="25" md="25" />
         <Div className="row">
           <Div className="col-sm-12">
             <h2 className="cs-font_30 ">Interview</h2>
@@ -206,6 +212,7 @@ Do not write any explanations or other words, just reply with the answer format.
               {answer}
             </div>
           </Div>
+          <Spacing lg="25" md="25" />
           <Div className="col-sm-6">
             <h2 className="cs-font_30 ">Strength</h2>
             <div className="cs-m0">
@@ -222,7 +229,7 @@ Do not write any explanations or other words, just reply with the answer format.
             <Spacing lg="25" md="25" />
           </Div>
 
-          <Div className="d-flex justify-content-sm-end">
+          <Div className="d-flex justify-content-end">
             <button className="cs-btn cs-style1" onClick={onSave}>
               <span>Save</span>
             </button>

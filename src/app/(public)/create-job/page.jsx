@@ -5,8 +5,8 @@ import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
-import Loader from "@/app/ui/Loader";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import Loading from "@/app/ui/loading";
 
 const report = [
   {
@@ -43,16 +43,29 @@ export default function CreateJob() {
 
   const router = useRouter();
   const onBack = () => {
-    step && setStep(step - 1);
+    step ? setStep(step - 1) : router.push("/job");
   };
   const onNext = () => {
-    if (!step && !jobTitle.trim()) return toast.error("Missing Title");
+    if (!step && !jobTitle.trim())
+      return toast.warning("Title is required.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     if (!step && !jobDescription.trim())
-      return toast.error("Missing Description");
+      return toast.warning("Description is required.", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     if (step < 2) setStep(step + 1);
     else {
       if (fileName == "No file chosen")
-        return toast.error("You have to choose file");
+        return toast.warning("Upload file is required.", {
+          className: "black-background",
+          bodyClassName: "grow-font-size",
+          progressClassName: "fancy-progress-bar",
+        });
       sendMessage(`I want 20 questions for ${jobTitle} job interview.
 Answer format:
 Number. Sentence.
@@ -91,7 +104,13 @@ Do not write any explanations or other words, just reply with the answer format.
       fileName: fileName,
       question: data,
     });
+
     setIsLoading(false);
+    toast.success("Created job successfully!", {
+      className: "black-background",
+      bodyClassName: "grow-font-size",
+      progressClassName: "fancy-progress-bar",
+    });
   };
 
   const handleFileUpload = async (event) => {
@@ -106,15 +125,9 @@ Do not write any explanations or other words, just reply with the answer format.
       body: data,
     });
   };
-  return isLoading ? (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ height: "100vh" }}
-    >
-      <Loader />
-    </div>
-  ) : (
+  return (
     <>
+      {isLoading && <Loading />}
       <Spacing lg="145" md="80" />
       <div className="container">
         <div className="row">
@@ -182,7 +195,7 @@ Do not write any explanations or other words, just reply with the answer format.
             <section>
               <div className="col-sm-12">
                 <label className="cs-btn cs-style1" htmlFor="choose">
-                  Choose File
+                  Upload File
                 </label>
                 <input
                   type="file"
@@ -191,7 +204,8 @@ Do not write any explanations or other words, just reply with the answer format.
                   accept=".pdf, .doc, .docx, .md, .txt"
                   onChange={handleFileUpload}
                 />
-                <p>{fileName}</p>
+                <div style={{ textIndent: "12px" }}>{fileName}</div>
+                <Spacing lg="25" md="25" />
               </div>
             </section>
           )}

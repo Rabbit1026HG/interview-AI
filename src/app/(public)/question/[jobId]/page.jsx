@@ -1,6 +1,7 @@
 "use client";
 
 import Div from "@/app/ui/Div";
+import Loading from "@/app/ui/loading";
 import SectionHeading from "@/app/ui/SectionHeading";
 import ServiceList from "@/app/ui/ServiceList";
 import Spacing from "@/app/ui/Spacing";
@@ -32,6 +33,7 @@ export default function Question({ params: { jobId } }) {
 
   return (
     <>
+      {!data.length && <Loading />}
       <Spacing lg="145" md="80" />
       <Div className="container">
         <SectionHeading
