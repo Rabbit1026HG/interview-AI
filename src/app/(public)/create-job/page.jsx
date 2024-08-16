@@ -5,7 +5,6 @@ import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApi } from "@/hooks/api";
-import Loader from "@/app/ui/Loader";
 import { toast } from "react-toastify";
 import Loading from "@/app/ui/loading";
 
@@ -105,7 +104,13 @@ Do not write any explanations or other words, just reply with the answer format.
       fileName: fileName,
       question: data,
     });
+
     setIsLoading(false);
+    toast.success("Created job successfully!", {
+      className: "black-background",
+      bodyClassName: "grow-font-size",
+      progressClassName: "fancy-progress-bar",
+    });
   };
 
   const handleFileUpload = async (event) => {

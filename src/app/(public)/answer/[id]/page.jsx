@@ -1,16 +1,12 @@
 "use client";
 
 import Div from "@/app/ui/Div";
-import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
-import Image from "next/image";
-import imgUrl from "../../../../../public/images/case_study_img_1.jpeg";
 import Link from "next/link";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
-import Loader from "@/app/ui/Loader";
 import { toast } from "react-toastify";
 import Loading from "@/app/ui/loading";
 
@@ -134,7 +130,7 @@ export default function Answer({ params: { id } }) {
 
   const onSubmit = async () => {
     if (!input.trim()) {
-      return toast.warning("Input invalid.", {
+      return toast.warning("Answer is required.", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
@@ -161,7 +157,7 @@ Do not write any explanations or other words, just reply with the answer format.
   };
   return (
     <>
-      {isLoading || (!question && <Loading />)}
+      {(isLoading || !question) && <Loading />}
       <Spacing lg="145" md="80" />
       <Div className="container">
         <Spacing lg="50" md="35" />
