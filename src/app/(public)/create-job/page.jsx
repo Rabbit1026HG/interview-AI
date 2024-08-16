@@ -44,17 +44,17 @@ export default function CreateJob() {
 
   const router = useRouter();
   const onBack = () => {
-    step && setStep(step - 1);
+    step ? setStep(step - 1) : router.push("/job");
   };
   const onNext = () => {
     if (!step && !jobTitle.trim())
-      return toast.warning("Missing title", {
+      return toast.warning("Title is required.", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
       });
     if (!step && !jobDescription.trim())
-      return toast.warning("Missing Description.", {
+      return toast.warning("Description is required.", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
@@ -62,7 +62,7 @@ export default function CreateJob() {
     if (step < 2) setStep(step + 1);
     else {
       if (fileName == "No file chosen")
-        return toast.warning("You have to choose file.", {
+        return toast.warning("Upload file is required.", {
           className: "black-background",
           bodyClassName: "grow-font-size",
           progressClassName: "fancy-progress-bar",
@@ -190,7 +190,7 @@ Do not write any explanations or other words, just reply with the answer format.
             <section>
               <div className="col-sm-12">
                 <label className="cs-btn cs-style1" htmlFor="choose">
-                  Choose File
+                  Upload File
                 </label>
                 <input
                   type="file"
@@ -199,7 +199,8 @@ Do not write any explanations or other words, just reply with the answer format.
                   accept=".pdf, .doc, .docx, .md, .txt"
                   onChange={handleFileUpload}
                 />
-                <p>{fileName}</p>
+                <div style={{ textIndent: "12px" }}>{fileName}</div>
+                <Spacing lg="25" md="25" />
               </div>
             </section>
           )}

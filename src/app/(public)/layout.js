@@ -1,12 +1,12 @@
 "use client";
 
 import Footer from "@/app/ui/Footer";
-import PublicHeader from "@/app/ui/Header/PublicHeader";
+import Header from "../ui/Header";
 
 export default function PublicLayout({ children }) {
   return (
     <>
-      <PublicHeader />
+      <Header />
       {children}
       <Footer />
     </>

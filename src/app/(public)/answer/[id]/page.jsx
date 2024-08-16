@@ -166,7 +166,7 @@ Do not write any explanations or other words, just reply with the answer format.
       <Div className="container">
         <Spacing lg="50" md="35" />
         <Link href={`/question/${jobId}`} className="cs-text_btn">
-          <span className="cs-font_30">Question</span>
+          <span className="cs-font_38">Question</span>
         </Link>
         <Spacing lg="20" md="10" />
         <div className="cs-m0">{question}</div>

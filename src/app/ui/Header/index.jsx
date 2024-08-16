@@ -1,12 +1,14 @@
 "use client";
+import { SignedOut, useAuth, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import Div from "../Div";
 import Link from "next/link";
 import DropDown from "./DropDown";
 
-export default function PublicHeader({ variant }) {
+export default function Header({ variant }) {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileToggle, setMobileToggle] = useState(false);
+  const { isLoaded } = useAuth();
   useEffect(() => {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 0) {
@@ -32,7 +34,7 @@ export default function PublicHeader({ variant }) {
                   <img src="/images/logo.svg" alt="Logo" />
                 </Link>
               </Div>
-              <Div className="cs-main_header_right">
+              <Div className="cs-main_header_center">
                 <Div className="cs-nav cs-primary_font cs-medium">
                   <ul
                     className="cs-nav_list"
@@ -54,6 +56,21 @@ export default function PublicHeader({ variant }) {
                           </li>
                         </ul>
                       </DropDown>
+                    </li>
+
+                    <li>
+                      <Link href="/job" onClick={() => setMobileToggle(false)}>
+                        Job
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        href="/price"
+                        onClick={() => setMobileToggle(false)}
+                      >
+                        Price
+                      </Link>
                     </li>
                     <li className="menu-item-has-children">
                       <Link href="/" onClick={() => setMobileToggle(false)}>
@@ -97,14 +114,6 @@ export default function PublicHeader({ variant }) {
                         </ul>
                       </DropDown>
                     </li>
-                    <li>
-                      <Link
-                        href="/sign-in"
-                        onClick={() => setMobileToggle(false)}
-                      >
-                        SignIn
-                      </Link>
-                    </li>
                   </ul>
                   <span
                     className={
@@ -118,6 +127,21 @@ export default function PublicHeader({ variant }) {
                   </span>
                 </Div>
               </Div>
+              <div
+                className="cs-main_header_right"
+                style={{ marginRight: "50px" }}
+              >
+                {isLoaded ? (
+                  <>
+                    <UserButton />
+                    <SignedOut>
+                      <Link href="/sign-in">Signin</Link>
+                    </SignedOut>
+                  </>
+                ) : (
+                  <Link href="/sign-in">Signin</Link>
+                )}
+              </div>
             </Div>
           </Div>
         </Div>

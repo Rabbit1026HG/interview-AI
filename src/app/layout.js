@@ -11,6 +11,7 @@ import NextTopLoader from "nextjs-toploader";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Provider } from "jotai";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,8 +38,8 @@ export default function RootLayout({ children }) {
           <SupabaseProvider>
             <NextTopLoader />
             <CustomCursor />
-            <ToastContainer />
-            {children}
+            <ToastContainer limit={5} />
+            <Provider>{children}</Provider>
           </SupabaseProvider>
         </body>
       </html>
