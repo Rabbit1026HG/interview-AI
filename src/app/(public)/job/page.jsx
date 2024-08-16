@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function FreelancerAgencyHome() {
   const supabase = useSupabase();
   const [data, setData] = useState([]);
+
   const getData = async () => {
     if (!supabase) return;
     const { data, error } = await supabase
