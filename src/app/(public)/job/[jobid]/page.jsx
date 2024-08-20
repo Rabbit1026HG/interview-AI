@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Div from "@/app/ui/Div";
-import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
-import Image from "next/image";
-import imgUrl from "../../../../../public/images/case_study_img_1.jpeg";
 import useSupabase from "@/hooks/SupabaseContext";
 import { useAtom } from "jotai";
 import { titlejotai } from "@/store";
+import SectionHeading from "@/app/ui/SectionHeading";
+import ServiceMork from "@/app/ui/ServiceList/ServiceMork";
 
 const categoryMenu = [
   {
@@ -18,7 +17,44 @@ const categoryMenu = [
   },
   {
     title: "Completed",
-    category: "completedn",
+    category: "Completed",
+  },
+];
+const data = [
+  {
+    id: 1,
+    question: "Completed   2024-09-08",
+    category: "Completed",
+  },
+  {
+    id: 2,
+    question: "Ready",
+    category: "Ready",
+  },
+  {
+    id: 3,
+    question: "Ready",
+    category: "Ready",
+  },
+  {
+    id: 4,
+    question: "Ready",
+    category: "Ready",
+  },
+  {
+    id: 5,
+    question: "Ready",
+    category: "Ready",
+  },
+  {
+    id: 6,
+    question: "Ready",
+    category: "Ready",
+  },
+  {
+    id: 7,
+    question: "Ready",
+    category: "Ready",
   },
 ];
 export default function CaseStudyDetailsPage({ params: { jobid } }) {
@@ -67,10 +103,8 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
           <h2 className="cs-section_title">{title}</h2>
           <Spacing lg="45" md="20" />
         </Div>
-
         <hr />
         <Spacing lg="90" md="45" />
-
         <section>
           <div className="col-sm-12">
             <label className="cs-btn cs-style1" htmlFor="choose">
@@ -91,35 +125,44 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
           </div>
         </section>
         <Spacing lg="50" md="35" />
-        <Link href={`/question/${jobid}`} className="cs-text_btn">
-          <span className="cs-font_30">Question Interviews</span>
-        </Link>
-      </Div>
-      <Spacing lg="50" md="35" />
-      <Div className="container">
-        <Div className="cs-portfolio_1_heading">
-          <Link href="" className="cs-text_btn">
-            <span className="cs-font_30">Mock Interviews</span>
-          </Link>
-          <Div className="cs-filter_menu cs-style1">
-            <ul className="cs-mp0 cs-center">
-              <li className={active === "all" ? "active" : ""}>
-                <span onClick={() => setActive("all")}>All</span>
-              </li>
-              {categoryMenu.map((item, index) => (
-                <li
-                  className={active === item.category ? "active" : ""}
-                  key={index}
-                >
-                  <span onClick={() => setActive(item.category)}>
-                    {item.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
+        <section>
+          <SectionHeading title="Question Interview" subtitle="" />
+          <Spacing lg="50" md="35" />
+          <Div className="container">
+            <Link href={`/question/${jobid}`}>
+              <div className=" cs-btn cs-style1">
+                Practice interview questions
+              </div>
+            </Link>
           </Div>
-        </Div>
-        <Spacing lg="90" md="45" />
+        </section>
+        <Spacing lg="50" md="35" />
+        <section>
+          <Div className="cs-portfolio_1_heading">
+            <SectionHeading title="Mock Interview List" subtitle="" />
+            <Div className="cs-filter_menu cs-style1">
+              <ul className="cs-mp0 cs-center">
+                <li className={active === "all" ? "active" : ""}>
+                  <span onClick={() => setActive("all")}>All</span>
+                </li>
+                {categoryMenu.map((item, index) => (
+                  <li
+                    className={active === item.category ? "active" : ""}
+                    key={index}
+                  >
+                    <span onClick={() => setActive(item.category)}>
+                      {item.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Div>
+          </Div>
+          <Spacing lg="35" md="25" />
+          <Div className="container">
+            <ServiceMork data={data} jobid={jobid} activeState={active} />
+          </Div>
+        </section>
       </Div>
       <Spacing lg="145" md="80" />
     </>

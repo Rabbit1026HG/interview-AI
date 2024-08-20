@@ -41,33 +41,6 @@ const funfaceData = [
     factNumber: "550",
   },
 ];
-// Portfolio Data
-const portfolioData = [
-  {
-    title: "Colorful Art Work",
-    subtitle: "See Details",
-    href: "/portfolio/portfolio-details",
-    src: "/images/portfolio_1.jpeg",
-  },
-  {
-    title: "Colorful Art Work",
-    subtitle: "See Details",
-    href: "/portfolio/portfolio-details",
-    src: "/images/portfolio_2.jpeg",
-  },
-  {
-    title: "Colorful Art Work",
-    subtitle: "See Details",
-    href: "/portfolio/portfolio-details",
-    src: "/images/portfolio_0.jpg",
-  },
-  {
-    title: "Colorful Art Work",
-    subtitle: "See Details",
-    href: "/portfolio/portfolio-details",
-    src: "/images/portfolio_3.jpeg",
-  },
-];
 
 export default function Home() {
   return (
@@ -81,10 +54,9 @@ export default function Home() {
         scrollDownId="#service"
         socialLinksHeading="Follow Us"
         heroSocialLinks={heroSocialLinks}
-        bgImageUrl="/images/hero_bg.jpeg"
+        bgImageUrl="/images/hero_bg_2.jpeg"
       />
       {/* End Hero Section */}
-
       {/* Start FunFact Section */}
       <div className="container">
         <FunFact
@@ -95,14 +67,13 @@ export default function Home() {
         />
       </div>
       {/* End FunFact Section */}
-
       {/* Start LogoList Section */}
       <Div className="container">
         <LogoList />
       </Div>
+
       <Spacing lg="150" md="80" />
       {/* End LogoList Section */}
-
       {/* Start CTA Section */}
       <Div className="container">
         <Cta
