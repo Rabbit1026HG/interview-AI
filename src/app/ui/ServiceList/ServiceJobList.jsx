@@ -59,7 +59,7 @@ export default function JobList({ data }) {
               </span>
               <Div className="cs-iconbox_in">
                 <h2 className="cs-iconbox_title">{item.title}</h2>
-                <Div className="cs-iconbox_subtitle">{item.description}</Div>
+                <Div className="cs-iconbox_subtitle line-clamp">{item.description}</Div>
               </Div>
             </>
           </Link>
