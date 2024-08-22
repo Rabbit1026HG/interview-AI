@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Div from "../Div";
 
-export default function ServiceList({ variant, data, isMork }) {
+export default function ServiceList({ variant, data }) {
   const [active, setActive] = useState(0);
   const handelActive = (index) => {
     setActive(index);
@@ -51,9 +51,6 @@ export default function ServiceList({ variant, data, isMork }) {
                 )}
               </span>
               <Div className="cs-iconbox_in">
-                {isMork && (
-                  <h2 className="cs-iconbox_title cs-font_30">{`Mork Interview ${item.id}`}</h2>
-                )}
                 <Div className="cs-iconbox_subtitle">{item.question}</Div>
               </Div>
             </>

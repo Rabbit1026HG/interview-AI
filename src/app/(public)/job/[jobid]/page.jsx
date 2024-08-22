@@ -8,7 +8,7 @@ import useSupabase from "@/hooks/SupabaseContext";
 import { useAtom } from "jotai";
 import { titlejotai } from "@/store";
 import SectionHeading from "@/app/ui/SectionHeading";
-import ServiceMork from "@/app/ui/ServiceList/ServiceMork";
+import ServiceMock from "@/app/ui/ServiceList/ServiceMock";
 
 const categoryMenu = [
   {
@@ -160,7 +160,7 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
           </Div>
           <Spacing lg="35" md="25" />
           <Div className="container">
-            <ServiceMork data={data} jobid={jobid} activeState={active} />
+            <ServiceMock data={data} jobid={jobid} activeState={active} />
           </Div>
         </section>
       </Div>

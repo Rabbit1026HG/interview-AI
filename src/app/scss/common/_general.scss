@@ -376,6 +376,44 @@ hr {
     border-color: $accent;
   }
 }
+
+.cs-form_field1 {
+  display: block;
+  width: 100%;
+  padding: 10px 25px 10px 20px;
+  border-radius: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  border: 2px solid #999696;
+  background-color: transparent;
+  color: #fff;
+  font-size: 16px;
+  /* Adjust font size as needed */
+  appearance: none;
+  /* Remove default styling */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white"><path d="M1 4l7 7 7-7H1z"/></svg>');
+  /* Custom dropdown arrow */
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  /* Position the arrow */
+  background-size: 12px;
+  /* Size of the arrow */
+  overflow: hidden;
+}
+
+.cs-form_field1:focus {
+  border-color: $accent;
+  /* Change this to your accent color */
+}
+
+/* Optional: Add some styles for the option elements */
+.cs-form_field1 option {
+  background-color: #333;
+  /* Background color for dropdown options */
+  color: #fff;
+ font-size: 14px;
+  /* Text color for dropdown options */
+}
 label {
   margin-bottom: 12px;
 }
@@ -1660,5 +1698,20 @@ label {
         padding-top: 30px;
       }
     }
+  }
+}
+
+[data-recording='true'] {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0px rgb(218, 18, 18);
+    // box-shadow: 0 0 0 0px rgb(66,173,226);
+  }
+
+  100% {
+    box-shadow: 0 0 0 20px rgba(40, 167, 69, 0);
   }
 }

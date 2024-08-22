@@ -1,37 +1,37 @@
-import React from 'react';
-import { useState } from 'react';
-import Div from '../Div';
+import React from "react";
+import { useState } from "react";
+import Div from "../Div";
 const accordionData = [
   {
-    question: 'Do you design illustration website?',
+    question: "Do you design illustration website?",
     answer:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.',
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.",
   },
   {
-    question: 'Do you provide design source file after finish work?',
+    question: "Do you provide design source file after finish work?",
     answer:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.',
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.",
   },
   {
-    question: 'How to provide project details and payments?',
+    question: "How to provide project details and payments?",
     answer:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.',
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.",
   },
   {
-    question: 'Can you tell me please how to contact for project?',
+    question: "Can you tell me please how to contact for project?",
     answer:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.',
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.",
   },
   {
-    question: 'Do you makes custom logo, icon etc?',
+    question: "Do you makes custom logo, icon etc?",
     answer:
-      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.',
+      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesent voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui.",
   },
 ];
 
 export default function Accordion() {
   const [selected, setSelected] = useState(0);
-  const handelToggle = index => {
+  const handelToggle = (index) => {
     if (selected === index) {
       return setSelected(null);
     }
@@ -42,7 +42,7 @@ export default function Accordion() {
     <Div className="cs-accordians cs-style1">
       {accordionData.map((item, index) => (
         <Div
-          className={`cs-accordian ${selected === index ? 'active' : ''}`}
+          className={`cs-accordian ${selected === index ? "active" : ""}`}
           key={index}
         >
           <Div

@@ -24,15 +24,6 @@ export default function Answer({ params: { id } }) {
   const { userId } = useAuth();
 
   const [threadId, setThreadId] = useState("");
-  const textToSpeach = (text) => {
-    if ("speechSynthesis" in window) {
-      const speech = new SpeechSynthesisUtterance(text);
-      console.log("voice:", window.speechSynthesis.getVoices().length);
-      window.speechSynthesis.speak(speech);
-    } else {
-      alert("Sorry, your browser does not support text to speech");
-    }
-  };
   const getAnswer = async () => {
     if (!supabase) return;
     const { data, error } = await supabase
@@ -144,7 +135,6 @@ export default function Answer({ params: { id } }) {
         progressClassName: "fancy-progress-bar",
       });
     }
-    textToSpeach(answers[0].answer);
     setIsLoading(true);
     const text = `I would like to rate my answer to the question. Answer format:
 Weaknesses: Less than 4 sentences. 
