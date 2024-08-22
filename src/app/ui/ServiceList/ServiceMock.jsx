@@ -4,7 +4,7 @@ import Div from "../Div";
 import { Icon } from "@iconify/react";
 import Spacing from "../Spacing";
 
-export default function ServiceMork({ data, activeState, jobid }) {
+export default function ServiceMock({ data, activeState, jobid }) {
   const [active, setActive] = useState(0);
   const [itemShow, setItemShow] = useState(4);
   const handelActive = (index) => {

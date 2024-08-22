@@ -1,6 +1,5 @@
 "use client";
 
-import Loader from "@/app/ui/Loader";
 import Loading from "@/app/ui/loading";
 import SectionHeading from "@/app/ui/SectionHeading";
 import JobList from "@/app/ui/ServiceList/ServiceJobList";
@@ -33,7 +32,7 @@ export default function FreelancerAgencyHome() {
     getData();
   }, [supabase]);
   return (
-    <>
+    <div style={{ minHeight: "90vh" }}>
       {!data.length && <Loading />}
       <section className="cs-shape_wrap_4 cs-parallax">
         <div className="cs-shape_4 cs-to_up" />
@@ -50,9 +49,8 @@ export default function FreelancerAgencyHome() {
             </div>
           </div>
         </div>
+        <Spacing lg="50" md="35" />
       </section>
-
-      <Spacing lg="145" md="80" />
-    </>
+    </div>
   );
 }
