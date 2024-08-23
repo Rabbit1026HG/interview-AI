@@ -1,8 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import useSupabase from "@/hooks/SupabaseContext";
+
 import Webcam from "react-webcam";
 import Spacing from "../Spacing";
 import RecordButton from "./RecordButton";
-export default function WebcamVideo({ setCamera, isCamera, start }) {
+
+import { useAtom } from "jotai";
+import { mockquestionnum, mockquestions } from "@/store";
+
+export default function WebcamVideo({ setCamera, start }) {
+  const supabase = useSupabase();
+
+  const [questions] = useAtom(mockquestions);
+  const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
+
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
@@ -37,27 +48,28 @@ export default function WebcamVideo({ setCamera, isCamera, start }) {
     setCapturing(false);
   }, [mediaRecorderRef, setCapturing]);
 
-  const handleDownload = useCallback(() => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, {
-        type: "video/webm",
+  const handleUpload = useCallback(async () => {
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const filenName = `video_${questions[questionnum].id}`;
+    const { data, error } = await supabase.storage
+      .from("mockvideo")
+      .upload(filenName, blob, {
+        contentType: "video/webm",
+        upsert: false,
       });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      document.body.appendChild(a);
-      a.style = "display: none";
-      a.href = url;
-      a.download = "react-webcam-stream-capture.webm";
-      a.click();
-      window.URL.revokeObjectURL(url);
-      setRecordedChunks([]);
+    if (error) {
+      console.error("Error uploading video:", error);
+    } else {
+      console.log("Video uploaded successfully");
     }
+    setRecordedChunks([]);
   }, [recordedChunks]);
 
-  const videoConstraints = {
-    // width: 420,
-    // height: 420,
-    facingMode: "user",
+  const onNext = () => {
+    handleUpload();
+    if (questionnum < questions.length - 1) {
+      setQuestionnum(questionnum + 1);
+    }
   };
 
   const handleDevices = useCallback(
@@ -65,7 +77,7 @@ export default function WebcamVideo({ setCamera, isCamera, start }) {
       const videoInputs = mediaDevices.filter(
         ({ kind }) => kind === "videoinput"
       );
-      setCamera(videoInputs.length > 0);
+      setCamera(videoInputs.length > 0 && audioDevices[0]?.deviceId);
       setVideoDevices(videoInputs);
       setAudioDevices(
         mediaDevices.filter(({ kind }) => kind === "audiooutput")
@@ -80,11 +92,9 @@ export default function WebcamVideo({ setCamera, isCamera, start }) {
 
   return (
     <div className="col-lg-6 offset-lg-1">
-      {isCamera ? (
+      {videoDevices.length ? (
         <div className="w-100 d-flex justify-content-center align-items-center">
           <Webcam
-            // height={400}
-            // width={400}
             audio={true}
             mirrored={true}
             ref={webcamRef}
@@ -110,11 +120,7 @@ export default function WebcamVideo({ setCamera, isCamera, start }) {
           onStop={handleStopCaptureClick}
         />
       )}
-      {start && !capturing && recordedChunks.length > 0 && (
-        <div onClick={handleDownload} className="cs-btn cs-style1 cs-type1">
-          Download
-        </div>
-      )}
+
       <Spacing lg="20" md="20" />
       <label className="cs-primary_color">Camera</label>
       {videoDevices.length ? (
@@ -154,6 +160,17 @@ export default function WebcamVideo({ setCamera, isCamera, start }) {
       )}
 
       <Spacing lg="20" md="20" />
+      {start && !capturing && recordedChunks.length > 0 && (
+        <div className="d-flex justify-content-end">
+          <div className="cs-btn cs-style1 cs-type1" onClick={onNext}>
+            <span>
+              {questionnum < questions.length - 1
+                ? "Next Question"
+                : "End Interviw"}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

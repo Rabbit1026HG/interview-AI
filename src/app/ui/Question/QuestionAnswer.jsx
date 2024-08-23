@@ -1,37 +1,52 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Div from "../Div";
-import { Icon } from "@iconify/react";
 import Spacing from "../Spacing";
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
+import useSupabase from "@/hooks/SupabaseContext";
 
-export default function Question() {
+export default function QuestionAnswer() {
+  const supabase = useSupabase();
   const [selected, setSelected] = useState(0);
-  const [isSpeack, setIsSpeack] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
   const [index] = useAtom(mockquestionnum);
   const [data] = useAtom(mockquestions);
+  const handelToggle = (index) => {
+    setVideoUrl("");
+    if (selected === index) {
+      return setSelected(null);
+    }
+    const fileName = `video_${data[index].id}`;
+    getUrl(fileName);
+    setSelected(index);
+  };
+
+  const getUrl = async (fileName) => {
+    if (!supabase) return;
+
+    const { data, error } = await supabase.storage
+      .from("mockvideo")
+      .getPublicUrl(fileName);
+    if (error) {
+      console.log("Error fetching video URL:", error);
+    } else {
+      const url = data.publicUrl;
+      setVideoUrl(url);
+    }
+  };
 
   useEffect(() => {
     setSelected(index);
   }, [index]);
-  const textToSpeach = (text) => {
-    if ("speechSynthesis" in window) {
-      const voices = window.speechSynthesis.getVoices();
-      const speech = new SpeechSynthesisUtterance(text);
-      speech.voice = voices[5];
-      window.speechSynthesis.speak(speech);
-    } else {
-      toast.error("Sorry, your browser does not support text to speech");
+
+  useEffect(() => {
+    if (data.length) {
+      const fileName = `video_${data[0].id}`;
+      getUrl(fileName);
     }
-  };
-  const stopSpeach = () => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    } else {
-      toast.error("Sorry, your browser does not support text to speech");
-    }
-  };
+  }, [supabase, data]);
+
   return (
     <div className="col-lg-5">
       <div className="cs-height_0 cs-height_lg_40" />
@@ -41,7 +56,10 @@ export default function Question() {
             className={`cs-accordian ${selected === index ? "active" : ""}`}
             key={index}
           >
-            <Div className="cs-accordian_head">
+            <Div
+              className="cs-accordian_head"
+              onClick={() => handelToggle(index)}
+            >
               <h2 className="cs-accordian_title">{`Question${index + 1}`}</h2>
               <span className="cs-accordian_toggle cs-accent_color">
                 <svg
@@ -62,25 +80,14 @@ export default function Question() {
         ))}
       </Div>
       <Spacing lg="30" md="20" />
-      <div
-        className="cs-btn cs-style1 cs-type1"
-        style={{ padding: "5px 5px 5px 0px" }}
-        onClick={() => {
-          if (isSpeack) {
-            setIsSpeack(false);
-            stopSpeach();
-          } else {
-            setIsSpeack(true);
-            textToSpeach(data[selected].question);
-          }
-        }}
-      >
-        {isSpeack ? (
-          <Icon icon="emojione:speaker-high-volume" height={30} width={30} />
-        ) : (
-          <Icon icon="emojione:speaker-low-volume" height={30} width={30} />
-        )}
-      </div>
+      {videoUrl && (
+        <div className="video-wrapper">
+          <video controls>
+            <source src={videoUrl} type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
       <Spacing lg="30" md="20" />
     </div>
   );

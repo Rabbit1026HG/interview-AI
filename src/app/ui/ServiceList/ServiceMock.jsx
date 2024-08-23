@@ -28,7 +28,13 @@ export default function ServiceMock({ data, activeState, jobid }) {
             onMouseEnter={() => handelActive(index)}
           >
             <Link
-              href={index < 2 ? `/mock/${jobid}/${item.id}` : "/price"}
+              href={
+                index < 2
+                  ? item.category === "Ready"
+                    ? `/mock/${jobid}/${item.id}`
+                    : `/mockcompleted/${jobid}/${item.id}`
+                  : "/price"
+              }
               className="cs-iconbox cs-style3"
             >
               <>
