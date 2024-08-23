@@ -1,4 +1,6 @@
 const { atom } = require("jotai");
 
 const titlejotai = atom("");
-export { titlejotai };
+const mockquestionnum = atom(0);
+const mockquestions = atom([]);
+export { titlejotai, mockquestionnum, mockquestions };
