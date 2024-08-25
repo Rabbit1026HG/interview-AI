@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.14",
+    "@ffmpeg/core": "0.10.0",
+    "@ffmpeg/ffmpeg": "0.9.8",
     "@supabase/supabase-js": "^2.45.1",
     "bootstrap": "^5.3.3",
     "html-react-parser": "^5.1.8",
@@ -17,7 +19,7 @@
     "lightgallery": "^2.7.2",
     "next": "14.1.2",
     "nextjs-toploader": "^1.6.12",
-    "openai": "^4.55.4",
+    "openai": "^4.56.0",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
@@ -27,7 +29,8 @@
     "sass": "^1.71.1",
     "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
-    "swiper": "^8.4.5"
+    "swiper": "^8.4.5",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

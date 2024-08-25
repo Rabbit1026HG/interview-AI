@@ -19,7 +19,7 @@ export default function Question() {
     if ("speechSynthesis" in window) {
       const voices = window.speechSynthesis.getVoices();
       const speech = new SpeechSynthesisUtterance(text);
-      speech.voice = voices[5];
+      speech.voice = voices[0];
       window.speechSynthesis.speak(speech);
     } else {
       toast.error("Sorry, your browser does not support text to speech");
