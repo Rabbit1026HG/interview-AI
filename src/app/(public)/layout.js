@@ -7,7 +7,7 @@ export default function PublicLayout({ children }) {
   return (
     <>
       <Header />
-      {children}
+      <div style={{ minHeight: "85vh" }}>{children}</div>
       <Footer />
     </>
   );

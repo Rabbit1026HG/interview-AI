@@ -31,8 +31,8 @@ export default function ServiceMock({ data, activeState, jobid }) {
               href={
                 index < 2
                   ? item.category === "Ready"
-                    ? `/mock/${jobid}/${item.id}`
-                    : `/mockcompleted/${jobid}/${item.id}`
+                    ? `/mock/${jobid}/${index + 1}`
+                    : `/mockcompleted/${jobid}/${index + 1}`
                   : "/price"
               }
               className="cs-iconbox cs-style3"
@@ -69,9 +69,13 @@ export default function ServiceMock({ data, activeState, jobid }) {
                   )}
                 </span>
                 <Div className="cs-iconbox_in">
-                  <h2 className="cs-iconbox_title cs-font_30">{`Mock Interview ${item.id}`}</h2>
-
-                  <Div className="cs-iconbox_subtitle">{item.question}</Div>
+                  <h2 className="cs-iconbox_title cs-font_30">{`Mock Interview ${
+                    index + 1
+                  }`}</h2>
+                  <div className="d-flex justify-content-between">
+                    <div>{item.category}</div>
+                    <div>{item.update_at}</div>
+                  </div>
                 </Div>
               </>
             </Link>

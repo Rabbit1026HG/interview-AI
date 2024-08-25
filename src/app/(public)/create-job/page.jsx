@@ -209,7 +209,10 @@ Do not write any explanations or other words, just reply with the answer format.
               </div>
             </section>
           )}
-          <div className="d-flex justify-content-between cs-font_22">
+          <div
+            className="d-flex justify-content-between cs-font_22 align-item-end "
+            style={{ height: "100%" }}
+          >
             <div className="cs-btn cs-style1" onClick={onBack}>
               Back
             </div>

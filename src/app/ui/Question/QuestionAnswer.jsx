@@ -5,9 +5,11 @@ import Spacing from "../Spacing";
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
 import useSupabase from "@/hooks/SupabaseContext";
+import openaiRepo from "@/app/_services/openai-repo";
 
 export default function QuestionAnswer() {
   const supabase = useSupabase();
+  const useopenAI = openaiRepo();
   const [selected, setSelected] = useState(0);
   const [videoUrl, setVideoUrl] = useState("");
   const [index] = useAtom(mockquestionnum);
@@ -19,6 +21,7 @@ export default function QuestionAnswer() {
     }
     const fileName = `video_${data[index].id}`;
     getUrl(fileName);
+    getfile(fileName);
     setSelected(index);
   };
 
@@ -33,6 +36,27 @@ export default function QuestionAnswer() {
     } else {
       const url = data.publicUrl;
       setVideoUrl(url);
+    }
+  };
+  const getfile = async () => {
+    console.log("processing...");
+
+    if (!supabase) return;
+
+    const { data, error } = await supabase.storage
+      .from("mockvideo")
+      .download("360.59-Habits1.mp3");
+    if (error) {
+      console.log("Error fetching video URL:", error);
+    } else {
+      console.log("data:", data);
+      const formData = new FormData();
+      formData.append("file", data);
+      const transcription = await fetch("/api/tts", {
+        method: "POST",
+        body: formData,
+      });
+      console.log(transcription);
     }
   };
 

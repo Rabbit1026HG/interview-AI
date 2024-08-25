@@ -7,10 +7,11 @@ import RecordButton from "./RecordButton";
 
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
+import openaiRepo from "@/app/_services/openai-repo";
 
 export default function WebcamVideo({ setCamera, start }) {
   const supabase = useSupabase();
-
+  const useopenAI = openaiRepo();
   const [questions] = useAtom(mockquestions);
   const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
 
@@ -51,17 +52,45 @@ export default function WebcamVideo({ setCamera, start }) {
   const handleUpload = useCallback(async () => {
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const filenName = `video_${questions[questionnum].id}`;
-    const { data, error } = await supabase.storage
+
+    const { data: existingFiles, error: listError } = await supabase.storage
       .from("mockvideo")
-      .upload(filenName, blob, {
-        contentType: "video/webm",
-        upsert: false,
-      });
-    if (error) {
-      console.error("Error uploading video:", error);
+      .list("", { search: filenName });
+    if (listError) {
+      console.log("Error cheching existing files:, listError");
+      return;
+    }
+
+    if (existingFiles.length > 0) {
+      const { data, error } = await supabase.storage
+        .from("mockvideo")
+        .upload(filenName, blob, {
+          contentType: "video/webm",
+          upsert: true,
+        });
+      if (error) {
+        console.error("Error updated video:", error);
+        return;
+      }
+      console.log("Video updated successfully");
     } else {
+      const { data, error } = await supabase.storage
+        .from("mockvideo")
+        .upload(filenName, blob, {
+          contentType: "video/webm",
+          upsert: false,
+        });
+      if (error) {
+        console.error("Error uploading video:", error);
+        return;
+      }
+
       console.log("Video uploaded successfully");
     }
+    const audioBlob = await useopenAI.extractAudio(recordedChunks);
+    const transcription = await useopenAI.transcribeAudioWithOpenAI(audioBlob);
+    console.log(transcription);
+
     setRecordedChunks([]);
   }, [recordedChunks]);
 
@@ -77,7 +106,10 @@ export default function WebcamVideo({ setCamera, start }) {
       const videoInputs = mediaDevices.filter(
         ({ kind }) => kind === "videoinput"
       );
-      setCamera(videoInputs.length > 0 && audioDevices[0]?.deviceId);
+      const audioInputs = mediaDevices.filter(
+        ({ kind }) => kind === "audioinput"
+      );
+      setCamera(videoInputs[0]?.deviceId > 0 && audioInputs[0]?.deviceId);
       setVideoDevices(videoInputs);
       setAudioDevices(
         mediaDevices.filter(({ kind }) => kind === "audiooutput")
@@ -93,7 +125,7 @@ export default function WebcamVideo({ setCamera, start }) {
   return (
     <div className="col-lg-6 offset-lg-1">
       {videoDevices.length ? (
-        <div className="w-100 d-flex justify-content-center align-items-center">
+        <div className="video-wrapper">
           <Webcam
             audio={true}
             mirrored={true}

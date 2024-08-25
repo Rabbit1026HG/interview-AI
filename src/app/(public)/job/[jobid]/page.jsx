@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import Div from "@/app/ui/Div";
 import Spacing from "@/app/ui/Spacing";
 import useSupabase from "@/hooks/SupabaseContext";
-import { useAtom } from "jotai";
-import { titlejotai } from "@/store";
 import SectionHeading from "@/app/ui/SectionHeading";
 import ServiceMock from "@/app/ui/ServiceList/ServiceMock";
 
@@ -23,59 +21,82 @@ const categoryMenu = [
 const data = [
   {
     id: 1,
-    question: "Completed   2024-09-08",
+    update_at: "Completed   2024-09-08",
     category: "Completed",
   },
   {
     id: 2,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
   {
     id: 3,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
   {
     id: 4,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
   {
     id: 5,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
   {
     id: 6,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
   {
     id: 7,
-    question: "Ready",
+    update_at: "Ready",
     category: "Ready",
   },
 ];
 export default function CaseStudyDetailsPage({ params: { jobid } }) {
   const [active, setActive] = useState("all");
   const [fileName, setFileName] = useState("No file chosen");
-  const [title, setTitle] = useAtom(titlejotai);
+  const [title, setTitle] = useState();
+  const [mockInterview, setMockInterview] = useState([]);
   const supabase = useSupabase();
-  const getTitle = async () => {
+  const getData = async () => {
+    let cnt = 0;
+    let mock = [];
     if (!supabase) return;
     const { data, error } = await supabase
       .from("jobtable")
-      .select("title")
+      .select(`title,questiontable(state,update_at)`)
       .eq("id", jobid);
     if (error) {
       console.log(error.message);
       return;
     }
     setTitle(data[0].title);
+    data[0].questiontable.map((item, index) => {
+      if (item.state) cnt++;
+      if ((index + 1) % 3 === 0) {
+        cnt === 3
+          ? mock.push({ category: "Completed", date: item.upadate_at })
+          : mock.push({ category: "Ready", date: "" });
+        cnt = 0;
+      }
+    });
+    const num = data[0].questiontable.length % 3;
+    if (num) {
+      num === cnt
+        ? mock.push({
+            category: "Completed",
+            date: data[0].questiontable[data[0].questiontable.length]
+              .upadate_at,
+          })
+        : mock.push({ category: "Ready", date: "" });
+    }
+    setMockInterview(mock);
   };
   useEffect(() => {
-    if (!title) getTitle();
+    getData();
   }, [supabase]);
   // const [files, setFiles] = useState([]);
 
@@ -160,7 +181,11 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
           </Div>
           <Spacing lg="35" md="25" />
           <Div className="container">
-            <ServiceMock data={data} jobid={jobid} activeState={active} />
+            <ServiceMock
+              data={mockInterview}
+              jobid={jobid}
+              activeState={active}
+            />
           </Div>
         </section>
       </Div>
