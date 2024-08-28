@@ -67,31 +67,32 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("jobtable")
-      .select(`title,questiontable(state,update_at)`)
-      .eq("id", jobid);
+      .select(`title,questiontable(state,update_at,questionnum)`)
+      .eq("id", jobid)
+      .order("questionnum", {
+        referencedTable: "questiontable",
+        ascending: true,
+      });
     if (error) {
       console.log(error.message);
       return;
     }
     setTitle(data[0].title);
-    data[0].questiontable.map((item, index) => {
+    data[0].questiontable.forEach((item, index) => {
       if (item.state) cnt++;
+      console.log("cnt--->", cnt);
       if ((index + 1) % 3 === 0) {
-        cnt === 3
-          ? mock.push({ category: "Completed", date: item.upadate_at })
-          : mock.push({ category: "Ready", date: "" });
-        cnt = 0;
+        const category = cnt === 3 ? "Completed" : "Ready";
+        const date = cnt === 3 ? item.update_at : ""; // Fixed typo from 'upadate_at' to 'update_at'
+        mock.push({ category, date });
+        cnt = 0; // Reset count for the next group
       }
     });
-    const num = data[0].questiontable.length % 3;
-    if (num) {
-      num === cnt
-        ? mock.push({
-            category: "Completed",
-            date: data[0].questiontable[data[0].questiontable.length]
-              .upadate_at,
-          })
-        : mock.push({ category: "Ready", date: "" });
+    if (data[0].questiontable.length % 3 !== 0) {
+      const lastItem = data[0].questiontable[data[0].questiontable.length - 1];
+      const category = cnt === 0 ? "Completed" : "Ready";
+      const date = cnt === 0 ? lastItem.update_at : ""; // Fixed typo from 'upadate_at' to 'update_at'
+      mock.push({ category, date });
     }
     setMockInterview(mock);
   };
@@ -126,7 +127,7 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
         </Div>
         <hr />
         <Spacing lg="90" md="45" />
-        <section>
+        {/* <section>
           <div className="col-sm-12">
             <label className="cs-btn cs-style1" htmlFor="choose">
               Upload File
@@ -145,7 +146,7 @@ export default function CaseStudyDetailsPage({ params: { jobid } }) {
             <div style={{ textIndent: "12px" }}>{fileName}</div>
           </div>
         </section>
-        <Spacing lg="50" md="35" />
+        <Spacing lg="50" md="35" /> */}
         <section>
           <SectionHeading title="Question Interview" subtitle="" />
           <Spacing lg="50" md="35" />

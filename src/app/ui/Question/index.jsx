@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import Spacing from "../Spacing";
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
+import { toast } from "react-toastify";
 
 export default function Question() {
   const [selected, setSelected] = useState(0);
@@ -22,14 +23,22 @@ export default function Question() {
       speech.voice = voices[0];
       window.speechSynthesis.speak(speech);
     } else {
-      toast.error("Sorry, your browser does not support text to speech");
+      toast.error("Sorry, your browser does not support text to speech", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     }
   };
   const stopSpeach = () => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     } else {
-      toast.error("Sorry, your browser does not support text to speech");
+      toast.error("Sorry, your browser does not support text to speech", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
     }
   };
   return (

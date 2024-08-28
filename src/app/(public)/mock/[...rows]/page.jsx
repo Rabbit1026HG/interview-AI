@@ -34,8 +34,10 @@ export default function Page({ params: { rows } }) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`id,question`)
-      .eq("jobId", rows[0]);
+      .select(`id,question,questionnum`)
+      .eq("jobId", rows[0])
+      .order("questionnum", { ascending: true });
+
     if (error) {
       console.log(error.message);
       return;
