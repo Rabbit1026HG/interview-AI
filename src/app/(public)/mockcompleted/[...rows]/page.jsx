@@ -8,6 +8,8 @@ import { useAtom } from "jotai";
 import { mockquestions } from "@/store";
 import QuestionAnswer from "@/app/ui/Question/QuestionAnswer";
 import Loading from "@/app/ui/loading";
+import Markdown from "react-markdown";
+import Feedback from "@/app/ui/Question/Feedback";
 
 export default function Page({ params: { rows } }) {
   const supabase = useSupabase();
@@ -17,8 +19,9 @@ export default function Page({ params: { rows } }) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`id,question`)
-      .eq("jobId", rows[0]);
+      .select(`id,question,answer,weakness,strength`)
+      .eq("jobId", rows[0])
+      .order("questionnum", { ascending: true });
     if (error) {
       console.log(error.message);
       return;
@@ -37,7 +40,7 @@ export default function Page({ params: { rows } }) {
       <div className="container">
         <div className="row align-items-center ">
           <QuestionAnswer />
-          <div className="col-lg-6 offset-lg-1"></div>
+          <Feedback />
         </div>
       </div>
     </div>

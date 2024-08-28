@@ -6,6 +6,8 @@ const isProtectedRoute = createRouteMatcher([
   "/job/:path*",
   "/create-job",
   "/answer/:path*",
+  "/mockcompleted/:path*",
+  "/mock/:path*",
 ]);
 
 export default clerkMiddleware((auth, req) => {

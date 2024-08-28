@@ -67,13 +67,13 @@ export default function Home() {
         />
       </div>
       {/* End FunFact Section */}
+      <Spacing lg="60" md="40" />
       {/* Start LogoList Section */}
       <Div className="container">
         <LogoList />
       </Div>
-
-      <Spacing lg="150" md="80" />
       {/* End LogoList Section */}
+      <Spacing lg="60" md="40" />
       {/* Start CTA Section */}
       <Div className="container">
         <Cta

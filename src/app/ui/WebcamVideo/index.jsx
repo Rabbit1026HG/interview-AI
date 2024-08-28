@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import useSupabase from "@/hooks/SupabaseContext";
 
 import Webcam from "react-webcam";
 import Spacing from "../Spacing";
@@ -7,10 +6,12 @@ import RecordButton from "./RecordButton";
 
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
+import extractAudio from "@/app/_services/extractAudio";
+import SupabaseRepo from "@/app/_services/supabase-repo";
+import { sendMessage } from "@/app/_services/openai-repo";
 
 export default function WebcamVideo({ setCamera, start }) {
-  const supabase = useSupabase();
-
+  const supabaseRepo = SupabaseRepo();
   const [questions] = useAtom(mockquestions);
   const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
 
@@ -21,6 +22,7 @@ export default function WebcamVideo({ setCamera, start }) {
   const [videoDevices, setVideoDevices] = useState([]);
   const [audioDevices, setAudioDevices] = useState([]);
   const [audiodeviceId, setAudioDeviceId] = useState();
+  const [transcriptions, setTranscriptions] = useState(["", "", ""]);
 
   const handleDataAvailable = useCallback(
     ({ data }) => {
@@ -51,24 +53,76 @@ export default function WebcamVideo({ setCamera, start }) {
   const handleUpload = useCallback(async () => {
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const filenName = `video_${questions[questionnum].id}`;
-    const { data, error } = await supabase.storage
-      .from("mockvideo")
-      .upload(filenName, blob, {
-        contentType: "video/webm",
-        upsert: false,
+
+    const audioBlob = await extractAudio(blob);
+    const formData = new FormData();
+    formData.append("file", audioBlob, `audio.mp3`);
+    const data = await fetch("/api/tts", {
+      method: "POST",
+      body: formData,
+    });
+    const transcription = await data.json();
+    console.log(transcription.msg);
+
+    if (transcription.msg.includes("Transcription failed")) {
+      toast.warning("Transcription failed", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
       });
-    if (error) {
-      console.error("Error uploading video:", error);
-    } else {
-      console.log("Video uploaded successfully");
+      setTranscriptions((transcriptions) =>
+        transcriptions.map((item, index) =>
+          index === questionnum ? (item = transcription.msg) : item
+        )
+      );
+      setRecordedChunks([]);
+      return false;
     }
+    const uploadFlag = supabaseRepo.createMock(blob, filenName);
     setRecordedChunks([]);
+    return uploadFlag;
   }, [recordedChunks]);
 
-  const onNext = () => {
-    handleUpload();
+  const feedback = async () => {
+    transcriptions.map(async (item, index) => {
+      const text = `I would like to rate my answer to the question. Answer format:
+Weaknesses: Less than 4 sentences. 
+Strengths: Less than 4 sentences.
+My question and answer are as follows:
+Question: ${questions[questionnum].question}
+Answer: ${item} 
+Do not write any explanations or other words, just reply with the answer format.`;
+      console.log("text:", text);
+      let data = await sendMessage(text);
+      console.log("data:", data);
+      let data_array = data.split("Strengths:");
+      const strength = data_array[1].trim();
+      const weakness = data_array[0].replace("Weaknesses:", "").trim();
+      const saveflag = await supabaseRepo.createFeedback(
+        item,
+        weakness,
+        strength,
+        questions[questionnum].id
+      );
+      toast.success(
+        `Created feedback of question${questions[index + 1]} successfully.`,
+        {
+          className: "black-background",
+          bodyClassName: "grow-font-size",
+          progressClassName: "fancy-progress-bar",
+        }
+      );
+    });
+  };
+
+  const onNext = async () => {
+    const flag = await handleUpload();
+    if (!flag) return;
+
     if (questionnum < questions.length - 1) {
       setQuestionnum(questionnum + 1);
+    } else {
+      feedback();
     }
   };
 
@@ -77,7 +131,10 @@ export default function WebcamVideo({ setCamera, start }) {
       const videoInputs = mediaDevices.filter(
         ({ kind }) => kind === "videoinput"
       );
-      setCamera(videoInputs.length > 0 && audioDevices[0]?.deviceId);
+      const audioInputs = mediaDevices.filter(
+        ({ kind }) => kind === "audioinput"
+      );
+      setCamera(videoInputs[0]?.deviceId && audioInputs[0]?.deviceId);
       setVideoDevices(videoInputs);
       setAudioDevices(
         mediaDevices.filter(({ kind }) => kind === "audiooutput")
@@ -87,13 +144,14 @@ export default function WebcamVideo({ setCamera, start }) {
   );
 
   useEffect(() => {
+    setQuestionnum(0);
     navigator.mediaDevices.enumerateDevices().then(handleDevices);
   }, [handleDevices]);
 
   return (
     <div className="col-lg-6 offset-lg-1">
       {videoDevices.length ? (
-        <div className="w-100 d-flex justify-content-center align-items-center">
+        <div className="video-wrapper">
           <Webcam
             audio={true}
             mirrored={true}

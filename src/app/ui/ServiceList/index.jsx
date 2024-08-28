@@ -8,7 +8,7 @@ export default function ServiceList({ variant, data }) {
     setActive(index);
   };
   return (
-    <Div className={`cs-iconbox_3_list cs-style1`}>
+    <Div className={`cs-iconbox_3_list cs-style2`}>
       {data?.map((item, index) => (
         <Div
           className={`cs-hover_tab ${active === index ? "active" : ""}`}
@@ -51,7 +51,7 @@ export default function ServiceList({ variant, data }) {
                 )}
               </span>
               <Div className="cs-iconbox_in">
-                <Div className="cs-iconbox_subtitle">{item.question}</Div>
+                <h2 className="cs-font_22">{item.question}</h2>
               </Div>
             </>
           </Link>

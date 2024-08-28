@@ -23,6 +23,8 @@ export default function Question({ params: { jobId } }) {
       console.log(error.message);
       return;
     }
+    console.log("questions:", data[0].questiontable);
+
     setData(data[0].questiontable);
     setTitle(data[0].title);
   };

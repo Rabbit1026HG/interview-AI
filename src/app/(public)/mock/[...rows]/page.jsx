@@ -8,32 +8,36 @@ import MockHeading from "@/app/ui/WebcamVideo/MockHeading";
 import useSupabase from "@/hooks/SupabaseContext";
 import Question from "@/app/ui/Question";
 import { useAtom } from "jotai";
-import { mockquestions } from "@/store";
+import { mockquestionnum, mockquestions } from "@/store";
 
 export default function Page({ params: { rows } }) {
   const supabase = useSupabase();
   const [start, setStart] = useState(false);
   const [, setQuestions] = useAtom(mockquestions);
+  const [, setQuestionnum] = useAtom(mockquestionnum);
 
   const [isCamera, setIsCamera] = useState(false);
 
   const onStart = () => {
-    // if (!isCamera)
-    //   toast.warning("No find comera!", {
-    //     className: "black-background",
-    //     bodyClassName: "grow-font-size",
-    //     progressClassName: "fancy-progress-bar",
-    //   });
-    // else setStart(true);
+    if (!isCamera)
+      return toast.warning("No find device !", {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
+
     setStart(true);
+    setQuestionnum(0);
   };
 
   const getQuestionData = async () => {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`id,question`)
-      .eq("jobId", rows[0]);
+      .select(`id,question,questionnum`)
+      .eq("jobId", rows[0])
+      .order("questionnum", { ascending: true });
+
     if (error) {
       console.log(error.message);
       return;

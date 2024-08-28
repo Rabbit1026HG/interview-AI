@@ -4,9 +4,9 @@ import ProgressBar from "@/app/ui/ProgressBar";
 import Spacing from "@/app/ui/Spacing";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useApi } from "@/hooks/api";
-import { toast } from "react-toastify";
 import Loading from "@/app/ui/loading";
+import supabaseRepo from "@/app/_services/supabase-repo";
+import { toast } from "react-toastify";
 
 const report = [
   {
@@ -30,7 +30,7 @@ const report = [
   },
 ];
 export default function CreateJob() {
-  const api = useApi();
+  const api = supabaseRepo();
   const [step, setStep] = useState(0);
   const [fileName, setFileName] = useState("No file chosen");
   const [jobTitle, setJobTitle] = useState("");
@@ -66,10 +66,7 @@ export default function CreateJob() {
           bodyClassName: "grow-font-size",
           progressClassName: "fancy-progress-bar",
         });
-      sendMessage(`I want 20 questions for ${jobTitle} job interview.
-Answer format:
-Number. Sentence.
-Do not write any explanations or other words, just reply with the answer format.
+      sendMessage(`I want 20 questions for ${jobTitle} job interview.Do not write any explanations or other words, just reply with the answer format.
 `);
     }
   };
@@ -209,7 +206,10 @@ Do not write any explanations or other words, just reply with the answer format.
               </div>
             </section>
           )}
-          <div className="d-flex justify-content-between cs-font_22">
+          <div
+            className="d-flex justify-content-between cs-font_22 align-item-end "
+            style={{ height: "100%" }}
+          >
             <div className="cs-btn cs-style1" onClick={onBack}>
               Back
             </div>
