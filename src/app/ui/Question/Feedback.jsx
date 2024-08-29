@@ -11,7 +11,7 @@ export default function Feedback() {
       <div className="col-sm-12">
         <h2 className="cs-font_30 ">Answer</h2>
         <div className="cs-m0" style={{ whiteSpace: "pre-wrap" }}>
-          {questions[0].answer}
+          {questions[questionsnum].answer}
         </div>
       </div>
       <Spacing lg="25" md="25" />
