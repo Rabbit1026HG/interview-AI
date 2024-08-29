@@ -9,6 +9,7 @@ import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
 import { toast } from "react-toastify";
 import Loading from "@/app/ui/loading";
+import { createThread, sendMessage } from "@/app/_services/openai-repo";
 
 export default function Answer({ params: { id } }) {
   const [question, setQuestion] = useState("");
@@ -18,20 +19,19 @@ export default function Answer({ params: { id } }) {
   const [answer, setAnswer] = useState("");
   const [weakness, setWeakness] = useState("");
   const [strength, setStrength] = useState("");
+  const [score, setScore] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const supabase = useSupabase();
   const { userId } = useAuth();
 
-  const [threadId, setThreadId] = useState("");
-  const getAnswer = async () => {
+  const [threadId, setThreadId] = useState("No thread");
+  const getAnswer = async (index) => {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`question, jobId,answertable(id,answer,weakness,strength)`)
-
+      .select(`question, jobId,answertable(id,answer,weakness,strength,score)`)
       .eq("id", id);
-
     if (error) {
       console.log(error.message);
       return;
@@ -39,36 +39,25 @@ export default function Answer({ params: { id } }) {
     setJobId(data[0].jobId);
     setQuestion(data[0].question);
     setAnswers(data[0].answertable);
-    setAnswer(data[0].answertable[0]?.answer);
-    setWeakness(data[0].answertable[0]?.weakness);
-    setStrength(data[0].answertable[0]?.strength);
+    setAnswer(data[0].answertable[index]?.answer);
+    setWeakness(data[0].answertable[index]?.weakness);
+    setStrength(data[0].answertable[index]?.strength);
+    setScore(data[0].answertable[index]?.score);
   };
 
   useEffect(() => {
-    getAnswer();
+    getAnswer(0);
   }, [supabase]);
 
   useEffect(() => {
-    const createThread = async () => {
-      const res = await fetch(`/api/assistants/threads`, {
-        method: "POST",
-      });
-      const data = await res.json();
-      setThreadId(data.threadId);
-    };
-    createThread();
+    async function fetchThread() {
+      const data = await createThread();
+      if (data.threadId) {
+        setThreadId(data.threadId);
+      }
+    }
+    fetchThread();
   }, []);
-
-  const sendMessage = async (text) => {
-    let data = await fetch(`/api/assistants/threads/${threadId}/messages`, {
-      method: "POST",
-      body: JSON.stringify({
-        content: text,
-      }),
-    });
-    const returnvalue = await data.json();
-    return returnvalue.msg;
-  };
 
   const onSave = async () => {
     if (!answer || !weakness || !strength)
@@ -80,27 +69,31 @@ export default function Answer({ params: { id } }) {
     setIsLoading(true);
     const ischeck = await isExist();
 
-    if (!ischeck)
+    if (!ischeck) {
+      setIsLoading(false);
       return toast.warning("The value to be saved already exists.", {
         className: "black-background",
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
       });
+    }
     const { data, error } = await supabase
       .from("answertable")
       .upsert({
         answer: answer,
         weakness: weakness,
         strength: strength,
+        score: score,
         questionid: id,
         clerk_user_id: userId,
       })
-      .select(`id,answer,weakness,strength`);
+      .select(`id,answer,weakness,strength,score`);
     if (error) {
+      setIsLoading(false);
       console.log(error.message);
       return;
     }
-    getAnswer();
+    getAnswer(0);
     setIsLoading(false);
     toast.success("Saved successfully!", {
       className: "black-background",
@@ -137,22 +130,34 @@ export default function Answer({ params: { id } }) {
     }
     setIsLoading(true);
     const text = `I would like to rate my answer to the question. Answer format:
-Weaknesses: Less than 4 sentences. 
-Strengths: Less than 4 sentences.
+Weaknesses: [Your weaknesses here, less than 10 sentences.]
+Strengths: [Your strengths here, less than 10 sentences.]
+Score: [Your score here, as a number from 0 to 10.]
 My question and answer are as follows:
 Question: ${question}
-Answer: ${input.trim()} 
+Answer: ${input.trim()}
 Do not write any explanations or other words, just reply with the answer format.`;
     console.log("text:", text);
-    let data = await sendMessage(text);
+    let data = await sendMessage(text, threadId);
+    setIsLoading(false);
+    if (data.error) {
+      toast.error(data.error, {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
+      return;
+    }
     console.log("data:", data);
-    let data_array = data.split("Strengths:");
+    const weaknessesMatch = data.msg.match(/Weaknesses: (.*?)(?=\n)/);
+    const strengthsMatch = data.msg.match(/Strengths: (.*?)(?=\n)/);
+    const scoreMatch = data.msg.match(/Score: (\d+)/);
 
     setAnswer(input.trim());
-    setStrength(data_array[1].trim());
-    setWeakness(data_array[0].replace("Weaknesses:", "").trim());
+    setStrength(strengthsMatch ? strengthsMatch[1].trim() : "");
+    setWeakness(weaknessesMatch ? weaknessesMatch[1].trim() : "");
+    setScore(scoreMatch ? parseInt(scoreMatch[1]) : null);
     setInput("");
-    setIsLoading(false);
   };
   return (
     <>
@@ -177,12 +182,12 @@ Do not write any explanations or other words, just reply with the answer format.
         <hr />
         <br />
         {answers?.map((item, index) => (
-          <>
-            <div className="cs-m0 line-clamp" key={index}>
+          <div key={index}>
+            <div className="cs-m0 line-clamp" onClick={() => getAnswer(index)}>
               {item.answer}
             </div>
             <br />
-          </>
+          </div>
         ))}
 
         <Div className="col-sm-12">
@@ -206,7 +211,27 @@ Do not write any explanations or other words, just reply with the answer format.
         <Spacing lg="25" md="25" />
         <Div className="row">
           <Div className="col-sm-12">
-            <h2 className="cs-font_30 ">Interview</h2>
+            <div className="d-flex justify-content-between align-items-center">
+              <h2 className="cs-font_30 ">Interview</h2>
+              <div className="text-center">
+                <Div className="cs-rating">
+                  <Div
+                    className="cs-rating_bg"
+                    style={{ backgroundImage: "url(/images/rating.svg)" }}
+                  />
+                  <Div
+                    className="cs-rating_percentage"
+                    style={{
+                      backgroundImage: "url(/images/rating.svg)",
+                      width: `${score * 10}%`,
+                    }}
+                  />
+                </Div>
+                <Div className="cs-rating_text" style={{ color: "#ff4a17" }}>
+                  <i>{`SCORE ${score}`}</i>
+                </Div>
+              </div>
+            </div>
             <div className="cs-m0" style={{ whiteSpace: "pre-wrap" }}>
               {answer}
             </div>
