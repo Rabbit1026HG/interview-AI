@@ -18,7 +18,11 @@ export default function Question({ params: { jobId } }) {
     const { data, error } = await supabase
       .from("jobtable")
       .select(`title,questiontable(id,question)`)
-      .eq("id", jobId);
+      .eq("id", jobId)
+      .order("questionnum", {
+        referencedTable: "questiontable",
+        ascending: true,
+      });
     if (error) {
       console.log(error.message);
       return;
@@ -44,7 +48,7 @@ export default function Question({ params: { jobId } }) {
           variant="cs-style1 text-center"
         />
         <Spacing lg="70" md="45" />
-        <ServiceList variant="cs-style2" data={data} />
+        <ServiceList variant="cs-style2" data={data} jobId={jobId} />
       </Div>
       <Spacing lg="120" md="50" />
     </>

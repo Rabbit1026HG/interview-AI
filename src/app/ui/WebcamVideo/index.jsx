@@ -8,7 +8,7 @@ import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
 import extractAudio from "@/app/_services/extractAudio";
 import SupabaseRepo from "@/app/_services/supabase-repo";
-import { sendMessage } from "@/app/_services/openai-repo";
+import { createThread, sendMessage } from "@/app/_services/openai-repo";
 
 export default function WebcamVideo({ setCamera, start }) {
   const supabaseRepo = SupabaseRepo();
@@ -23,6 +23,18 @@ export default function WebcamVideo({ setCamera, start }) {
   const [audioDevices, setAudioDevices] = useState([]);
   const [audiodeviceId, setAudioDeviceId] = useState();
   const [transcriptions, setTranscriptions] = useState(["", "", ""]);
+  const [threadId, setThreadId] = useState("No thread");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchThread() {
+      const data = await createThread();
+      if (data.threadId) {
+        setThreadId(data.threadId);
+      }
+    }
+    fetchThread();
+  }, []);
 
   const handleDataAvailable = useCallback(
     ({ data }) => {
@@ -93,15 +105,28 @@ Question: ${questions[questionnum].question}
 Answer: ${item} 
 Do not write any explanations or other words, just reply with the answer format.`;
       console.log("text:", text);
-      let data = await sendMessage(text);
+      let data = await sendMessage(text, threadId);
+      if (data.error) {
+        toast.error(data.error, {
+          className: "black-background",
+          bodyClassName: "grow-font-size",
+          progressClassName: "fancy-progress-bar",
+        });
+        return;
+      }
       console.log("data:", data);
-      let data_array = data.split("Strengths:");
-      const strength = data_array[1].trim();
-      const weakness = data_array[0].replace("Weaknesses:", "").trim();
+      const weaknessesMatch = data.msg.match(/Weaknesses: (.*?)(?=\n)/);
+      const strengthsMatch = data.msg.match(/Strengths: (.*?)(?=\n)/);
+      const scoreMatch = data.msg.match(/Score: (\d+)/);
+
+      const strength = strengthsMatch ? strengthsMatch[1].trim() : "";
+      const weakness = weaknessesMatch ? weaknessesMatch[1].trim() : "";
+      const score = scoreMatch ? scoreMatch[1] : null;
       const saveflag = await supabaseRepo.createFeedback(
         item,
         weakness,
         strength,
+        score,
         questions[questionnum].id
       );
       toast.success(

@@ -4,7 +4,7 @@ import Div from "../Div";
 import { Icon } from "@iconify/react";
 import Spacing from "../Spacing";
 
-export default function ServiceMock({ data, activeState, jobid }) {
+export default function ServiceMock({ data, activeState, jobId }) {
   const [active, setActive] = useState(0);
   const [itemShow, setItemShow] = useState(4);
   const handelActive = (index) => {
@@ -31,8 +31,8 @@ export default function ServiceMock({ data, activeState, jobid }) {
               href={
                 index < 2
                   ? item.category === "Ready"
-                    ? `/mock/${jobid}/${index + 1}`
-                    : `/mockcompleted/${jobid}/${index + 1}`
+                    ? `/mock/${jobId}/${index + 1}`
+                    : `/mockcompleted/${jobId}/${index + 1}`
                   : "/price"
               }
               className="cs-iconbox cs-style3"
