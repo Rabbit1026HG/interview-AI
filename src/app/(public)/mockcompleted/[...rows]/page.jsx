@@ -19,7 +19,7 @@ export default function Page({ params: { rows } }) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`id,question,answer,weakness,strength`)
+      .select(`id,question,answer,weakness,strength,score`)
       .eq("jobId", rows[0])
       .order("questionnum", { ascending: true });
     if (error) {

@@ -12,7 +12,7 @@ import { fetchFile } from "@ffmpeg/util";
 export default function QuestionAnswer() {
   const supabase = useSupabase();
   // const useopenAI = openaiRepo();
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useAtom(mockquestionnum);
   const [videoUrl, setVideoUrl] = useState("");
   const [index] = useAtom(mockquestionnum);
   const [data] = useAtom(mockquestions);
@@ -39,36 +39,10 @@ export default function QuestionAnswer() {
       setVideoUrl(url);
     }
   };
-  // const getfile = async (fileName) => {
-  //   console.log("processing...");
-  //   if (!supabase) return;
 
-  //   const { data, error } = await supabase.storage
-  //     .from("mockvideo")
-  //     .download("1-1-1.mp4");
-  //   if (error) {
-  //     console.log("Error fetching video URL:", error);
-  //   } else {
-  //     console.log("data:", data);
-  //     const ffmpeg = new FFmpeg();
-  //     await ffmpeg.load();
-  //     await ffmpeg.writeFile("input.mp4", await fetchFile(data));
-  //     await ffmpeg.exec(["-i", "input.mp4", "output.wav"]);
-  //     const outputdata = await ffmpeg.readFile("output.wav");
-  //     const audioBlob = new Blob([outputdata.buffer], { type: "audio/wav" });
-  //     const formData = new FormData();
-  //     formData.append("file", audioBlob, `audio.wav`);
-  //     const transcription = await fetch("/api/tts", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-  //     console.log(transcription);
-  //   }
-  // };
-
-  useEffect(() => {
-    setSelected(index);
-  }, [index]);
+  // useEffect(() => {
+  //   setSelected(index);
+  // }, [index]);
 
   useEffect(() => {
     if (data.length) {

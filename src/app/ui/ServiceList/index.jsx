@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Div from "../Div";
 
-export default function ServiceList({ variant, data }) {
+export default function ServiceList({ variant, data, jobId }) {
   const [active, setActive] = useState(0);
   const handelActive = (index) => {
     setActive(index);
@@ -16,7 +16,7 @@ export default function ServiceList({ variant, data }) {
           onMouseEnter={() => handelActive(index)}
         >
           <Link
-            href={index < 2 ? `/answer/${item.id}` : "/price"}
+            href={index < 2 ? `/answer/${jobId}/${index + 1}` : "/price"}
             className="cs-iconbox cs-style3"
           >
             <>
