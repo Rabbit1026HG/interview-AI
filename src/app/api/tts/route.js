@@ -1,6 +1,6 @@
 import { openai } from "@/config/openai";
 import fs from "fs/promises";
-import { createReadStream } from "fs";
+import { createReadStream, unlinkSync } from "fs";
 
 export async function POST(request) {
   const formData = await request.formData(); // process file as FormData

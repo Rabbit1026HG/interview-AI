@@ -9,6 +9,7 @@ import { mockquestionnum, mockquestions } from "@/store";
 import extractAudio from "@/app/_services/extractAudio";
 import SupabaseRepo from "@/app/_services/supabase-repo";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
+import { toast } from "react-toastify";
 
 export default function WebcamVideo({ setCamera, start }) {
   const supabaseRepo = SupabaseRepo();
@@ -82,14 +83,14 @@ export default function WebcamVideo({ setCamera, start }) {
         bodyClassName: "grow-font-size",
         progressClassName: "fancy-progress-bar",
       });
-      setTranscriptions((transcriptions) =>
-        transcriptions.map((item, index) =>
-          index === questionnum ? (item = transcription.msg) : item
-        )
-      );
       setRecordedChunks([]);
       return false;
     }
+    setTranscriptions((transcriptions) =>
+      transcriptions.map((item, index) =>
+        index === questionnum ? (item = transcription.msg) : item
+      )
+    );
     const uploadFlag = supabaseRepo.createMock(blob, filenName);
     setRecordedChunks([]);
     return uploadFlag;
