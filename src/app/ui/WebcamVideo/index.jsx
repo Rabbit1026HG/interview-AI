@@ -10,8 +10,9 @@ import extractAudio from "@/app/_services/extractAudio";
 import SupabaseRepo from "@/app/_services/supabase-repo";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-export default function WebcamVideo({ setCamera, start }) {
+export default function WebcamVideo({ setCamera, start, jobId }) {
   const supabaseRepo = SupabaseRepo();
   const [questions] = useAtom(mockquestions);
   const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
@@ -26,6 +27,8 @@ export default function WebcamVideo({ setCamera, start }) {
   const [transcriptions, setTranscriptions] = useState(["", "", ""]);
   const [threadId, setThreadId] = useState("No thread");
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchThread() {
@@ -139,6 +142,7 @@ Do not write any explanations or other words, just reply with the answer format.
         }
       );
     });
+    router.push(`/mock/${jobId}`);
   };
 
   const onNext = async () => {
