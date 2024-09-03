@@ -82,11 +82,7 @@ export default function Answer({ params: { rows } }) {
     console.log("NEXT", isNext, "rows:", rows[1] + 1);
     pagebuton(isNext);
     if (!answer || !weakness || !strength) {
-      return toast.warning("The value to be saved is incorrect.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
-      });
+      return;
     }
     setIsLoading(true);
     const ischeck = await isExist();
@@ -94,11 +90,7 @@ export default function Answer({ params: { rows } }) {
     if (!ischeck) {
       setIsLoading(false);
       pagebuton(isNext);
-      return toast.warning("The value to be saved already exists.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
-      });
+      return;
     }
     const { data, error } = await supabase
       .from("answertable")
@@ -143,7 +135,23 @@ export default function Answer({ params: { rows } }) {
     }
     return true;
   };
-
+  const onGenerate = async () => {
+    setIsLoading(true);
+    const text = `Please answer the question.
+Question: ${question}
+Please answer in 10 sentences or 3 paragraphs without explanation or other words.`;
+    let data = await sendMessage(text, threadId);
+    setIsLoading(false);
+    if (data.error) {
+      toast.error(data.error, {
+        className: "black-background",
+        bodyClassName: "grow-font-size",
+        progressClassName: "fancy-progress-bar",
+      });
+      return;
+    }
+    setInput(data.msg);
+  };
   const onSubmit = async () => {
     if (!input.trim()) {
       return toast.warning("Answer is required.", {
@@ -161,7 +169,7 @@ My question and answer are as follows:
 Question: ${question}
 Answer: ${input.trim()}
 Do not write any explanations or other words, just reply with the answer format.`;
-    console.log("text:", text);
+    // console.log("text:", text);
     let data = await sendMessage(text, threadId);
     setIsLoading(false);
     if (data.error) {
@@ -223,7 +231,15 @@ Do not write any explanations or other words, just reply with the answer format.
           <Spacing lg="25" md="25" />
         </Div>
 
-        <Div className="d-flex justify-content-end">
+        <Div className="d-flex justify-content-end gap-4">
+          <button
+            className="cs-btn cs-style1 "
+            onClick={onGenerate}
+            style={{ paddingLeft: "5px" }}
+          >
+            <Icon icon="token-branded:ait" height={30} width={30} />
+            <span> Generate Answer</span>
+          </button>
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
