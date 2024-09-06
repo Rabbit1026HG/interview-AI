@@ -3,13 +3,14 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 1026",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.14",
+    "@emailjs/browser": "^4.4.1",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
     "@supabase/supabase-js": "^2.45.1",
@@ -30,6 +31,7 @@
     "sass": "^1.71.1",
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
+    "stripe": "^16.9.0",
     "swiper": "^8.4.5"
   },
   "devDependencies": {

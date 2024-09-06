@@ -66,9 +66,7 @@ export default function Answer({ params: { id } }) {
   const onSave = async (isNext) => {
     if (!answer || !weakness || !strength)
       return toast.warning("The value to be saved is incorrect.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     setIsLoading(true);
     const ischeck = await isExist();
@@ -76,9 +74,7 @@ export default function Answer({ params: { id } }) {
     if (!ischeck) {
       setIsLoading(false);
       return toast.warning("The value to be saved already exists.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     }
     const { data, error } = await supabase
@@ -127,9 +123,7 @@ export default function Answer({ params: { id } }) {
   const onSubmit = async () => {
     if (!input.trim()) {
       return toast.warning("Answer is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     }
     setIsLoading(true);
@@ -146,9 +140,7 @@ Do not write any explanations or other words, just reply with the answer format.
     setIsLoading(false);
     if (data.error) {
       toast.error(data.error, {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
       return;
     }

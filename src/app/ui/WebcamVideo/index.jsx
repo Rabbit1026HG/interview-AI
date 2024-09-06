@@ -82,9 +82,7 @@ export default function WebcamVideo({ setCamera, start, jobId }) {
 
     if (transcription.msg.includes("Transcription failed")) {
       toast.warning("Transcription failed", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
       setRecordedChunks([]);
       return false;

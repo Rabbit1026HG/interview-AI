@@ -24,9 +24,7 @@ export default function Question() {
       window.speechSynthesis.speak(speech);
     } else {
       toast.error("Sorry, your browser does not support text to speech", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     }
   };
@@ -35,9 +33,7 @@ export default function Question() {
       window.speechSynthesis.cancel();
     } else {
       toast.error("Sorry, your browser does not support text to speech", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     }
   };

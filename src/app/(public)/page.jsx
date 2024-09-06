@@ -5,47 +5,45 @@ import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
 import HomeHeading from "../ui/PageHeading/HomeHeading";
 import PricingTableList from "../ui/PricingTable/PricingTableList";
-import { Icon } from "@iconify/react";
-import ContactInfoWidget from "../ui/Widget/ContactInfoWidget";
-
-// Hero Social Links
-const heroSocialLinks = [
-  {
-    name: "Behance",
-    links: "/",
-  },
-  {
-    name: "Twitter",
-    links: "/",
-  },
-];
-// FunFact Data
-const funfaceData = [
-  {
-    title: "Global Happy Clients",
-    factNumber: "40K",
-  },
-  {
-    title: "Project Completed",
-    factNumber: "50K",
-  },
-  {
-    title: "Team Members",
-    factNumber: "245",
-  },
-  {
-    title: "Digital products",
-    factNumber: "550",
-  },
-];
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import Constact from "../ui/Contact";
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    const { searchParams } = new URL(window.location.href);
+    const status = searchParams.get("status");
+    status === "success" &&
+      toast.success("Your success!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    status === "cancel" &&
+      toast.error("Failed, please try again later!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+  }, [router]);
   return (
     <>
       {/* Start Hero Section */}
       <HomeHeading
         title="Interviews are scary and unpredictable. InterviewAmigo is here to fix that."
-        bgSrc="/images/hero_bg_4.jpeg"
+        bgSrc="/images/case_study_1.jpeg"
         // bgSrc="/images/about_hero_bg.jpeg"
         subtitle="Interviews can be tough, but you don’t have to go through them alone. InterviewAmigo is here to help you practice, get personalized feedback, and build the confidence you need to succeed, whether it’s your first job or your next big career move."
       />
@@ -126,60 +124,7 @@ export default function Home() {
         <PricingTableList />
       </Div>
       <Spacing lg="85" md="40" />
-
-      <Div className="container">
-        <Div className="row">
-          <Div className="col-lg-6">
-            <SectionHeading
-              title="Do you have a project <br/>in your mind?"
-              subtitle="Getting Touch"
-            />
-            <Spacing lg="55" md="30" />
-            <ContactInfoWidget withIcon />
-            <Spacing lg="0" md="50" />
-          </Div>
-          <Div className="col-lg-6">
-            <form action="#" className="row">
-              <Div className="col-sm-6">
-                <label className="cs-primary_color">Full Name*</label>
-                <input type="text" className="cs-form_field" />
-                <Spacing lg="20" md="20" />
-              </Div>
-              <Div className="col-sm-6">
-                <label className="cs-primary_color">Email*</label>
-                <input type="text" className="cs-form_field" />
-                <Spacing lg="20" md="20" />
-              </Div>
-              <Div className="col-sm-6">
-                <label className="cs-primary_color">Project Type*</label>
-                <input type="text" className="cs-form_field" />
-                <Spacing lg="20" md="20" />
-              </Div>
-              <Div className="col-sm-6">
-                <label className="cs-primary_color">Mobile*</label>
-                <input type="text" className="cs-form_field" />
-                <Spacing lg="20" md="20" />
-              </Div>
-              <Div className="col-sm-12">
-                <label className="cs-primary_color">Mobile*</label>
-                <textarea
-                  cols="30"
-                  rows="7"
-                  className="cs-form_field"
-                ></textarea>
-                <Spacing lg="25" md="25" />
-              </Div>
-              <Div className="col-sm-12">
-                <button className="cs-btn cs-style1">
-                  <span>Send Message</span>
-                  <Icon icon="bi:arrow-right" />
-                </button>
-              </Div>
-            </form>
-          </Div>
-        </Div>
-        <Spacing lg="85" md="40" />
-      </Div>
+      <Constact />
     </>
   );
 }
