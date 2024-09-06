@@ -144,9 +144,7 @@ Please answer in 10 sentences or 3 paragraphs without explanation or other words
     setIsLoading(false);
     if (data.error) {
       toast.error(data.error, {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
       return;
     }
@@ -155,9 +153,7 @@ Please answer in 10 sentences or 3 paragraphs without explanation or other words
   const onSubmit = async () => {
     if (!input.trim()) {
       return toast.warning("Answer is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     }
     setIsLoading(true);
@@ -174,9 +170,7 @@ Do not write any explanations or other words, just reply with the answer format.
     setIsLoading(false);
     if (data.error) {
       toast.error(data.error, {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
       return;
     }

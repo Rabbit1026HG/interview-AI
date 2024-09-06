@@ -49,15 +49,11 @@ export default function CreateJob() {
   const onNext = () => {
     if (!step && !jobTitle.trim())
       return toast.warning("Title is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     if (!step && !jobDescription.trim())
       return toast.warning("Description is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     if (step < 2) setStep(step + 1);
     else {
@@ -90,9 +86,7 @@ export default function CreateJob() {
     if (data.error) {
       setIsLoading(false);
       toast.error("Failed to send message.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
       return;
     }
