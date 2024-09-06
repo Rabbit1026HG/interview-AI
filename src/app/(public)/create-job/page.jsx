@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/ui/loading";
 import supabaseRepo from "@/app/_services/supabase-repo";
 import { toast } from "react-toastify";
+import { createThread, sendMessage } from "@/app/_services/openai-repo";
 
 const report = [
   {
@@ -39,7 +40,7 @@ export default function CreateJob() {
   const [companyDescription, setCompanyDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const [threadId, setThreadId] = useState("");
+  const [threadId, setThreadId] = useState("No thread");
 
   const router = useRouter();
   const onBack = () => {
@@ -48,15 +49,11 @@ export default function CreateJob() {
   const onNext = () => {
     if (!step && !jobTitle.trim())
       return toast.warning("Title is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     if (!step && !jobDescription.trim())
       return toast.warning("Description is required.", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
     if (step < 2) setStep(step + 1);
     else {
@@ -66,40 +63,41 @@ export default function CreateJob() {
           bodyClassName: "grow-font-size",
           progressClassName: "fancy-progress-bar",
         });
-      sendMessage(`I want 20 questions for ${jobTitle} job interview.Do not write any explanations or other words, just reply with the answer format.
-`);
+      sendAndSave(
+        `I want 20 questions for ${jobTitle} job interview.Do not write any explanations or other words, just reply with the answer format.
+`
+      );
     }
   };
 
   useEffect(() => {
-    const createThread = async () => {
-      const res = await fetch(`/api/assistants/threads`, {
-        method: "POST",
-      });
-      const data = await res.json();
-      setThreadId(data.threadId);
-    };
-    createThread();
+    async function fetchThread() {
+      const data = await createThread();
+      if (data.threadId) {
+        setThreadId(data.threadId);
+      }
+    }
+    fetchThread();
   }, []);
 
-  const sendMessage = async (text) => {
+  const sendAndSave = async (text) => {
     setIsLoading(true);
-    let data = await fetch(`/api/assistants/threads/${threadId}/messages`, {
-      method: "POST",
-      body: JSON.stringify({
-        content: text,
-      }),
-    });
-    let data1 = await data.json();
-    data = data1.msg.split("\n");
-    console.log("response:", data1.msg);
+    let data = await sendMessage(text, threadId);
+    if (data.error) {
+      setIsLoading(false);
+      toast.error("Failed to send message.", {
+        theme: "dark",
+      });
+      return;
+    }
+    const questions = data.msg.split("\n");
     await api.test({
       title: jobTitle,
       description: jobDescription,
       company: companyName,
       companyDescription: companyDescription,
       fileName: fileName,
-      question: data,
+      question: questions,
     });
 
     setIsLoading(false);

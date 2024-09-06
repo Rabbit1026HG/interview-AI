@@ -1,12 +1,18 @@
 async function createThread() {
-  const res = await fetch(`/api/assistants/threads`, {
-    method: "POST",
-  });
-  const data = await res.json();
-  return data;
+  try {
+    const res = await fetch(`/api/assistants/threads`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    console.log("data:", data);
+    return data;
+  } catch (error) {
+    console.log("Error creating thread:", error);
+    return error.message;
+  }
 }
 
-async function sendMessage(text) {
+async function sendMessage(text, threadId) {
   let data = await fetch(`/api/assistants/threads/${threadId}/messages`, {
     method: "POST",
     body: JSON.stringify({
@@ -14,6 +20,6 @@ async function sendMessage(text) {
     }),
   });
   let dataValue = await data.json();
-  return dataValue.msg;
+  return dataValue;
 }
 export { createThread, sendMessage };

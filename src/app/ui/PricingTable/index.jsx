@@ -1,17 +1,35 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
-import Button from '../Button';
-import Div from '../Div';
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import Div from "../Div";
+import { useRouter } from "next/navigation";
 
 export default function PricingTable({
   title,
   price,
   currency,
   features,
-  btnLink,
   btnText,
   timeline,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const item = {
+    name: "Subscibe to interviewamigo",
+    description: "per month",
+    price: price,
+    quantity: 1,
+  };
+  const router = useRouter();
+  const createCheckOutSession = async () => {
+    setIsLoading(true);
+    const checkoutSession = await fetch("/api/create-stripe-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    });
+    const res = await checkoutSession.json();
+    router.push(res.url);
+    setIsLoading(false);
+  };
   return (
     <Div className="cs-pricing_table cs-style1">
       <h2 className="cs-pricing_title">{title}</h2>
@@ -35,9 +53,20 @@ export default function PricingTable({
           </li>
         ))}
       </ul>
-      <Div className="cs-pricing_btn_wrap">
-        <Button btnLink={btnLink} btnText={btnText} />
-      </Div>
+      {isLoading ? (
+        <Div className="cs-pricing_btn_wrap cs-text_btn">
+          <span>Processing...</span>
+          <Icon icon="eos-icons:bubble-loading" />
+        </Div>
+      ) : (
+        <Div
+          className="cs-pricing_btn_wrap cs-text_btn"
+          onClick={createCheckOutSession}
+        >
+          <span>{btnText}</span>
+          <Icon icon="bi:arrow-right" />
+        </Div>
+      )}
     </Div>
   );
 }

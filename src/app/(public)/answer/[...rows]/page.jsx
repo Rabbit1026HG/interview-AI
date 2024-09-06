@@ -4,16 +4,18 @@ import Div from "@/app/ui/Div";
 import Spacing from "@/app/ui/Spacing";
 import Link from "next/link";
 import useSupabase from "@/hooks/SupabaseContext";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import Markdown from "react-markdown";
 import { toast } from "react-toastify";
 import Loading from "@/app/ui/loading";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
+import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
-export default function Answer({ params: { id } }) {
-  const [jobId, setJobId] = useState("");
+export default function Answer({ params: { rows } }) {
   const [question, setQuestion] = useState("");
+  const [questionId, setQuestionId] = useState("");
   const [answers, setAnswers] = useState([]);
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState("");
@@ -24,14 +26,18 @@ export default function Answer({ params: { id } }) {
 
   const supabase = useSupabase();
   const { userId } = useAuth();
+  const router = useRouter();
 
   const [threadId, setThreadId] = useState("No thread");
-  const getAnswer = async (index) => {
+  const getAnswer = async (index, jobId, questionnum) => {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
-      .select(`question,jobId,answertable(id,answer,weakness,strength,score)`)
-      .eq("id", id)
+      .select(
+        `id,question,questionnum,answertable(id,answer,weakness,strength,score)`
+      )
+      .eq("jobId", jobId)
+      .eq("questionnum", questionnum)
       .order("created_at", {
         referencedTable: "answertable",
         ascending: false,
@@ -41,6 +47,7 @@ export default function Answer({ params: { id } }) {
       console.log(error.message);
       return;
     }
+    setQuestionId(data[0].id);
     setQuestion(data[0].question);
     setAnswers(data[0].answertable);
     setAnswer(data[0].answertable[index]?.answer);
@@ -50,7 +57,7 @@ export default function Answer({ params: { id } }) {
   };
 
   useEffect(() => {
-    getAnswer(0);
+    getAnswer(0, rows[0], rows[1]);
   }, [supabase]);
 
   useEffect(() => {
@@ -62,20 +69,28 @@ export default function Answer({ params: { id } }) {
     }
     fetchThread();
   }, []);
-
+  const pagebuton = (isNext) => {
+    isNext
+      ? rows[1] < 20
+        ? router.push(`/answer/${rows[0]}/${Number(rows[1]) + 1}`)
+        : router.push(`/question/${rows[0]}`)
+      : rows[1] > 1
+      ? router.push(`/answer/${rows[0]}/${Number(rows[1]) - 1}`)
+      : router.push(`/question/${rows[0]}`);
+  };
   const onSave = async (isNext) => {
-    if (!answer || !weakness || !strength)
-      return toast.warning("The value to be saved is incorrect.", {
-        theme: "dark",
-      });
+    console.log("NEXT", isNext, "rows:", rows[1] + 1);
+    pagebuton(isNext);
+    if (!answer || !weakness || !strength) {
+      return;
+    }
     setIsLoading(true);
     const ischeck = await isExist();
 
     if (!ischeck) {
       setIsLoading(false);
-      return toast.warning("The value to be saved already exists.", {
-        theme: "dark",
-      });
+      pagebuton(isNext);
+      return;
     }
     const { data, error } = await supabase
       .from("answertable")
@@ -84,16 +99,17 @@ export default function Answer({ params: { id } }) {
         weakness: weakness,
         strength: strength,
         score: score,
-        questionid: id,
+        questionid: questionId,
         clerk_user_id: userId,
       })
       .select(`id,answer,weakness,strength,score`);
     if (error) {
       setIsLoading(false);
+      pagebuton(isNext);
       console.log(error.message);
       return;
     }
-    isne;
+    pagebuton(isNext);
     setIsLoading(false);
     toast.success("Saved successfully!", {
       className: "black-background",
@@ -107,7 +123,7 @@ export default function Answer({ params: { id } }) {
       .from("answertable")
       .select()
       .eq("answer", answer)
-      .eq("questionid", id);
+      .eq("questionid", questionId);
 
     if (error) {
       console.log(error.message);
@@ -119,7 +135,21 @@ export default function Answer({ params: { id } }) {
     }
     return true;
   };
-
+  const onGenerate = async () => {
+    setIsLoading(true);
+    const text = `Please answer the question.
+Question: ${question}
+Please answer in 10 sentences or 3 paragraphs without explanation or other words.`;
+    let data = await sendMessage(text, threadId);
+    setIsLoading(false);
+    if (data.error) {
+      toast.error(data.error, {
+        theme: "dark",
+      });
+      return;
+    }
+    setInput(data.msg);
+  };
   const onSubmit = async () => {
     if (!input.trim()) {
       return toast.warning("Answer is required.", {
@@ -135,7 +165,7 @@ My question and answer are as follows:
 Question: ${question}
 Answer: ${input.trim()}
 Do not write any explanations or other words, just reply with the answer format.`;
-    console.log("text:", text);
+    // console.log("text:", text);
     let data = await sendMessage(text, threadId);
     setIsLoading(false);
     if (data.error) {
@@ -161,7 +191,7 @@ Do not write any explanations or other words, just reply with the answer format.
       <Spacing lg="145" md="80" />
       <Div className="container">
         <Spacing lg="50" md="35" />
-        <Link href={`/question/${jobId}`} className="cs-text_btn">
+        <Link href={`/question/${rows[0]}`} className="cs-text_btn">
           <span className="cs-font_38">Question</span>
         </Link>
         <Spacing lg="20" md="10" />
@@ -170,10 +200,15 @@ Do not write any explanations or other words, just reply with the answer format.
         <hr />
         <br />
         {answers?.map((item, index) => (
-          <div key={index}>
-            <div className="cs-m0 line-clamp" onClick={() => getAnswer(index)}>
+          <div key={index} className="custombtn">
+            <br />
+            <div
+              className="cs-m0 line-clamp"
+              onClick={() => getAnswer(index, rows[0], rows[1])}
+            >
               {item.answer}
             </div>
+            <br />
             <hr />
           </div>
         ))}
@@ -190,7 +225,15 @@ Do not write any explanations or other words, just reply with the answer format.
           <Spacing lg="25" md="25" />
         </Div>
 
-        <Div className="d-flex justify-content-end">
+        <Div className="d-flex justify-content-end gap-4">
+          <button
+            className="cs-btn cs-style1 "
+            onClick={onGenerate}
+            style={{ paddingLeft: "5px" }}
+          >
+            <Icon icon="token-branded:ait" height={30} width={30} />
+            <span> Generate Answer</span>
+          </button>
           <button className="cs-btn cs-style1" onClick={onSubmit}>
             <span>Submit</span>
           </button>
@@ -222,7 +265,10 @@ Do not write any explanations or other words, just reply with the answer format.
           </Div>
           <Spacing lg="25" md="25" />
           <Div className="col-sm-6">
-            <h2 className="cs-font_30 ">Strength</h2>
+            <h2 className="cs-font_30 ">
+              <span>Strength </span>
+              <Icon icon="iwwa:good-o" style={{ color: "#ff4a17" }} />
+            </h2>
             <div className="cs-m0">
               <Markdown>{strength}</Markdown>
             </div>
@@ -230,7 +276,10 @@ Do not write any explanations or other words, just reply with the answer format.
             <Spacing lg="25" md="25" />
           </Div>
           <Div className="col-sm-6">
-            <h2 className="cs-font_30 ">Weakness</h2>
+            <h2 className="cs-font_30 ">
+              <span>Weakness </span>
+              <Icon icon="iwwa:bad-o" style={{ color: "#ff4a17" }} />
+            </h2>
             <div className="cs-m0">
               <Markdown>{weakness}</Markdown>
             </div>
@@ -238,10 +287,16 @@ Do not write any explanations or other words, just reply with the answer format.
           </Div>
 
           <Div className="d-flex justify-content-between">
-            <button className="cs-btn cs-style1 cs-type1" onClick={onSave}>
+            <button
+              className="cs-btn cs-style1 cs-type1"
+              onClick={() => onSave(false)}
+            >
               <span>Prev</span>
             </button>
-            <button className="cs-btn cs-style1 cs-type1" onClick={onSave}>
+            <button
+              className="cs-btn cs-style1 cs-type1"
+              onClick={() => onSave(true)}
+            >
               <span>Next</span>
             </button>
           </Div>

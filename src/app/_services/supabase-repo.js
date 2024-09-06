@@ -97,7 +97,7 @@ const SupabaseRepo = () => {
   // @function  Insert mock result
   // @input     answer, weakness, strength,questionId
   // @output    bool true&successfully or false@failure
-  async function createFeedback(answer, weakness, strength, questionId) {
+  async function createFeedback(answer, weakness, strength, score, questionId) {
     if (!supabase) return;
     const { data, error } = await supabase
       .from("questiontable")
@@ -106,6 +106,7 @@ const SupabaseRepo = () => {
           answer: answer,
           weakness: weakness,
           strength: strength,
+          score: score,
           state: true,
           update_at: new Date(),
         },

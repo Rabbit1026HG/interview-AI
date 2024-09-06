@@ -21,9 +21,7 @@ export default function Page({ params: { rows } }) {
   const onStart = () => {
     if (!isCamera)
       return toast.warning("No find device !", {
-        className: "black-background",
-        bodyClassName: "grow-font-size",
-        progressClassName: "fancy-progress-bar",
+        theme: "dark",
       });
 
     setStart(true);
@@ -55,7 +53,11 @@ export default function Page({ params: { rows } }) {
         <div className="container">
           <div className="row align-items-center ">
             {start ? <Question /> : <MockHeading btnClick={onStart} />}
-            <WebcamVideo setCamera={setIsCamera} start={start} />
+            <WebcamVideo
+              setCamera={setIsCamera}
+              start={start}
+              jobId={rows[0]}
+            />
           </div>
         </div>
       </section>
