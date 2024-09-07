@@ -42,7 +42,6 @@ export default function Mock({ params: { jobId } }) {
     setTitle(data[0].title);
     data[0].questiontable.forEach((item, index) => {
       if (item.state) cnt++;
-      console.log("cnt--->", cnt);
       if ((index + 1) % 3 === 0) {
         const category = cnt === 3 ? "Completed" : "Ready";
         const date = cnt === 3 ? item.update_at : ""; // Fixed typo from 'upadate_at' to 'update_at'

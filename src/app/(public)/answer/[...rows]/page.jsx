@@ -165,7 +165,7 @@ My question and answer are as follows:
 Question: ${question}
 Answer: ${input.trim()}
 Do not write any explanations or other words, just reply with the answer format.`;
-    // console.log("text:", text);
+   
     let data = await sendMessage(text, threadId);
     setIsLoading(false);
     if (data.error) {

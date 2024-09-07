@@ -11,8 +11,9 @@ import SupabaseRepo from "@/app/_services/supabase-repo";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Loading from "../loading";
 
-export default function WebcamVideo({ setCamera, start, jobId }) {
+export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
   const supabaseRepo = SupabaseRepo();
   const [questions] = useAtom(mockquestions);
   const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
@@ -24,9 +25,8 @@ export default function WebcamVideo({ setCamera, start, jobId }) {
   const [videoDevices, setVideoDevices] = useState([]);
   const [audioDevices, setAudioDevices] = useState([]);
   const [audiodeviceId, setAudioDeviceId] = useState();
-  const [transcriptions, setTranscriptions] = useState(["", "", ""]);
+  const [transcriptions, setTranscriptions] = useState(["I can do it", "I can do it", "I can do it"]);
   const [threadId, setThreadId] = useState("No thread");
-  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -85,6 +85,7 @@ export default function WebcamVideo({ setCamera, start, jobId }) {
         theme: "dark",
       });
       setRecordedChunks([]);
+
       return false;
     }
     setTranscriptions((transcriptions) =>
@@ -96,62 +97,75 @@ export default function WebcamVideo({ setCamera, start, jobId }) {
     setRecordedChunks([]);
     return uploadFlag;
   }, [recordedChunks]);
-
   const feedback = async () => {
-    transcriptions.map(async (item, index) => {
-      const text = `I would like to rate my answer to the question. Answer format:
-Weaknesses: Less than 4 sentences. 
-Strengths: Less than 4 sentences.
-My question and answer are as follows:
-Question: ${questions[questionnum].question}
-Answer: ${item} 
-Do not write any explanations or other words, just reply with the answer format.`;
-      console.log("text:", text);
-      let data = await sendMessage(text, threadId);
-      if (data.error) {
-        toast.error(data.error, {
-          className: "black-background",
-          bodyClassName: "grow-font-size",
-          progressClassName: "fancy-progress-bar",
-        });
-        return;
-      }
-      console.log("data:", data);
-      const weaknessesMatch = data.msg.match(/Weaknesses: (.*?)(?=\n)/);
-      const strengthsMatch = data.msg.match(/Strengths: (.*?)(?=\n)/);
-      const scoreMatch = data.msg.match(/Score: (\d+)/);
+    try {
+      for (const [index, item] of transcriptions.entries()) {
+        const text = `I would like to rate my answer to the question. Answer format:
+    Weaknesses: [Your weaknesses here, less than 10 sentences.]
+    Strengths: [Your strengths here, less than 10 sentences.]
+    Score: [Your score here, as a number from 0 to 10.]
+    My question and answer are as follows:
+    Question: ${questions[index].question}
+    Answer: ${item}
+    Do not write any explanations or other words, just reply with the answer format.`;
 
-      const strength = strengthsMatch ? strengthsMatch[1].trim() : "";
-      const weakness = weaknessesMatch ? weaknessesMatch[1].trim() : "";
-      const score = scoreMatch ? scoreMatch[1] : null;
-      const saveflag = await supabaseRepo.createFeedback(
-        item,
-        weakness,
-        strength,
-        score,
-        questions[questionnum].id
-      );
-      toast.success(
-        `Created feedback of question${questions[index + 1]} successfully.`,
-        {
-          className: "black-background",
-          bodyClassName: "grow-font-size",
-          progressClassName: "fancy-progress-bar",
+        console.log("text:", text);
+        console.log('start: ', Date.now());
+
+        let data = await sendMessage(text, threadId);
+
+        console.log('end: ', Date.now());
+        if (data.error) {
+          toast.error(data.error, {
+            theme: "dark",
+          });
+          return;
         }
-      );
-    });
+
+        console.log("data:", data.msg);
+        const weaknessesMatch = data.msg.match(/Weaknesses: (.*?)(?=\n)/);
+        const strengthsMatch = data.msg.match(/Strengths: (.*?)(?=\n)/);
+        const scoreMatch = data.msg.match(/Score: (\d+)/);
+
+        const strength = strengthsMatch ? strengthsMatch[1].trim() : "";
+        const weakness = weaknessesMatch ? weaknessesMatch[1].trim() : "";
+        const score = scoreMatch ? scoreMatch[1] : null;
+
+        const saveflag = await supabaseRepo.createFeedback(
+          item, weakness, strength, score, questions[index].id
+        );
+        console.log("save supabase:", saveflag);
+
+        toast.success(
+          `Created feedback of question${index + 1} successfully.`,
+          {
+            theme: "dark",
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error processing transcriptions:", error);
+      toast.error("An error occurred while processing transcriptions.", {
+        theme: "dark",
+      });
+    }
     router.push(`/mock/${jobId}`);
   };
 
   const onNext = async () => {
+    setLoading(true);
     const flag = await handleUpload();
-    if (!flag) return;
+    if (!flag) {
+      setLoading(false);
+      return;
+    }
 
     if (questionnum < questions.length - 1) {
       setQuestionnum(questionnum + 1);
     } else {
-      feedback();
+      await feedback();
     }
+    setLoading(false);
   };
 
   const handleDevices = useCallback(
@@ -178,6 +192,7 @@ Do not write any explanations or other words, just reply with the answer format.
 
   return (
     <div className="col-lg-6 offset-lg-1">
+      
       {videoDevices.length ? (
         <div className="video-wrapper">
           <Webcam
@@ -206,7 +221,7 @@ Do not write any explanations or other words, just reply with the answer format.
           onStop={handleStopCaptureClick}
         />
       )}
-
+      <button className="btn cs-text_btn" onClick={async () => { await feedback(); }}>test</button>
       <Spacing lg="20" md="20" />
       <label className="cs-primary_color">Camera</label>
       {videoDevices.length ? (

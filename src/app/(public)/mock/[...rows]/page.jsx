@@ -9,6 +9,7 @@ import useSupabase from "@/hooks/SupabaseContext";
 import Question from "@/app/ui/Question";
 import { useAtom } from "jotai";
 import { mockquestionnum, mockquestions } from "@/store";
+import Loading from "@/app/ui/loading";
 
 export default function Page({ params: { rows } }) {
   const supabase = useSupabase();
@@ -17,6 +18,7 @@ export default function Page({ params: { rows } }) {
   const [, setQuestionnum] = useAtom(mockquestionnum);
 
   const [isCamera, setIsCamera] = useState(false);
+  const [isLoading,setIsLoading]=useState(false);
 
   const onStart = () => {
     if (!isCamera)
@@ -48,12 +50,14 @@ export default function Page({ params: { rows } }) {
   }, [supabase]);
   return (
     <div>
+      {isLoading&&<Loading/>}
       <Spacing lg="145" md="80" />
       <section>
         <div className="container">
           <div className="row align-items-center ">
             {start ? <Question /> : <MockHeading btnClick={onStart} />}
             <WebcamVideo
+            setLoading={setIsLoading}
               setCamera={setIsCamera}
               start={start}
               jobId={rows[0]}
