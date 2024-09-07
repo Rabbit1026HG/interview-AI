@@ -111,16 +111,16 @@ const SupabaseRepo = () => {
           update_at: new Date(),
         },
       ])
-      .eq("id", questionId);
+      .eq("id", questionId).select();
     if (error) {
       console.log(error.message);
       return false;
     }
-    console.log(data);
+    console.log("data",data);
     return true;
   }
 
-  return { test, getJob, getQuestion, createMock, createFeedback };
+  return { test, getJob, getQuestion, createFeedback };
 };
 
 export default SupabaseRepo;
