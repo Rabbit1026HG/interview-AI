@@ -25,7 +25,6 @@ const openSans = Open_Sans({
 });
 
 export default function RootLayout({ children }) {
-  // <time datetime={Date.now} suppressHydrationWarning />;
   return (
     <ClerkProvider>
       <html lang="en">

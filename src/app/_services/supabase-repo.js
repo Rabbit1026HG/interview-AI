@@ -85,7 +85,7 @@ const SupabaseRepo = () => {
     if (!supabase) return;
     const { data, error } = await supabase.storage
       .from("mockvideo")
-      .upload(fileName, blob, { contentType: "video/webm", upsert: false });
+      .upload(fileName, blob, { contentType: "video/webm", upsert: true });
     if (error) {
       console.log("Error uploading video:", error);
       return false;
@@ -111,16 +111,17 @@ const SupabaseRepo = () => {
           update_at: new Date(),
         },
       ])
-      .eq("id", questionId).select();
+      .eq("id", questionId)
+      .select();
     if (error) {
       console.log(error.message);
       return false;
     }
-    console.log("data",data);
+    console.log("data", data);
     return true;
   }
 
-  return { test, getJob, getQuestion, createFeedback };
+  return { test, getJob, getQuestion, createFeedback, createMock };
 };
 
 export default SupabaseRepo;
