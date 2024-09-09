@@ -16,7 +16,7 @@ export default function ServiceList({ variant, data, jobId }) {
           onMouseEnter={() => handelActive(index)}
         >
           <Link
-            href={index < 2 ? `/answer/${jobId}/${index + 1}` : "/price"}
+            href={index < 2 ? `/answer/${jobId}/${index + 1}` : "/#price"}
             className="cs-iconbox cs-style3"
           >
             <>

@@ -54,7 +54,7 @@ export default function Header({ variant }) {
 
                     <li>
                       <Link
-                        href="/price"
+                        href="/#price"
                         onClick={() => setMobileToggle(false)}
                       >
                         Price

@@ -33,7 +33,7 @@ export default function ServiceMock({ data, activeState, jobId }) {
                   ? item.category === "Ready"
                     ? `/mock/${jobId}/${index + 1}`
                     : `/mockcompleted/${jobId}/${index + 1}`
-                  : "/price"
+                  : "/#price"
               }
               className="cs-iconbox cs-style3"
             >

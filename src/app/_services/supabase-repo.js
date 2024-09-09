@@ -94,6 +94,47 @@ const SupabaseRepo = () => {
     return true;
   }
 
+  // @function  Users price
+  // @input     session_id:status, jobcount: job number
+  // @output    bool true&successfully or false@failure
+
+  async function updatePrice({ session_id, jobcount }) {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from("users")
+      .update([
+        {
+          session_id: session_id,
+          job_count: jobcount,
+        },
+      ])
+      .eq("clerk_user_id", userId)
+      .select();
+    if (error) {
+      console.log(error.message);
+      return false;
+    }
+    console.log("data", data);
+
+    return true;
+  }
+
+  async function doublecheck({ session_id }) {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from("users")
+      .eq("clerk_user_id", userId)
+      .eq("session_id", session_id)
+      .select();
+    if (error) {
+      console.log(error.message);
+      return false;
+    }
+    console.log("data", data);
+    if (data.data.length) return false;
+    return true;
+  }
+
   // @function  Insert mock result
   // @input     answer, weakness, strength,questionId
   // @output    bool true&successfully or false@failure
@@ -121,7 +162,15 @@ const SupabaseRepo = () => {
     return true;
   }
 
-  return { test, getJob, getQuestion, createFeedback, createMock };
+  return {
+    test,
+    getJob,
+    getQuestion,
+    createFeedback,
+    createMock,
+    doublecheck,
+    updatePrice,
+  };
 };
 
 export default SupabaseRepo;

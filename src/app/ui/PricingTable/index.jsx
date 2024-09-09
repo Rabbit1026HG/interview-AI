@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import Div from "../Div";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useAtom } from "jotai";
+import { pricestate } from "@/store";
 
 export default function PricingTable({
   title,
@@ -27,8 +30,13 @@ export default function PricingTable({
       body: JSON.stringify(item),
     });
     const res = await checkoutSession.json();
-    router.push(res.url);
-    setIsLoading(false);
+    if (res.url) {
+      router.push(res.url); // Redirect to the Stripe checkout page
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      console.error("Stripe URL not found in response:", res);
+    }
   };
   return (
     <Div className="cs-pricing_table cs-style1">

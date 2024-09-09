@@ -28,7 +28,8 @@ export async function POST(req) {
       payment_method_types: ["card"],
       line_items: [transformedItem],
       mode: "payment",
-      success_url: `${redirectURL}?status=success`,
+      success_url: `${redirectURL}?status=stripe{CHECKOUT_SESSION_ID}${item.price}`,
+      // success_url: `${redirectURL}?status=success`,
       cancel_url: `${redirectURL}?status=cancel`,
       metadata: {
         // images: item.image,

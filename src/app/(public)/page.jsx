@@ -9,34 +9,34 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Constact from "../ui/Contact";
+import pricecheck from "../_services/pricecheck";
+import SupabaseRepo from "../_services/supabase-repo";
 
 export default function Home() {
   const router = useRouter();
-  useEffect(() => {
+  const supabaseRepo = SupabaseRepo();
+  async function priceinput() {
     const { searchParams } = new URL(window.location.href);
     const status = searchParams.get("status");
-    status === "success" &&
-      toast.success("Your success!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    status === "cancel" &&
-      toast.error("Failed, please try again later!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+    const priceresult = pricecheck(status);
+    if (!priceresult) {
+      toast.error("Payment Failed", { theme: "dark" });
+      router.push("/");
+      return;
+    }
+    try {
+      const ischeck = await supabaseRepo.doublecheck(status);
+      console.log("ischeck:", ischeck);
+
+      ischeck && (await supabaseRepo.updatePrice(status, priceresult));
+      router.push("/");
+    } catch (error) {
+      toast.error("Payment Failed", { theme: "dark" });
+      router.push("/");
+    }
+  }
+  useEffect(() => {
+    priceinput();
   }, [router]);
   return (
     <>
@@ -115,7 +115,7 @@ export default function Home() {
       {/* End LogoList Section */}
       <Spacing lg="60" md="40" />
 
-      <Div className="container">
+      <Div className="container" id="price">
         <SectionHeading
           title="Providing best <br/>pricing for client"
           subtitle="Pricing & Packaging"
