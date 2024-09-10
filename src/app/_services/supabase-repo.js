@@ -162,6 +162,52 @@ const SupabaseRepo = () => {
     return true;
   }
 
+  // @function  Get user allow job
+  // @input
+  // @output    count: allowed job count
+  async function getuserallowjob() {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from("users")
+      .select("job_count")
+      .eq("clerk_user_id", userId);
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+    console.log("getuserallowjob:", data[0]?.job_count);
+    if (data.length) return data[0]?.job_count;
+    return 1;
+  }
+
+  // @function  Get user job
+  // @input
+  // @output    count: used job count
+  async function getuserjob() {
+    if (!supabase) return;
+    const { count, error } = await supabase
+      .from("jobtable")
+      .select("*", { count: "exact", head: true })
+      .eq("clerk_user_id", userId);
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+    console.log("getuserjob", count);
+    return count;
+  }
+
+  async function customjobAllow() {
+    try {
+      const allowjobcount = await getuserallowjob();
+      const jobcount = await getuserjob();
+      if (allowjobcount <= jobcount) {
+        router.push("/#price");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return {
     test,
     getJob,
@@ -170,6 +216,9 @@ const SupabaseRepo = () => {
     createMock,
     doublecheck,
     updatePrice,
+    getuserjob,
+    getuserallowjob,
+    customjobAllow,
   };
 };
 

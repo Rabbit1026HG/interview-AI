@@ -8,6 +8,7 @@ import Loading from "@/app/ui/loading";
 import supabaseRepo from "@/app/_services/supabase-repo";
 import { toast } from "react-toastify";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
+import useSupabase from "@/hooks/SupabaseContext";
 
 const report = [
   {
@@ -43,6 +44,12 @@ export default function CreateJob() {
   const [threadId, setThreadId] = useState("No thread");
 
   const router = useRouter();
+
+  const supabase = useSupabase();
+
+  useEffect(() => {
+    api.customjobAllow();
+  }, [supabase]);
   const onBack = () => {
     step ? setStep(step - 1) : router.push("/job");
   };
@@ -59,9 +66,7 @@ export default function CreateJob() {
     else {
       if (fileName == "No file chosen")
         return toast.warning("Upload file is required.", {
-          className: "black-background",
-          bodyClassName: "grow-font-size",
-          progressClassName: "fancy-progress-bar",
+          theme: "dark",
         });
       sendAndSave(
         `I want 20 questions for ${jobTitle} job interview.Do not write any explanations or other words, just reply with the answer format.
@@ -102,9 +107,7 @@ export default function CreateJob() {
 
     setIsLoading(false);
     toast.success("Created job successfully!", {
-      className: "black-background",
-      bodyClassName: "grow-font-size",
-      progressClassName: "fancy-progress-bar",
+      theme: "dark",
     });
   };
 

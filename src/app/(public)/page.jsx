@@ -35,9 +35,9 @@ export default function Home() {
       router.push("/");
     }
   }
-  useEffect(() => {
-    priceinput();
-  }, [router]);
+  // useEffect(() => {
+  //   priceinput();
+  // }, [router]);
   return (
     <>
       {/* Start Hero Section */}

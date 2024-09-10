@@ -1,5 +1,6 @@
 "use client";
 
+import SupabaseRepo from "@/app/_services/supabase-repo";
 import Loading from "@/app/ui/loading";
 import SectionHeading from "@/app/ui/SectionHeading";
 import JobList from "@/app/ui/ServiceList/ServiceJobList";
@@ -10,9 +11,16 @@ import { useEffect, useState } from "react";
 export default function FreelancerAgencyHome() {
   const supabase = useSupabase();
   const [data, setData] = useState([]);
+  const supabaseapi = SupabaseRepo();
 
   const getData = async () => {
+    let url;
     if (!supabase) return;
+    const allowjobcount = await supabaseapi.getuserallowjob();
+    const jobcount = await supabaseapi.getuserjob();
+    if (allowjobcount > jobcount) {
+      url = "/create-job";
+    } else url = "/#price";
     const { data, error } = await supabase
       .from("jobtable")
       .select(`id,title,description`)
@@ -24,7 +32,7 @@ export default function FreelancerAgencyHome() {
     data?.unshift({
       title: "Create custom job",
       description: "",
-      id: "/create-job",
+      id: url,
     });
     setData(data);
   };

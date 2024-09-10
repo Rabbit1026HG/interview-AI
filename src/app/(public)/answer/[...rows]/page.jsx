@@ -12,6 +12,7 @@ import Loading from "@/app/ui/loading";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
+import SupabaseRepo from "@/app/_services/supabase-repo";
 
 export default function Answer({ params: { rows } }) {
   const [question, setQuestion] = useState("");
@@ -25,12 +26,18 @@ export default function Answer({ params: { rows } }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const supabase = useSupabase();
+  const supabaseapi = SupabaseRepo();
   const { userId } = useAuth();
   const router = useRouter();
 
   const [threadId, setThreadId] = useState("No thread");
   const getAnswer = async (index, jobId, questionnum) => {
     if (!supabase) return;
+    const getallowjob = await supabaseapi.getuserallowjob();
+    if (getallowjob < 2 && rows[1] > 2) {
+      router.push("/#price");
+      return;
+    }
     const { data, error } = await supabase
       .from("questiontable")
       .select(
@@ -165,7 +172,7 @@ My question and answer are as follows:
 Question: ${question}
 Answer: ${input.trim()}
 Do not write any explanations or other words, just reply with the answer format.`;
-   
+
     let data = await sendMessage(text, threadId);
     setIsLoading(false);
     if (data.error) {

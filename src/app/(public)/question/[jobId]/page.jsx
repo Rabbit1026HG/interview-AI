@@ -1,5 +1,6 @@
 "use client";
 
+import SupabaseRepo from "@/app/_services/supabase-repo";
 import Div from "@/app/ui/Div";
 import Loading from "@/app/ui/loading";
 import SectionHeading from "@/app/ui/SectionHeading";
@@ -11,10 +12,13 @@ import { useEffect, useState } from "react";
 export default function Question({ params: { jobId } }) {
   const [data, setData] = useState([]);
   const [questiontitle, setTitle] = useState("");
+  const [isLock, setIsLock] = useState(true);
   const supabase = useSupabase();
-
+  const supabaseapi = SupabaseRepo();
   const getQuestionData = async () => {
     if (!supabase) return;
+    const getallowjob = await supabaseapi.getuserallowjob();
+    getallowjob > 1 ? setIsLock(false) : setIsLock(true);
     const { data, error } = await supabase
       .from("jobtable")
       .select(`title,questiontable(id,question)`)
@@ -48,7 +52,12 @@ export default function Question({ params: { jobId } }) {
           variant="cs-style1 text-center"
         />
         <Spacing lg="70" md="45" />
-        <ServiceList variant="cs-style2" data={data} jobId={jobId} />
+        <ServiceList
+          variant="cs-style2"
+          data={data}
+          jobId={jobId}
+          lock={isLock}
+        />
       </Div>
       <Spacing lg="120" md="50" />
     </>
