@@ -25,14 +25,13 @@ const openSans = Open_Sans({
 });
 
 export default function RootLayout({ children }) {
-  // <time datetime={Date.now} suppressHydrationWarning />;
   return (
     <ClerkProvider>
       <html lang="en">
         <head>
           <meta name="author" content="Laralink" />
-          <link rel="icon" href="/images/favicon.ico" sizes="any" />
-          <title>Arino Creative Agency Next JS Template</title>
+          <link rel="icon" href="/images/favicon.icoyar" sizes="any" />
+          <title>Interview Amigo</title>
         </head>
         <body className={`${openSans.variable} ${poppins.variable}`}>
           <SupabaseProvider>

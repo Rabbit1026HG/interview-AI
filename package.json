@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 1026",
+    "dev": "next dev  -p 1026",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +13,7 @@
     "@emailjs/browser": "^4.4.1",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
+    "@stripe/stripe-js": "^4.4.0",
     "@supabase/supabase-js": "^2.45.1",
     "bootstrap": "^5.3.3",
     "fs": "^0.0.1-security",
@@ -21,6 +22,7 @@
     "lightgallery": "^2.7.2",
     "next": "14.1.2",
     "nextjs-toploader": "^1.6.12",
+    "node-fetch": "^3.3.2",
     "openai": "^4.56.0",
     "react": "^18",
     "react-dom": "^18",
@@ -32,7 +34,9 @@
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
     "stripe": "^16.9.0",
-    "swiper": "^8.4.5"
+    "svix": "^1.32.0",
+    "swiper": "^8.4.5",
+    "undici": "^6.19.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

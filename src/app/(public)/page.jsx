@@ -5,39 +5,36 @@ import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
 import HomeHeading from "../ui/PageHeading/HomeHeading";
 import PricingTableList from "../ui/PricingTable/PricingTableList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Constact from "../ui/Contact";
+import pricecheck from "../_services/pricecheck";
+import SupabaseRepo from "../_services/supabase-repo";
+import useSupabase from "@/hooks/SupabaseContext";
 
 export default function Home() {
   const router = useRouter();
-  useEffect(() => {
+  const supabase = useSupabase();
+  const supabaseapi = SupabaseRepo();
+  async function priceinput() {
+    if (!supabase) return;
     const { searchParams } = new URL(window.location.href);
     const status = searchParams.get("status");
-    status === "success" &&
-      toast.success("Your success!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    status === "cancel" &&
-      toast.error("Failed, please try again later!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-  }, [router]);
+    if (!status) return;
+    router.push(`/`);
+    const result = pricecheck(status);
+    if (!result) return toast.error("Payment failed!", { theme: "dark" });
+    const ischeck = await supabaseapi.doublecheck(status);
+    if (ischeck) return toast.error("Payment failed!", { theme: "dark" });
+    const updateresult = await supabaseapi.updatePrice(status, result);
+    if (updateresult)
+      return toast.success("Payment successful!", { theme: "dark" });
+    else return toast.error("Payment failed?!", { theme: "dark" });
+  }
+  useEffect(() => {
+    priceinput();
+  }, [supabase]);
   return (
     <>
       {/* Start Hero Section */}
@@ -115,7 +112,7 @@ export default function Home() {
       {/* End LogoList Section */}
       <Spacing lg="60" md="40" />
 
-      <Div className="container">
+      <Div className="container" id="price">
         <SectionHeading
           title="Providing best <br/>pricing for client"
           subtitle="Pricing & Packaging"

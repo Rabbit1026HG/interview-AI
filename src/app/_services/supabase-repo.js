@@ -85,13 +85,67 @@ const SupabaseRepo = () => {
     if (!supabase) return;
     const { data, error } = await supabase.storage
       .from("mockvideo")
-      .upload(fileName, blob, { contentType: "video/webm", upsert: false });
+      .upload(fileName, blob, { contentType: "video/webm", upsert: true });
     if (error) {
       console.log("Error uploading video:", error);
       return false;
     }
     console.log("Video uploaded successfully!");
     return true;
+  }
+
+  // @function  Users price
+  // @input     session_id:status, jobcount: job number
+  // @output    bool true&successfully or false@failure
+
+  async function updatePrice(session_id, jobcount) {
+    if (!supabase) return;
+    const { data: curentData, error: fetchError } = await supabase
+      .from("users")
+      .select("job_count")
+      .eq("clerk_user_id", userId)
+      .single();
+    if (fetchError) {
+      console.log(fetchError.message);
+      return false;
+    }
+    const currentValue = curentData.job_count;
+    const newValue = currentValue + jobcount;
+
+    const { data: updateData, error: updataError } = await supabase
+      .from("users")
+      .update([
+        {
+          session_id: session_id,
+          job_count: newValue,
+          updated_at: new Date(),
+        },
+      ])
+      .eq("clerk_user_id", userId);
+    if (updataError) {
+      console.log(updataError.message);
+      return false;
+    }
+    return true;
+  }
+
+  // @function  price validater
+  // @input     session_id:status
+  // @output    bool true&successfully or false@failure
+  async function doublecheck(session_id) {
+    if (!supabase) return;
+    const { count, error } = await supabase
+      .from("users")
+      .select("*", { count: "exact", head: true })
+      .eq("clerk_user_id", userId)
+      .eq("session_id", session_id);
+
+    if (error) {
+      console.log(error.message);
+      return false;
+    }
+    console.log("count:", count);
+    return count;
   }
 
   // @function  Insert mock result
@@ -111,16 +165,74 @@ const SupabaseRepo = () => {
           update_at: new Date(),
         },
       ])
-      .eq("id", questionId).select();
+      .eq("id", questionId)
+      .select();
     if (error) {
       console.log(error.message);
       return false;
     }
-    console.log("data",data);
+    console.log("data", data);
     return true;
   }
 
-  return { test, getJob, getQuestion, createFeedback };
+  // @function  Get user allow job
+  // @input
+  // @output    count: allowed job count
+  async function getuserallowjob() {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from("users")
+      .select("job_count")
+      .eq("clerk_user_id", userId);
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+    console.log("getuserallowjob:", data[0]?.job_count);
+    if (data.length) return data[0]?.job_count;
+    return 1;
+  }
+
+  // @function  Get user job
+  // @input
+  // @output    count: used job count
+  async function getuserjob() {
+    if (!supabase) return;
+    const { count, error } = await supabase
+      .from("jobtable")
+      .select("*", { count: "exact", head: true })
+      .eq("clerk_user_id", userId);
+    if (error) {
+      console.log(error.message);
+      return;
+    }
+    console.log("getuserjob", count);
+    return count;
+  }
+
+  async function customjobAllow() {
+    try {
+      const allowjobcount = await getuserallowjob();
+      const jobcount = await getuserjob();
+      if (allowjobcount <= jobcount) {
+        router.push("/#price");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return {
+    test,
+    getJob,
+    getQuestion,
+    createFeedback,
+    createMock,
+    doublecheck,
+    updatePrice,
+    getuserjob,
+    getuserallowjob,
+    customjobAllow,
+  };
 };
 
 export default SupabaseRepo;

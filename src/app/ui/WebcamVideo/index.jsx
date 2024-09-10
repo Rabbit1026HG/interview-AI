@@ -11,9 +11,8 @@ import SupabaseRepo from "@/app/_services/supabase-repo";
 import { createThread, sendMessage } from "@/app/_services/openai-repo";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Loading from "../loading";
 
-export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
+export default function WebcamVideo({ setCamera, start, jobId, setLoading }) {
   const supabaseRepo = SupabaseRepo();
   const [questions] = useAtom(mockquestions);
   const [questionnum, setQuestionnum] = useAtom(mockquestionnum);
@@ -25,11 +24,19 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
   const [videoDevices, setVideoDevices] = useState([]);
   const [audioDevices, setAudioDevices] = useState([]);
   const [audiodeviceId, setAudioDeviceId] = useState();
-  const [transcriptions, setTranscriptions] = useState(["I can do it", "I can do it", "I can do it"]);
+  const [isfeedback, setIsFeedback] = useState(false);
+  const [transcriptions, setTranscriptions] = useState([
+    "I can do it",
+    "I can do it",
+    "I can do it",
+  ]);
   const [threadId, setThreadId] = useState("No thread");
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (isfeedback) feedback();
+  }, [isfeedback]);
   useEffect(() => {
     async function fetchThread() {
       const data = await createThread();
@@ -88,6 +95,9 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
 
       return false;
     }
+    toast.success("Transcription successfully.", {
+      theme: "dark",
+    });
     setTranscriptions((transcriptions) =>
       transcriptions.map((item, index) =>
         index === questionnum ? (item = transcription.msg) : item
@@ -99,6 +109,7 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
   }, [recordedChunks]);
   const feedback = async () => {
     try {
+      setLoading(true);
       for (const [index, item] of transcriptions.entries()) {
         const text = `I would like to rate my answer to the question. Answer format:
     Weaknesses: [Your weaknesses here, less than 10 sentences.]
@@ -110,15 +121,16 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
     Do not write any explanations or other words, just reply with the answer format.`;
 
         console.log("text:", text);
-        console.log('start: ', Date.now());
+        console.log("start: ", Date.now());
 
         let data = await sendMessage(text, threadId);
 
-        console.log('end: ', Date.now());
+        console.log("end: ", Date.now());
         if (data.error) {
           toast.error(data.error, {
             theme: "dark",
           });
+          setLoading(false);
           return;
         }
 
@@ -132,7 +144,11 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
         const score = scoreMatch ? scoreMatch[1] : null;
 
         const saveflag = await supabaseRepo.createFeedback(
-          item, weakness, strength, score, questions[index].id
+          item,
+          weakness,
+          strength,
+          score,
+          questions[index].id
         );
         console.log("save supabase:", saveflag);
 
@@ -143,7 +159,9 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
           }
         );
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error processing transcriptions:", error);
       toast.error("An error occurred while processing transcriptions.", {
         theme: "dark",
@@ -156,14 +174,21 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
     setLoading(true);
     const flag = await handleUpload();
     if (!flag) {
+      toast.error("Video Upload failed. Retry", {
+        theme: "dark",
+      });
       setLoading(false);
       return;
     }
+    toast.success("Video Upload successfully.", {
+      theme: "dark",
+    });
 
     if (questionnum < questions.length - 1) {
       setQuestionnum(questionnum + 1);
     } else {
-      await feedback();
+      setQuestionnum(0);
+      setIsFeedback(true);
     }
     setLoading(false);
   };
@@ -192,7 +217,6 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
 
   return (
     <div className="col-lg-6 offset-lg-1">
-      
       {videoDevices.length ? (
         <div className="video-wrapper">
           <Webcam
@@ -221,7 +245,7 @@ export default function WebcamVideo({ setCamera, start, jobId,setLoading }) {
           onStop={handleStopCaptureClick}
         />
       )}
-      <button className="btn cs-text_btn" onClick={async () => { await feedback(); }}>test</button>
+
       <Spacing lg="20" md="20" />
       <label className="cs-primary_color">Camera</label>
       {videoDevices.length ? (
