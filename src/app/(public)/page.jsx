@@ -5,39 +5,36 @@ import SectionHeading from "@/app/ui/SectionHeading";
 import Spacing from "@/app/ui/Spacing";
 import HomeHeading from "../ui/PageHeading/HomeHeading";
 import PricingTableList from "../ui/PricingTable/PricingTableList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Constact from "../ui/Contact";
 import pricecheck from "../_services/pricecheck";
 import SupabaseRepo from "../_services/supabase-repo";
+import useSupabase from "@/hooks/SupabaseContext";
 
 export default function Home() {
   const router = useRouter();
-  const supabaseRepo = SupabaseRepo();
+  const supabase = useSupabase();
+  const supabaseapi = SupabaseRepo();
   async function priceinput() {
+    if (!supabase) return;
     const { searchParams } = new URL(window.location.href);
     const status = searchParams.get("status");
-    const priceresult = pricecheck(status);
-    if (!priceresult) {
-      toast.error("Payment Failed", { theme: "dark" });
-      router.push("/");
-      return;
-    }
-    try {
-      const ischeck = await supabaseRepo.doublecheck(status);
-      console.log("ischeck:", ischeck);
-
-      ischeck && (await supabaseRepo.updatePrice(status, priceresult));
-      router.push("/");
-    } catch (error) {
-      toast.error("Payment Failed", { theme: "dark" });
-      router.push("/");
-    }
+    if (!status) return;
+    router.push(`/`);
+    const result = pricecheck(status);
+    if (!result) return toast.error("Payment failed!", { theme: "dark" });
+    const ischeck = await supabaseapi.doublecheck(status);
+    if (ischeck) return toast.error("Payment failed!", { theme: "dark" });
+    const updateresult = await supabaseapi.updatePrice(status, result);
+    if (updateresult)
+      return toast.success("Payment successful!", { theme: "dark" });
+    else return toast.error("Payment failed?!", { theme: "dark" });
   }
-  // useEffect(() => {
-  //   priceinput();
-  // }, [router]);
+  useEffect(() => {
+    priceinput();
+  }, [supabase]);
   return (
     <>
       {/* Start Hero Section */}

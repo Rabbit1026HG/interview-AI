@@ -98,41 +98,54 @@ const SupabaseRepo = () => {
   // @input     session_id:status, jobcount: job number
   // @output    bool true&successfully or false@failure
 
-  async function updatePrice({ session_id, jobcount }) {
+  async function updatePrice(session_id, jobcount) {
     if (!supabase) return;
-    const { data, error } = await supabase
+    const { data: curentData, error: fetchError } = await supabase
+      .from("users")
+      .select("job_count")
+      .eq("clerk_user_id", userId)
+      .single();
+    if (fetchError) {
+      console.log(fetchError.message);
+      return false;
+    }
+    const currentValue = curentData.job_count;
+    const newValue = currentValue + jobcount;
+
+    const { data: updateData, error: updataError } = await supabase
       .from("users")
       .update([
         {
           session_id: session_id,
-          job_count: jobcount,
+          job_count: newValue,
+          updated_at: new Date(),
         },
       ])
-      .eq("clerk_user_id", userId)
-      .select();
-    if (error) {
-      console.log(error.message);
+      .eq("clerk_user_id", userId);
+    if (updataError) {
+      console.log(updataError.message);
       return false;
     }
-    console.log("data", data);
-
     return true;
   }
 
-  async function doublecheck({ session_id }) {
+  // @function  price validater
+  // @input     session_id:status
+  // @output    bool true&successfully or false@failure
+  async function doublecheck(session_id) {
     if (!supabase) return;
-    const { data, error } = await supabase
+    const { count, error } = await supabase
       .from("users")
+      .select("*", { count: "exact", head: true })
       .eq("clerk_user_id", userId)
-      .eq("session_id", session_id)
-      .select();
+      .eq("session_id", session_id);
+
     if (error) {
       console.log(error.message);
       return false;
     }
-    console.log("data", data);
-    if (data.data.length) return false;
-    return true;
+    console.log("count:", count);
+    return count;
   }
 
   // @function  Insert mock result
