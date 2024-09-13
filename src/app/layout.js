@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <head>
           <meta name="author" content="Laralink" />
-          <link rel="icon" href="/images/favicon.icoyar" sizes="any" />
+          <link rel="icon" href="/images/favicon.ico" sizes="any" />
           <title>Interview Amigo</title>
         </head>
         <body className={`${openSans.variable} ${poppins.variable}`}>

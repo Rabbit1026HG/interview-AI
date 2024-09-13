@@ -80,11 +80,12 @@ export default function Home() {
             </Div>
           </div>
           <div className="col-lg-6">
-            <div className="video-wrapper">
+            {/* <div className="video-wrapper">
               <video autoPlay loop muted>
                 <source src="/video/video-2.mp4" type="video/mp4" />
               </video>
-            </div>
+            </div> */}
+            <img src="/images/STEP 2.png" alt="STEP2" className="cs-w100" />
           </div>
         </div>
       </div>
@@ -100,11 +101,12 @@ export default function Home() {
             </Div>
           </div>
           <div className="col-lg-6">
-            <div className="video-wrapper">
+            {/* <div className="video-wrapper">
               <video autoPlay loop muted>
                 <source src="/video/video-3.mp4" type="video/mp4" />
               </video>
-            </div>
+            </div> */}
+            <img src="/images/STEP 3.png" alt="STEP2" className="cs-w100" />
           </div>
         </div>
       </div>

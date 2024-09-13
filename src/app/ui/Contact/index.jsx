@@ -60,7 +60,7 @@ export default function Constact() {
         <Div className="col-lg-6">
           <SectionHeading
             title="Do you have a project <br/>in your mind?"
-            subtitle="Getting Touch"
+            subtitle="Contact"
           />
           <Spacing lg="55" md="30" />
           <ContactInfoWidget withIcon />

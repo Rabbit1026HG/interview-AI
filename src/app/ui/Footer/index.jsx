@@ -9,10 +9,6 @@ const copyrightLinks = [
     title: "Terms of Use",
     href: "/",
   },
-  {
-    title: "Privacy Policy",
-    href: "/",
-  },
 ];
 
 const date = new Date().getFullYear();
