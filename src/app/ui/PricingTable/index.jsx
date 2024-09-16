@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import Div from "../Div";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { useAtom } from "jotai";
-import { pricestate } from "@/store";
 
 export default function PricingTable({
   title,
@@ -45,9 +42,9 @@ export default function PricingTable({
         <Div className="cs-price">
           <h3 className="cs-white_color">
             {currency}
-            {price}/
+            {price}
           </h3>
-          <span className="cs-accent_color">{timeline}</span>
+          {/* <span className="cs-accent_color">{timeline}</span> */}
         </Div>
         <Div className="cs-price_text">Per subscriber per year</Div>
       </Div>

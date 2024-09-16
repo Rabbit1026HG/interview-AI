@@ -10,11 +10,11 @@ export default function PricingTableList() {
         <Section className="col-lg-4">
           <PricingTable
             title="Standard"
-            price="13"
+            price="10"
             currency="$"
             timeline="monthly"
             features={[
-              "2 custom job",
+              "1 custom job",
               "Unlock all question",
               "Unlimited mock interviews",
               "Custom questions",
@@ -27,7 +27,7 @@ export default function PricingTableList() {
         <Section className="col-lg-4">
           <PricingTable
             title="Professional"
-            price="18"
+            price="20"
             currency="$"
             timeline="monthly"
             features={[
