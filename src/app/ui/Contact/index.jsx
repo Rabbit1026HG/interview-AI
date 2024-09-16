@@ -16,6 +16,8 @@ export default function Constact() {
   const sendEmail = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log(form.current);
+
     await emailjs
       .sendForm(
         process.env.NEXT_PUBLIC_SERVICE_ID,
@@ -100,6 +102,8 @@ export default function Constact() {
               <textarea
                 cols="30"
                 rows="7"
+                type="text"
+                name="message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Enter your message"
