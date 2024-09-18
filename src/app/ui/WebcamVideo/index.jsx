@@ -29,6 +29,8 @@ export default function WebcamVideo({ setCamera, start, jobId, setLoading }) {
     "I can do it",
     "I can do it",
     "I can do it",
+    "I can do it",
+    "I can do it",
   ]);
   const [threadId, setThreadId] = useState("No thread");
 

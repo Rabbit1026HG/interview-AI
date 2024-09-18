@@ -51,14 +51,14 @@ export default function Mock({ params: { jobId } }) {
     setTitle(data[0].title);
     data[0].questiontable.forEach((item, index) => {
       if (item.state) cnt++;
-      if ((index + 1) % 3 === 0) {
-        const category = cnt === 3 ? "Completed" : "Ready";
-        const date = cnt === 3 ? item.update_at : ""; // Fixed typo from 'upadate_at' to 'update_at'
+      if ((index + 1) % 5 === 0) {
+        const category = cnt === 5 ? "Completed" : "Ready";
+        const date = cnt === 5 ? item.update_at : ""; // Fixed typo from 'upadate_at' to 'update_at'
         mock.push({ category, date });
         cnt = 0; // Reset count for the next group
       }
     });
-    const cnt_num = data[0].questiontable.length % 3;
+    const cnt_num = data[0].questiontable.length % 5;
     if (cnt_num !== 0) {
       const lastItem = data[0].questiontable[data[0].questiontable.length - 1];
       const category = cnt === cnt_num ? "Completed" : "Ready";

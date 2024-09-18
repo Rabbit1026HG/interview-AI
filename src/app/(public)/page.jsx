@@ -60,11 +60,12 @@ export default function Home() {
             </Div>
           </div>
           <div className="col-lg-6">
-            <div className="video-wrapper">
+            {/* <div className="video-wrapper">
               <video autoPlay loop muted>
                 <source src="/video/video-3.mp4" type="video/mp4" />
               </video>
-            </div>
+            </div> */}
+            <img src="/images/STEP 1.png" alt="STEP1" className="cs-w100" />
           </div>
         </div>
       </div>
@@ -115,10 +116,7 @@ export default function Home() {
       <Spacing lg="60" md="40" />
 
       <Div className="container" id="price">
-        <SectionHeading
-          title="Providing best <br/>pricing for client"
-          subtitle="Pricing & Packaging"
-        />
+        <SectionHeading title="" subtitle="Pricing & Packaging" />
         <Spacing lg="85" md="40" />
         <PricingTableList />
       </Div>
