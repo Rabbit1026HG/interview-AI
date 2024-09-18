@@ -51,7 +51,7 @@ export default function Page({ params: { rows } }) {
       console.log(error.message);
       return;
     }
-    setQuestions(data.slice((rows[1] - 1) * 3, rows[1] * 3));
+    setQuestions(data.slice((rows[1] - 1) * 5, rows[1] * 5));
   };
 
   useEffect(() => {
