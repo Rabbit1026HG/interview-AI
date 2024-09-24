@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleAnalytics } from "@next/third-parties/google";
 import CustomCursor from "@/app/ui/CustomCursor";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
             <Provider>{children}</Provider>
           </SupabaseProvider>
         </body>
+        <GoogleAnalytics gaId="G-7416E1F183" />
       </html>
     </ClerkProvider>
   );
