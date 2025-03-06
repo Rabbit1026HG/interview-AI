@@ -81,16 +81,7 @@ Ensure you have the following installed:
 
 [Visit Interview Amigo](https://interviewamigo.com)
 
-## Screenshots
 
-### Step1
-<img width="1710" alt="STEP 1" src="https://github.com/user-attachments/assets/1feee4fe-058a-4867-a620-76c2970709b8" />
-
-### Step2
-<img width="1710" alt="STEP 2" src="https://github.com/user-attachments/assets/61e8d9db-d8d4-44dc-b524-9904a5b55005" />
-
-### Step3
-<img width="1710" alt="STEP 3" src="https://github.com/user-attachments/assets/78e3b3ae-f575-447f-b51b-998e05770f89" />
 
 ## Contributing
 
