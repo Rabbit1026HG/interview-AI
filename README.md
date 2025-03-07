@@ -93,5 +93,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Elevate your interview performance with **Interview Amigo** – your AI-powered interview coach!
+<!-- Elevate your interview performance with **Interview Amigo** – your AI-powered interview coach! -->
 
