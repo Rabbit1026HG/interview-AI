@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
         <head>
           <meta name="author" content="Laralink" />
           <link rel="icon" href="/images/favicon.ico" sizes="any" />
-          <title>Interview Amigo</title>
+          <title>Job Interview</title>
         </head>
         <body className={`${openSans.variable} ${poppins.variable}`}>
           <SupabaseProvider>

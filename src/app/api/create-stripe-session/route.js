@@ -6,9 +6,9 @@ export async function POST(req) {
 
   let redirectURL;
   if (process.env.NODE_ENV === "development") {
-    redirectURL = "http://localhost:1026";
+    redirectURL = process.env.NEXT_PUBLIC_DEV_URL;
   } else {
-    redirectURL = "https://interviewamigo.com";
+    redirectURL = process.env.NEXT_PUBLIC_PROD_URL || "https://interviewamigo.com";
   }
 
   const transformedItem = {
