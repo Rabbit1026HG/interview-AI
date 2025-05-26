@@ -1,7 +1,7 @@
 "use client";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
-import CustomCursor from "@/app/ui/CustomCursor";
+// import CustomCursor from "@/app/ui/CustomCursor";
 import "swiper/css";
 import "swiper/css/pagination";
 import "./scss/index.scss";
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
         <body className={`${openSans.variable} ${poppins.variable}`}>
           <SupabaseProvider>
             <NextTopLoader />
-            <CustomCursor />
+            {/* <CustomCursor /> */}
             <ToastContainer limit={5} />
             <Provider>{children}</Provider>
           </SupabaseProvider>
