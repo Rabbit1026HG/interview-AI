@@ -14,7 +14,7 @@ export default function ContactInfoWidget({ withIcon, title }) {
           ) : (
             ""
           )}
-          amigointerview@gmail.com
+          aisiminterview@gmail.com
         </li>
       </ul>
     </>
